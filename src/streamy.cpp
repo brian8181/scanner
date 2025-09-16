@@ -15,6 +15,9 @@
 
 using namespace std;
 
+
+string& COLOR_RED(string& s);
+
 map<string, unsigned int> _token_map = {  {"{", ID_OPEN_CURLY_BRACE}, {"}", ID_CLOSE_CURLY_BRACE}, {"#", ID_HASH_MARK}, {"*", ID_ASTERIK}, {"$", ID_DOLLAR_SIGN},
                                           {"=", ID_EQUAL}, {"|", ID_VBAR}, {":", ID_COLON}, {"\"", ID_DOUBLE_QUOTE}, {"'", ID_SINGLE_QUOTE}, {".", ID_DOT},
                                           {"+", ID_PLUS}, {"-", ID_MINUS}, {"%", ID_MODULUS},
@@ -115,7 +118,9 @@ string& streamy::compile(const string& tmpl, /* out */ string& html)
     int len = escapes.size();
     for(int i = 0; i < len; ++i)
     {
-        cout << escapes[i].second;
+        // string s = COLOR_RED(escapes[i].second);
+        // cout << s << endl;
+        cout << escapes[i].second << endl;
     }
 
     // parse the tokens appling agrammer rules

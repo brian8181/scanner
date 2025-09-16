@@ -16,6 +16,11 @@
 #include "streamy.hpp"
 #include "constants.hpp"
 #include "fileio.hpp"
+#include "scanner.hpp"
+#include <regex>
+#include <map>
+#include <vector>
+#include "config.hpp"
 
 using namespace std;
 
@@ -26,6 +31,61 @@ using namespace std;
  * @param escapes A vector to store the escape sequences found.
  */
 void lex(const string& src, /* out*/ vector<pair<int, string>>& escapes)
+{
+    string s = src;
+    regex esc_rexp = regex(ESCAPE, std::regex::ECMAScript);
+    smatch esc_match;
+    while(regex_search(s, esc_match, esc_rexp, std::regex_constants::match_default))
+    {
+        // push begin
+        if(esc_match.prefix().str().size())
+        {
+            escapes.push_back({TEXT, esc_match.prefix()});
+        }
+        // now start lexing
+        regex oper_rexp = regex("(" + VARIABLE + ")", regex::ECMAScript);
+        smatch oper_match;
+        string e_sub_match = esc_match.str();
+        while(regex_search(e_sub_match, oper_match, oper_rexp, regex_constants::match_default))
+        {
+            // push back match as token
+            if(oper_match.prefix().str().size() > 0)
+                escapes.push_back({TOKEN, oper_match.prefix().str()});
+
+            if(oper_match.str().size() > 0)
+                escapes.push_back( { TOKEN, oper_match.str()} );
+
+            // after oper_match to end of string
+            string suffix = oper_match.suffix().str();
+            if(oper_match.str() == "*" || oper_match.str() == "#" || oper_match.str() == "\"" || oper_match.str() == "'")
+            {
+                int pos = suffix.find_first_of("*#\"'");
+                int len = suffix.size();
+                escapes.push_back({ TOKEN, suffix.substr(0, pos ) });
+
+                len = len-(pos+1);
+                if(len > 0)
+                {
+                    escapes.push_back({ TOKEN, suffix.substr(pos, 1 ) });
+                    suffix = suffix.substr(pos+1, len);
+                }
+            }
+            e_sub_match = suffix;
+        }
+        s = (esc_match.suffix().str().size()) ? esc_match.suffix().str() : string("");
+    }
+    if(s.size() > 0)
+    {
+           escapes.push_back( { TEXT,  s } );
+    }
+}
+
+/**
+ * @brief Lexical analysis of the input source code.
+ * @param src The source code to analyze.
+ * @param escapes A vector to store the escape sequences found.
+ */
+void _lex(const string& src, /* out*/ vector<pair<int, string>>& escapes)
 {
     string s = src;
     regex esc_rexp = regex(ESCAPE, std::regex::ECMAScript);
