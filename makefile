@@ -71,7 +71,7 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: ./$(BLD)/scanner # ./$(BLD)/\*~${APP_NAME}_test~*\ ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
+all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
 
 $(BLD)/scanner: $(BLD)/utility.o $(BLD)/fileio.o $(BLD)/scanner.o $(BLD)/compiler.o $(BLD)/streamy.o
 	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ -o $@

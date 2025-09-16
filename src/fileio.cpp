@@ -5,99 +5,163 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <sstream>
+#include <string>
 #include "fileio.hpp"
-#include "utility.hpp"
 
-// get file lines as vector
-vector<string>& get_lines(const string& path, vector<string>& lines)
+using std::stringstream;
+using std::ifstream;
+using std::ofstream;
+using std::pair;
+using std::ios;
+
+ifstream& read_char(ifstream& stream, /* out */ char& c)
 {
-    ifstream file;
-    file.open(path, ios::in);
-    if (file.is_open())
+    if (stream.is_open())
+    {
+        stream.get(c);
+        if (!stream)
+        {
+            std::cerr << "Error: Unable to read character." << std::endl;
+            exit(-1);
+        }
+    }
+    else
+    {
+        std::cerr << "Error: Unable to open file for reading character." << std::endl;
+    }
+    return stream;
+}
+
+ofstream& write_char(ofstream& stream, /* in */ const char& c)
+{
+    if (stream.is_open())
+    {
+        stream.put(c);
+        if (!stream)
+        {
+            std::cerr << "Error: Unable to write character." << std::endl;
+            exit(-1);
+        }
+    }
+    else
+    {
+        std::cerr << "Error: Unable to open file for writing character." << std::endl;
+
+    }
+    return stream;
+}
+
+int read_buf(const string& file, /* out */ unsigned char* buf, const int& len)
+{
+    ifstream stream(file, std::ifstream::in );
+    if (stream.is_open())
+    {
+        stream.read((char*)buf, len);
+        stream.close();
+        return stream.good() ? stream.gcount() : -1;
+    }
+    return -1;
+}
+
+int write_buf(const string& file, /* in */ const unsigned char* buf, const int& len)
+{
+	std::ofstream stream(file, std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
+	if (stream.is_open())
+	{
+		stream.write((char*)buf, len);
+        stream.close();
+		return stream.good() ? len : -1;
+	}
+	return -1;
+}
+
+int read_str(const string& file, /* out */ string& out)
+{
+    ifstream stream(file, ios::in);
+    if (stream.is_open())
+    {
+        stringstream ss;
+        char c;
+        while (stream.get(c))
+        {
+            ss << c;
+        }
+        out = ss.str();
+        return (int)ss.str().size();
+    }
+    return 0;
+}
+
+int write_str(const string& file, /* in */ const string& in)
+{
+    ofstream stream;
+    stream.open(file, ios::out);
+    if (stream.is_open())
+    {
+        stringstream ss;
+        ss << in;
+        stream << ss.str();
+        stream.close();
+        return (int)ss.str().size();
+    }
+    return 0;
+}
+
+void read_sstream(const string& file, /* out */ stringstream& sstrm)
+{
+    ifstream stream(file, ios::in);
+    if (stream.is_open())
     {
         string line;
-        while (getline(file, line))
+        while (getline(stream, line))
+        {
+            sstrm << line;
+        }
+        stream.close();
+    }
+}
+
+void write_sstream(const string& file, /* in */ const stringstream& sstrm)
+{
+    ofstream stream;
+    stream.open(file, ios::out);
+    if (stream.is_open())
+    {
+        stream << sstrm.str();
+        stream.close();
+    }
+}
+
+vector<string>& read_lines(const string& file, /* out */ vector<string>& lines)
+{
+    ifstream stream;
+    stream.open(file, ios::out);
+    if (stream.is_open())
+    {
+        string line;
+        while (getline(stream, line))
         {
             lines.push_back(line);
         }
-        file.close();
+        stream.close();
     }
     return lines;
 }
 
-// read all, (default read function)
-// string& read_stream(const string& path)
-// {
-//     std::ifstream ifstrm(path);
-//     std::string output((std::istreambuf_iterator<char>(ifstrm)), std::istreambuf_iterator<char>());
-//     return output;
-// }
-
-std::string& read_stream(const std::string& path, /* out */std::string& out)
+void write_lines(const string& file, /* in */ const vector<string>& lines)
 {
-    std::ifstream ifstrm(path);
-    std::string output((std::istreambuf_iterator<char>(ifstrm)), std::istreambuf_iterator<char>());
-    out = output;
-    return out;
-}
-
-map<string, string> get_config(string path)
-{
-    ifstream file;
-    file.open(path, ios::in); //open a file
-
-    map<string, string> config;
-    pair<string, string> config_pair;
-
-    if (file.is_open())
-    {
-        string line;
-        while(getline(file, line))
+    std::ofstream os(file, std::ofstream::out | std::ofstream::trunc);
+	if (os.is_open())
+	{
+        string s;
+        int len = lines.size();
+        for(int i = 0; i < len; ++i)
         {
-            size_t pos = line.find('=');
-            string name = line.substr(0, pos-1);
-            name = trim(name);
-            string value = line.substr(pos+1);
-            value = trim(value);
-            pair<string, string> p(name, value);
-            config.insert(p);
+            s = lines[i];
+            s.append("\n");  // append new line
+		    os.write(s.c_str(), s.size());
         }
-        file.close(); //close the file
-    }
-    return config;
+	}
+    os.close();
 }
-
-// string& ltrim(std::string &s)
-// {
-//     int len = s.size();
-//     int i;
-//     for(i = 0; i < len; ++i)
-//     {
-//         if(!std::isspace(s[i]))
-//             break;
-//     }
-//     string::iterator beg = s.begin();
-//     s.erase(beg, beg+i);
-//     return s;
-// }
-
-// string& rtrim(std::string &s)
-// {
-//     int len = s.size();
-//     int i = len;
-//     for(;i > 0; --i)
-//     {
-//         if(!std::isspace(s[i-1]))
-//             break;
-//     }
-//     string::iterator end = s.end();
-//     s.erase(end-(len-i), end);
-//     return s;
-// }
-
-// string& trim(std::string &s)
-// {
-//     rtrim(s);
-//     ltrim(s);
-//     return s;
-// }

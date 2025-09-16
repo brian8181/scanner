@@ -10,16 +10,16 @@
 #include <sys/select.h>     /* for pselect   */
 #include <string>
 #include <getopt.h>
+#include <regex>
+#include <map>
+#include <vector>
 #include <filesystem>
-#include "bash_color.h"
 #include "utility.hpp"
 #include "streamy.hpp"
 #include "constants.hpp"
 #include "fileio.hpp"
 #include "scanner.hpp"
-#include <regex>
-#include <map>
-#include <vector>
+#include "bash_color.hpp"
 #include "config.hpp"
 
 using namespace std;
