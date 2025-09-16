@@ -2,7 +2,7 @@
 
 source colors.sh
 
-echo -e "\n$(PrintRed 'Auto-committing changes to git repository...')\n"
+echo -e "\nPrintRed 'Auto-committing changes to git repository...'\n"
 git add .
 echo -e "$(PrintYellow 'Changes staged for commit.')\n"
 git commit -m "Auto-commit changes"
