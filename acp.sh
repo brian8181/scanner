@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source colors.sh
+source ./colors.sh
 
 PrintRed "\nAuto-committing changes to git repository...\n"
 git add .
