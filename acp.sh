@@ -2,10 +2,10 @@
 
 echo "Auto-committing changes to git repository..."
 git add .
-echo "Changes staged for commit."
+echo -e "Changes staged for commit.\n"
 git commit -m "Auto-commit changes"
-echo "Changes committed."
+echo -e "Changes committed.\n"
 git push
 echo -e "Changes pushed to remote repository.\n"
 git log --oneline -5
-echo "Last 5 commits displayed."
+echo -e "Last 5 commits displayed.\n"
