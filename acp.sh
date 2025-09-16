@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Auto-committing changes to git repository..."
+echo -e "\nAuto-committing changes to git repository...\n"
 git add .
 echo -e "Changes staged for commit.\n"
 git commit -m "Auto-commit changes"
