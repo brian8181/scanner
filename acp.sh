@@ -6,6 +6,6 @@ echo "Changes staged for commit."
 git commit -m "Auto-commit changes"
 echo "Changes committed."
 git push
-echo "Changes pushed to remote repository."
+echo -e "Changes pushed to remote repository.\n\n"
 git log --oneline -5
 echo "Last 5 commits displayed."
