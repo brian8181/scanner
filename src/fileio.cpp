@@ -90,7 +90,7 @@ int read_str(const string& file, /* out */ string& out)
         out = ss.str();
         return (int)ss.str().size();
     }
-    return 0;
+    return -1;
 }
 
 int write_str(const string& file, /* in */ const string& in)
@@ -105,38 +105,46 @@ int write_str(const string& file, /* in */ const string& in)
         stream.close();
         return (int)ss.str().size();
     }
-    return 0;
+    return -1;
 }
 
-void read_sstream(const string& file, /* out */ stringstream& sstrm)
+int read_sstream(const string& file, /* out */ stringstream& sstrm)
 {
     ifstream stream(file, ios::in);
     if (stream.is_open())
     {
-        string line;
-        while (getline(stream, line))
+        char c;
+        while (stream.get(c))
         {
-            sstrm << line;
+            sstrm << c;
         }
         stream.close();
+        return sstrm.str().size();
     }
+    return -1;
 }
 
-void write_sstream(const string& file, /* in */ const stringstream& sstrm)
+int write_sstream(const string& file, /* in */ const stringstream& sstrm)
 {
-    ofstream stream;
-    stream.open(file, ios::out);
+    ofstream stream(file, ios::out);
     if (stream.is_open())
     {
         stream << sstrm.str();
         stream.close();
+        return sstrm.str().size();
     }
+    return -1;
 }
 
+/**
+ * @brief Read lines from a file into a vector of strings
+ * @param file The file to read from
+ * @param lines The vector to store the lines
+ * @return The number of lines read, or -1 on error
+ */
 vector<string>& read_lines(const string& file, /* out */ vector<string>& lines)
 {
-    ifstream stream;
-    stream.open(file, ios::out);
+    ifstream stream(file, ios::in );
     if (stream.is_open())
     {
         string line;
@@ -149,19 +157,27 @@ vector<string>& read_lines(const string& file, /* out */ vector<string>& lines)
     return lines;
 }
 
-void write_lines(const string& file, /* in */ const vector<string>& lines)
+/**
+ * @brief Write lines to a file
+ * @param file The file to write to
+ * @param lines The lines to write
+ * @return The number of lines written, or -1 on error
+ */
+int write_lines(const string& file, /* in */ const vector<string>& lines)
 {
     std::ofstream os(file, std::ofstream::out | std::ofstream::trunc);
 	if (os.is_open())
 	{
-        string s;
+        string line;
         int len = lines.size();
         for(int i = 0; i < len; ++i)
         {
-            s = lines[i];
-            s.append("\n");  // append new line
-		    os.write(s.c_str(), s.size());
+            line = lines[i];
+            line.append("\n");  // append new line
+		    os.write(line.c_str(), line.size());
         }
+        return len;
 	}
     os.close();
+    return -1;
 }

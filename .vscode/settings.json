@@ -2,6 +2,7 @@
     "cmake.sourceDirectory": "C:/Users/brian/src/scanner/src",
     "files.associations": {
         "utility": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "regex": "cpp"
     }
 }

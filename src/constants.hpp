@@ -10,6 +10,9 @@
 using std::string;
 
 // terminals
+const string TYPES = "(int)|(float)|(string)|(array)|(object)|(bool)|(void)";
+const string TYPE_MODIFIERS = "(public)|(private)|(protected)|(static)|(const)|(final)";
+//const string KEYWORDS = "(if)|(else)|(elseif)|(elseif)|(endif)|(for)|(endfor)|(foreach)|(endforeach)|(while)|(endwhile)|(do)|(switch)|(case)|(default)|(break)|(continue)|(return)|(function)|(endfunction)|(class)|(endclass)|(try)|(catch)|(finally)|(throw)|(throws)|(new)|(this)|(parent)|(self)|(namespace)|(use)|(as)|(interface)|(implements)|(extends)|(abstract)|(trait)|(yield)|(from)|(global)|(isset)|(empty
 const string OPEN_CURLY_BRACE = "\\{";
 const string CLOSE_CURLY_BRACE = "\\}";
 const string FORWARD_SLASH = "/";

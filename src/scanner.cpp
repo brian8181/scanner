@@ -15,123 +15,64 @@
 #include <vector>
 #include <filesystem>
 #include "utility.hpp"
-#include "streamy.hpp"
-#include "constants.hpp"
 #include "fileio.hpp"
 #include "scanner.hpp"
-#include "bash_color.hpp"
 #include "config.hpp"
+#include "cterminals.hpp"
 
 using namespace std;
 
-
 /**
- * @brief Lexical analysis of the input source code.
- * @param src The source code to analyze.
- * @param escapes A vector to store the escape sequences found.
+ * @brief start the lexical analysis process
+ * @param file The file to analyze
  */
-void lex(const string& src, /* out*/ vector<pair<int, string>>& escapes)
+void start(string file)
 {
-    string s = src;
-    regex esc_rexp = regex(ESCAPE, std::regex::ECMAScript);
-    smatch esc_match;
-    while(regex_search(s, esc_match, esc_rexp, std::regex_constants::match_default))
+    cout << "Starting lexical analysis on file: " << file << endl;
+    stringstream sstrm;
+    ifstream stream(file, ios::in );
+    if (stream.is_open())
     {
-        // push begin
-        if(esc_match.prefix().str().size())
-        {
-            escapes.push_back({TEXT, esc_match.prefix()});
-        }
-        // now start lexing
-        regex oper_rexp = regex("(" + VARIABLE + ")", regex::ECMAScript);
-        smatch oper_match;
-        string e_sub_match = esc_match.str();
-        while(regex_search(e_sub_match, oper_match, oper_rexp, regex_constants::match_default))
-        {
-            // push back match as token
-            if(oper_match.prefix().str().size() > 0)
-                escapes.push_back({TOKEN, oper_match.prefix().str()});
-
-            if(oper_match.str().size() > 0)
-                escapes.push_back( { TOKEN, oper_match.str()} );
-
-            // after oper_match to end of string
-            string suffix = oper_match.suffix().str();
-            if(oper_match.str() == "*" || oper_match.str() == "#" || oper_match.str() == "\"" || oper_match.str() == "'")
-            {
-                int pos = suffix.find_first_of("*#\"'");
-                int len = suffix.size();
-                escapes.push_back({ TOKEN, suffix.substr(0, pos ) });
-
-                len = len-(pos+1);
-                if(len > 0)
-                {
-                    escapes.push_back({ TOKEN, suffix.substr(pos, 1 ) });
-                    suffix = suffix.substr(pos+1, len);
-                }
-            }
-            e_sub_match = suffix;
-        }
-        s = (esc_match.suffix().str().size()) ? esc_match.suffix().str() : string("");
+        read_sstream(file, /* out */ sstrm);
+        stream.close();
     }
-    if(s.size() > 0)
+    else
     {
-           escapes.push_back( { TEXT,  s } );
+        cout << "Error: Unable to open file for reading." << endl;
+        return;
     }
+
+    string str = sstrm.str();
+    cout << "File content: " << str << endl;
+    match_token( TYPES + "|" + TYPE_MODIFIERS + "|" + ALL_OPERATORS + "|(" + SYMBOL + ")", str);
+    // match_token( IDENTIFIER, str);
+    // match_token( INT_LITERAL, str);
+    // match_token( FLOAT_LITERAL, str);
+    // match_token( STRING_LITERAL, str);
+    // match_token( CHAR_LITERAL, str);
+    // match_token( HEX_LITERAL, str);
+    // match_token( OPERATORS, str);
+    // match_token( LOGICAL_OPERATORS, str);
 }
 
 /**
- * @brief Lexical analysis of the input source code.
- * @param src The source code to analyze.
- * @param escapes A vector to store the escape sequences found.
+ * @brief match a token using regex
+ * @param exp The regular expression to match
+ * @param text The text to search for matches
  */
-void _lex(const string& src, /* out*/ vector<pair<int, string>>& escapes)
+void match_token(const string& exp, const string& text)
 {
-    string s = src;
-    regex esc_rexp = regex(ESCAPE, std::regex::ECMAScript);
-    smatch esc_match;
-    while(regex_search(s, esc_match, esc_rexp, std::regex_constants::match_default))
+
+    regex rexp = regex(exp, regex::ECMAScript);
+    smatch sm;
+
+    auto begin = sregex_iterator(text.begin(), text.end(), rexp);
+    auto end = sregex_iterator();
+    for (std::sregex_iterator i = begin; i != end; ++i)
     {
-        // push begin
-        if(esc_match.prefix().str().size())
-        {
-            escapes.push_back({TEXT, esc_match.prefix()});
-        }
-        // now start lexing
-        regex oper_rexp = regex("(" + VARIABLE + ")", regex::ECMAScript);
-        smatch oper_match;
-        string e_sub_match = esc_match.str();
-        while(regex_search(e_sub_match, oper_match, oper_rexp, regex_constants::match_default))
-        {
-            // push back match as token
-            if(oper_match.prefix().str().size() > 0)
-                escapes.push_back({TOKEN, oper_match.prefix().str()});
-
-            if(oper_match.str().size() > 0)
-                escapes.push_back( { TOKEN, oper_match.str()} );
-
-            // after oper_match to end of string
-            string suffix = oper_match.suffix().str();
-            if(oper_match.str() == "*" || oper_match.str() == "#" || oper_match.str() == "\"" || oper_match.str() == "'")
-            {
-                int pos = suffix.find_first_of("*#\"'");
-                int len = suffix.size();
-                escapes.push_back({ TOKEN, suffix.substr(0, pos ) });
-
-                len = len-(pos+1);
-                if(len > 0)
-                {
-                    escapes.push_back({ TOKEN, suffix.substr(pos, 1 ) });
-                    suffix = suffix.substr(pos+1, len);
-                }
-            }
-            e_sub_match = suffix;
-        }
-        s = (esc_match.suffix().str().size()) ? esc_match.suffix().str() : string("");
-    }
-    if(s.size() > 0)
-    {
-           escapes.push_back( { TEXT,  s } );
+        std::smatch match = *i;
+        std::string match_str = match.str();
+        std::cout << match_str << " : " << match.position() << endl;
     }
 }
 
@@ -143,109 +84,34 @@ void _lex(const string& src, /* out*/ vector<pair<int, string>>& escapes)
  */
 int parse_options(int argc, char* argv[])
 {
-
-    string exp = "abc";
-	string text = "abc";
-	bool match = match_single(exp, text);
-	cout << "exp: " << "\"" << exp << "\"" << " matching " << "\"" << text << "\"" " : matched=" << (match ? "true":"false") << endl;
-
-	exp = "abc";
-	text = "abcabc";
-	match = match_single(exp, text);
-	cout << "exp: " << "\"" << exp << "\"" << " matching " << "\"" << text << "\"" " : matched=" << (match ? "true":"false") << endl;
-
-    // array of values ...
-    vector<string> citys = { "Mesquite",  "Dallas", "Addison", "New York",     "London",
-                             "Barcelona", "Madrid", "Paris",   "Las Angelels", "Las Vegas",
-                             "Garland",   "Richardson", "Plano"};
-
-    // initial configuration ...
-    const string project_folder = "/home/brian/src/streamy-cpp";
-    const string config_path = "/home/brian/src/streamy-cpp/test/config/lexer_tester.conf";
-
-    streamy sm(project_folder + "/test/templates", project_folder + "/test/compile", project_folder + "/test/config", project_folder + "/test/cache");
-    sm.load_config(config_path);
-	sm.get_map_config()["test"] = "Config Var ...TESTING";
-    sm.assign("citys", citys);
-    sm.assign("headers", "HEADERS");
-    sm.assign("page_title", "*PAGE_TITLE*");
-    sm.assign("body", "**THE BODY**");
-    sm.assign("admin_email", "admin@something.com");
-    sm.assign("version", "0.1");
-    sm.assign("version_date", "Feb, 14 2022");
-	sm.display("test_vars.tpl");
-
-	cout << endl << FMT_FG_RED << "{ Configuration Variables }" << FMT_RESET << endl;
-	map<string, string> config_vars = sm.get_map_config();
-
-	map<string, map<string, string>> config = sm.get_map_config_sections();
-	map<string, map<string, string>>::iterator end = config.end();
-	for(map<string, map<string, string>>::iterator iter = config.begin(); iter != end; ++iter)
-	{
-		string section_name = iter->first;
-		cout << "[" + section_name + "]" << endl;
-		map<string, string> cfg_section = iter->second;
-		map<string, string>::iterator end = cfg_section.end();
-		for(map<string, string>::iterator section_iter = cfg_section.begin(); section_iter != end; ++section_iter)
-		{
-			cout << "key = " << section_iter->first << " : value = " << section_iter->second << endl;
-		}
-	}
-
-	if(argc < 2)
+    int opt;
+    const char* optstring = "hVf:";
+    const struct option longopts[] = {
+        {"help",        no_argument,        NULL,   'h'},
+        {"version",     no_argument,        NULL,   'V'},
+        {"file",        required_argument,  NULL,   'f'},
+        {NULL,          0,                  NULL,    0 }
+    };
+    string file = argv[1];
+    while ((opt = getopt_long(argc, argv, optstring, longopts, NULL)) != -1)
     {
-        cout << "No file parameter." << endl;
-        cout << "usage: "  << "lex_tester.cgi " << "[path to template file]" << endl;
-        return -1;
+        switch (opt)
+        {
+            case 'h':
+                cout << "Help message" << endl;
+                return 0;
+            case 'V':
+                cout << "Version 0.0.1" << endl;
+                return 0;
+            case 'f':
+                file = optarg;
+                break;
+            default:
+                cerr << "Unknown option" << endl;
+                return 1;
+        }
     }
-
-	string file_path = project_folder + "/test/templates/" + argv[1];
-    filesystem::path file = file_path;
-	if(!file_exist(file.string()))
-	{
-		cout << file.filename() << " : file not found ..." << endl;
-        cout << "usage: "  << "lex_tester.cgi " << "[path to template file]" << endl;
-		return -1;
-	}
-
-	cout << endl << FMT_FG_RED << "{ Begin streamy standard out --> ...}" << FMT_RESET << endl;
-    string tmpl(file.filename());
-    sm.display(tmpl);
-	cout << endl << FMT_FG_RED << "{ End streamy standard out --> ...}" << FMT_RESET << endl;
-
-	std::vector<std::pair<int, std::string>> escapes;
-	lex("This is some text with an {escape} and some more text. { $variable } and a number 1234.56 and hex 0x1A3F and operators + - * / ! && || == <= >= != -> <-", /* out */ escapes);
-	lex("A string with a {literal} block {literal} this is not parsed { /literal } back to normal. Also a foreach {foreach $citys as $city} City: {$city} {foreachelse} No cities found! { /foreach } The end.", /* out */ escapes);
-	lex("A string with a {literal} block {literal} this is not parsed { /literal } back to normal. Also an if {if $version == \"0.1\"} Version is 0.1 {elseif $version == \"0.2\"} Version is 0.2 {else} Version is something else! { /if } The end.", /* out */ escapes);
-	lex("A string with a {literal} block {literal} this is not parsed { /literal } back to normal. Also an if {if $version == \"0.1\"} Version is 0.1 {elseif $version == \"0.2\"} Version is 0.2 {else} Version is something else! { /if } The end.", /* out */ escapes);
-	lex("A string with a {literal} block {literal} this is not parsed { /literal } back to normal. Also an if {if $version == \"0.1\"} Version is 0.1 {elseif $version == \"0.2\"} Version is 0.2 {else} Version is something else! { /if } The end.", /* out */ escapes);
-	lex("A string with a {literal} block {literal} this is not parsed { /literal } back to normal. Also an if {if $version == \"0.1\"} Version is 0.1 {elseif $version == \"0.2\"} Version is 0.2 {else} Version is something else! { /if } The end.", /* out */ escapes);
-	lex("A string with a {literal} block {literal} this is not parsed { /literal } back to normal. Also an if {if $version == \"0.1\"} Version is 0.1 {elseif $version == \"0.2\"} Version is 0.2 {else} Version is something else! { /if } The end.", /* out */ escapes);
-	lex("A string with a {literal} block {literal} this is not parsed { /literal } back to normal. Also an if {if $version == \"0.1\"} Version is 0.1 {elseif $version == \"0.2\"} Version is 0.2 {}else} Version is something else! { /if } The end.", /* out */ escapes);
-
-
-	lex("0xFFF", /* out */ escapes);
-	lex("{$testing}", /* out */ escapes);
-	// lex("0xabcdef", /* out */ escapes);
-	// lex("0XABCDEF", /* out */ escapes);
-	// lex("123456", /* out */ escapes);
-	// lex("123456.789", /* out */ escapes);
-	// lex("0.789", /* out */ escapes);
-	// lex(".789", /* out */ escapes);
-	// lex("1234.", /* out */ escapes);
-	// lex("1234.56e10", /* out */ escapes);
-	// lex("1234.56E10", /* out */ escapes);
-	// lex("1234.56e-10", /* out */ escapes);
-	// lex("1234.56E-10", /* out */ escapes);
-
-	for(auto& e : escapes)
-	{
-		if(e.first == TEXT)
-			cout << "TEXT  : \"" << e.second << "\"" << endl;
-		else
-			cout << "TOKEN : \"" << e.second << "\"" << endl;
-	}
-
+    start(file);
     return 0;
 }
 

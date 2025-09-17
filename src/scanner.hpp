@@ -9,6 +9,10 @@
 
 using namespace std;
 
+
+void match_token(const string& exp, const string& text);
+
+void start(string file);
 /**
  * @file scanner.hpp
  * @brief Header file for scanner.cpp
@@ -18,6 +22,13 @@ using namespace std;
  */
 
 void lex(const string& src, /* out*/ vector<pair<int, string>>& escapes);
+
+/**
+ * @brief Lexical analysis of the input source code.
+ * @param src The source code to analyze.`
+ * @param escapes A vector to store the escape sequences found.
+ */
+void _lex(const string& src, /* out*/ vector<pair<int, string>>& escapes);
 
 /**
  * @brief parse command line options
