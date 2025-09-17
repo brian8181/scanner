@@ -30,11 +30,14 @@ void start(string file)
 {
     cout << "Starting lexical analysis on file: " << file << endl;
     stringstream sstrm;
-    ifstream stream(file, ios::in );
-    if (stream.is_open())
+    ifstream strm(file, ios::in );
+    if (strm.is_open())
     {
-        read_sstream(file, /* out */ sstrm);
-        stream.close();
+        char c;
+        while (strm.get(c))
+        {
+            sstrm << c;
+        }
     }
     else
     {
@@ -42,7 +45,8 @@ void start(string file)
         return;
     }
 
-    string str = sstrm.str();
+    string str = sstrm.str( );
+
     cout << "File content: " << str << endl;
     match_token( TYPES + "|" + TYPE_MODIFIERS + "|" + ALL_OPERATORS + "|(" + SYMBOL + ")", str);
     // match_token( IDENTIFIER, str);
@@ -55,6 +59,118 @@ void start(string file)
     // match_token( LOGICAL_OPERATORS, str);
 }
 
+
+int get_token(stringstream strm, string& token)
+{
+    while( !strm.eof() )
+    {
+        char c;
+        strm.get(c);
+        if(isspace(c))
+        {
+            if(!token.empty())
+            {
+                return 1;
+            }
+            continue;
+        }
+
+        switch(c)
+        {
+            case '(':
+                token += c;
+                return ID_OPEN_PAREN;
+            case '{':
+                token += c;
+                return ID_OPEN_CURLY_BRACE;
+            case '[':
+                token += c;
+                return ID_OPEN_BRACE;
+            case ';':
+                token += c;
+                return ID_SEMI_COLON;
+            case '.':
+                token += c;
+                return ID_DOT;
+            case ':':
+            case '^':
+                token += c;
+                return ID_BIT_XOR;
+            case '*':
+                token += c;
+                return ID_ASTERIK;
+            case '+':
+                token += c;
+                return ID_PLUS;
+            case '=':
+                token += c;
+                return ID_EQUAL;
+            case '>':
+                token += c;
+                return ID_GREATER_THAN;
+            case '&':
+                token += c;
+                return ID_BIT_AND;
+            case ')':
+                token += c;
+                return ID_CLOSE_PAREN;
+            case '}':
+                token += c;
+                return ID_CLOSE_CURLY_BRACE;
+            case ']':
+                token += c;
+                return ID_CLOSE_BRACE;
+            case ',':
+                token += c;
+                return ID_COMMA;
+            case '?':
+                token += c;
+                return ID_QUESTION_MARK;
+            case '~':
+                token += c;
+                return ID_TILDE;
+            case '%':
+                token += c;
+                return ID_MODULUS;
+            case '/':
+                token += c;
+                return ID_DIVIDE_OR;
+            case '-':
+                token += c;
+                return ID_MINUS;
+            case '<':
+                token += c;
+                return ID_LESS_THAN;
+            case '!':
+                token += c;
+                return ID_LOGICAL_NOT;
+            case '|':
+                token += c;
+                return ID_LOGICAL_OR;
+
+            default:
+            {
+                if ( isalnum( c ) || c == '_' )
+                {
+                    continue;
+                    }
+                else
+                    {
+                    if ( !token.empty( ) )
+                        {
+                        return 1;
+                        }
+                    token += c;
+                    return 1;
+                    }
+                break;
+            }
+        }
+        }
+    return ID_UNDEFINED;
+}
+
+
 /**
  * @brief match a token using regex
  * @param exp The regular expression to match
@@ -62,7 +178,6 @@ void start(string file)
  */
 void match_token(const string& exp, const string& text)
 {
-
     regex rexp = regex(exp, regex::ECMAScript);
     smatch sm;
 

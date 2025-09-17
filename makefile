@@ -96,25 +96,29 @@ $(BLD)/libstreamy.a: $(BLD)/streamy.o
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-#CCSK_RULE#
+$(OBJ)/%.o: $(AST)/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-.PHONY: rebuild
 rebuild: clean all
+.PHONY: rebuild
 
-.PHONY: install
+dist:
+	tar -czvf scanner.tar.gz ./src ./include ./makefile ./README.md ./LICENSE ./CHANGELOG.md
+.PHONY: dist
+
 install:
 	cp ./$(BLD)/scanner ./$(prefix)/bin/scanner
+.PHONY: install
 
-.PHONY: uninstall
 uninstall:
 	-rm ./$(prefix)/bin/scanner
+.PHONY: uninstall
 
-.PHONY: clean
 clean:
 	-rm -f ./$(OBJ)/*.o
 	-rm -f ./$(BLD)/*.o
+.PHONY: clean
 
-.PHONY: help
 help:
 	@echo  '  all         - build all'
 	@echo  '  scanner          - build scanner executable'
@@ -124,3 +128,6 @@ help:
 	@echo  '  clean                      - remove all files from build dir'
 	@echo  '  install                    - copy files to usr/local'
 	@echo  '  dist                       - create distribution, tar.gz'
+	@echo  '  rebuild                    - clean and build all'
+	@echo  '  help                       - this help message'
+.PHONY: help

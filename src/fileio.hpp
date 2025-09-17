@@ -1,6 +1,8 @@
-// File Name:  fileio.cpp
-// Build Date: Sat Nov 25 06:03:48 AM CST 2023
-// Version:    3.6.7
+/**
+ * @file     fileio.hpp
+ * @date:    Wed, Sep 17, 2025  2:03:48 PM
+ * @version: 0.0.1
+ */
 
 #ifndef _FILEIO_HPP_
 #define _FILEIO_HPP_
@@ -23,6 +25,7 @@ using std::stringstream;
  * @return The file stream
  */
 ifstream& read_char(ifstream& stream, /* out */ char& c);
+
 /**
  * @brief Write a character to a file stream
  * @param stream The file stream to write to
@@ -30,6 +33,7 @@ ifstream& read_char(ifstream& stream, /* out */ char& c);
  * @return The file stream
  */
 ofstream& write_char(ofstream& stream, /* in */ const char& c);
+
 /**
  * @brief Read a file into a buffer
  * @param file The file to read from
@@ -38,6 +42,7 @@ ofstream& write_char(ofstream& stream, /* in */ const char& c);
  * @return The number of bytes read, or -1 on error
  */
 int read_buf(const string& file, /* out */ unsigned char* buf, const int& len);
+
 /**
  * @brief Write a buffer to a file
  * @param file The file to write to
@@ -46,6 +51,7 @@ int read_buf(const string& file, /* out */ unsigned char* buf, const int& len);
  * @return The number of bytes written, or -1 on error
  */
 int write_buf(const string& file, /* in */ const unsigned char* buf, const int& len);
+
 /**
  * @brief Read a file into a string
  * @param file The file to read from
@@ -53,6 +59,7 @@ int write_buf(const string& file, /* in */ const unsigned char* buf, const int& 
  * @return The number of characters read, or -1 on error
  */
 int read_str(const string& file, /* out */ string& out);
+
 /**
  * @brief Write a string to a file
  * @param file The file to write to
@@ -60,6 +67,7 @@ int read_str(const string& file, /* out */ string& out);
  * @return The number of characters written, or -1 on error
  */
 int write_str(const string& file, /* in */ const string& out);
+
 /**
  * @brief Read a file into a stringstream
  * @param file The file to read from
@@ -74,6 +82,7 @@ int read_sstream(const string& file, /* out */ stringstream& sstrm);
  * @return The number of characters written, or -1 on error
  */
 int write_sstream(const string& file, /* in */ const stringstream& sstrm);
+
 /**
  * @brief Read lines from a file into a vector of strings
  * @param file The file to read from
@@ -81,6 +90,7 @@ int write_sstream(const string& file, /* in */ const stringstream& sstrm);
  * @return The number of lines read, or -1 on error
  */
 vector<string>& read_lines(const string& file, /* out */ vector<string>& lines);
+
 /**
  * @brief Write lines from a vector of strings to a file
  * @param file The file to write to

@@ -3,6 +3,8 @@
     "files.associations": {
         "utility": "cpp",
         "iosfwd": "cpp",
-        "regex": "cpp"
-    }
+        "regex": "cpp",
+        "fstream": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

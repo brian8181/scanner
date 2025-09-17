@@ -16,8 +16,6 @@
 using namespace std;
 
 
-string& COLOR_RED(string& s);
-
 map<string, unsigned int> _token_map = {  {"{", ID_OPEN_CURLY_BRACE}, {"}", ID_CLOSE_CURLY_BRACE}, {"#", ID_HASH_MARK}, {"*", ID_ASTERIK}, {"$", ID_DOLLAR_SIGN},
                                           {"=", ID_EQUAL}, {"|", ID_VBAR}, {":", ID_COLON}, {"\"", ID_DOUBLE_QUOTE}, {"'", ID_SINGLE_QUOTE}, {".", ID_DOT},
                                           {"+", ID_PLUS}, {"-", ID_MINUS}, {"%", ID_MODULUS},
