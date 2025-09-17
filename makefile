@@ -73,7 +73,7 @@ endif
 .PHONY all: help
 all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
 
-$(BLD)/scanner: $(BLD)/utility.o $(BLD)/fileio.o $(BLD)/scanner.o $(BLD)/compiler.o $(BLD)/streamy.o
+$(BLD)/scanner: $(BLD)/utility.o $(BLD)/fileio.o $(BLD)/scanner.o
 	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ -o $@
 
 $(BLD)/libscanner.so: ./$(BLD)/scanner.o

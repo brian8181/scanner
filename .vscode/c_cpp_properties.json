@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${default}"
+            ],
+            "windowsSdkVersion": "10.0.26100.0",
+            "compilerPath": "C:/cygwin64/bin/g++.exe",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerArgs": [
+                "--sysroot"
+            ],
+            "defines": [
+                "CYGWIN=true"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++20"
+        },
+        {
+            "name": "scanner",
+            "includePath": [
+                "${default}"
+            ],
+            "windowsSdkVersion": "10.0.26100.0",
+            "compilerPath": "C:/cygwin64/bin/g++.exe",
+            "intelliSenseMode": "linux-gcc-x64",
+            "cStandard": "c17",
+            "cppStandard": "c++20"
+        }
+    ],
+    "version": 4
+}

@@ -47,8 +47,8 @@ void start(string file)
 
     string str = sstrm.str( );
 
-    cout << "File content: " << str << endl;
-    match_token( TYPES + "|" + TYPE_MODIFIERS + "|" + ALL_OPERATORS + "|(" + SYMBOL + ")", str);
+    //cout << "File content: " << str << endl;
+    match_token( TYPES + "|" + TYPE_MODIFIERS + "|(" + SYMBOL + ")", str);
     // match_token( IDENTIFIER, str);
     // match_token( INT_LITERAL, str);
     // match_token( FLOAT_LITERAL, str);

@@ -1,0 +1,13 @@
+void start(string file);
+{
+    cout << "Starting scanner on file: " << file << endl;
+    ifstream in(file, ios::in);
+    if(!in)
+    {
+        throw runtime_error("Error: Unable to open file: " + file);
+    }
+    stringstream buffer;
+    buffer << in.rdbuf();
+    string src = buffer.str();
+    in.close();
+}

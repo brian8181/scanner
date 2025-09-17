@@ -9,7 +9,7 @@
 #include <regex>
 #include <string>
 #include <map>
-#include "constants.hpp"
+
 
 //void create_alteration(const long int& flags, /* out */ string& pattern);
 
