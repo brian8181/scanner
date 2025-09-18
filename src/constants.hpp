@@ -140,5 +140,12 @@ enum token_id : unsigned long
     ID_TILDE                   = 490,
     ID_BIT_XOR                 = 500,
     ID_BIT_AND                 = 510,
+    ID_BIT_OR                  = 520,
+    ID_BIT_NOT                 = 530,
+    ID_BIT_SHIFT_LEFT          = 540,
+    ID_BIT_SHIFT_RIGHT         = 550,
+    ID_NUMERIC_LITERAL         = 600,
+    ID_STRING_LITERAL          = 610,
+    ID_SYMBOL_NAME             = 620
     };
 #endif // _CTERMINALS_HPP
