@@ -18,7 +18,7 @@
 #include "fileio.hpp"
 #include "scanner.hpp"
 #include "config.hpp"
-#include "cterminals.hpp"
+#include "constants.hpp"
 
 using namespace std;
 
