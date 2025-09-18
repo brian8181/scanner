@@ -48,7 +48,7 @@ void start(string file)
     string str = sstrm.str( );
 
     //cout << "File content: " << str << endl;
-    match_token( TYPES + "|" + TYPE_MODIFIERS + "|(" + SYMBOL + ")", str);
+    match_token( "(" + TYPES + ")|(" + TYPE_MODIFIERS + ")|(" + SYMBOL + ")", str);
     // match_token( IDENTIFIER, str);
     // match_token( INT_LITERAL, str);
     // match_token( FLOAT_LITERAL, str);
@@ -187,8 +187,9 @@ void match_token(const string& exp, const string& text)
     {
         std::smatch match = *i;
         std::string match_str = match.str();
-        std::cout << match_str << " : " << match.position() << endl;
-    }
+        std::cout << match[ 0 ] << " : " << match.position( ) << endl;
+        //match.format( cout, "match: $&\n" );
+        }
 }
 
 /**
