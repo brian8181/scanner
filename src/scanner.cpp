@@ -32,7 +32,8 @@ void start(string file)
     stringstream sstrm;
     ifstream strm(file, ios::in );
     if (strm.is_open())
-    {
+        {
+        cout << file << "-> opened ..." << endl;
         char c;
         while (strm.get(c))
         {
@@ -48,7 +49,7 @@ void start(string file)
     string str = sstrm.str( );
 
     //cout << "File content: " << str << endl;
-    match_token( "(" + TYPES + ")|(" + TYPE_MODIFIERS + ")|(" + SYMBOL + ")", str);
+    match_token( STRING_LITERAL  , str);
     // match_token( IDENTIFIER, str);
     // match_token( INT_LITERAL, str);
     // match_token( FLOAT_LITERAL, str);
@@ -82,10 +83,10 @@ int get_token(stringstream strm, string& token)
                 return ID_OPEN_PAREN;
             case '{':
                 token += c;
-                return ID_OPEN_CURLY_BRACE;
+                return ID_OPEN_BRACE;
             case '[':
                 token += c;
-                return ID_OPEN_BRACE;
+                return ID_OPEN_BRACKET;
             case ';':
                 token += c;
                 return ID_SEMI_COLON;
@@ -95,7 +96,7 @@ int get_token(stringstream strm, string& token)
             case ':':
             case '^':
                 token += c;
-                return ID_BIT_XOR;
+                return ID_CARROT;
             case '*':
                 token += c;
                 return ID_ASTERIK;
@@ -110,16 +111,16 @@ int get_token(stringstream strm, string& token)
                 return ID_GREATER_THAN;
             case '&':
                 token += c;
-                return ID_BIT_AND;
+                return ID_AMPERSAND;
             case ')':
                 token += c;
                 return ID_CLOSE_PAREN;
             case '}':
                 token += c;
-                return ID_CLOSE_CURLY_BRACE;
+                return ID_CLOSE_BRACE;
             case ']':
                 token += c;
-                return ID_CLOSE_BRACE;
+                return ID_CLOSE_BRACKET;
             case ',':
                 token += c;
                 return ID_COMMA;
@@ -131,10 +132,10 @@ int get_token(stringstream strm, string& token)
                 return ID_TILDE;
             case '%':
                 token += c;
-                return ID_MODULUS;
+                return ID_PERCENT;
             case '/':
                 token += c;
-                return ID_DIVIDE_OR;
+                return ID_FORWARD_SLASH;
             case '-':
                 token += c;
                 return ID_MINUS;
@@ -189,7 +190,7 @@ void match_token(const string& exp, const string& text)
         std::string match_str = match.str();
         std::cout << match[ 0 ] << " : " << match.position( ) << endl;
         //match.format( cout, "match: $&\n" );
-        }
+    }
 }
 
 /**
@@ -267,7 +268,7 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		char* argv_cpy[sizeof(char*) * (argc+1)];
+		char* argv_cpy[ ( sizeof(char*) * argc ) + 1 ];
 		if(stdin_ready(STDIN_FILENO))
 		{
 			std::string buffer;

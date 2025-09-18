@@ -3,4 +3,4 @@ long; static float myfloat;
 double x1;
 int x2;
 
-long
+char c = "testing"
