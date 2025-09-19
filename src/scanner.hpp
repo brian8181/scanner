@@ -10,7 +10,9 @@
 using namespace std;
 
 
-void match_token(const string& exp, const string& text);
+void match_token( const string &exp, const string &text );
+
+void load_config( const string &path );
 
 void start(string file);
 /**

@@ -1,0 +1,8 @@
+VALID_SYMBOL_CHARS = "[A-Za-z0-9_]";
+VALID_CHARS        = "[\\w\\s\\[\\]+-=|$><^/#@~&*.%!~`_:;',()]";
+VALID_FILE_CHARS   = "[A-Za-z0-9_. ]";
+FLOAT_LITERAL      = "[0-9]*\\.[0-9]+";
+INTEGER_LITERAL    = "[0-9]+";
+HEX_LITERAL        = "0x[0-9A-Fa-f]+";
+STRING_LITERAL     = "\"" + VALID_CHARS + "*\"";
+CHAR_LITERAL       = "'[a-zA-Z0-9_{}[]#()<>%:;.?*+-\\/^&|~!=,\"]'";

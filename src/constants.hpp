@@ -4,16 +4,35 @@
 #include <string>
 using std::string;
 
+/*
+    The basic source character set consists of 96 characters:
+    the space character, the control characters representing horizontal tab,
+    vertical tab, form feed, and new-line, plus the following 91 graphical characters
+        a b c d e f g h i j k l m n o p q r s t u v w x y z
+        A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+        0 1 2 3 4 5 6 7 8 9
+        _ { } [ ] # ( ) < > % : ; . ? * + - / ˆ & | ˜ ! = , \ " ’ \
+*/
+
+const string VALID_SYMBOL_CHARS = "[A-Za-z0-9_]";
+const string VALID_CHARS = "[\\w\\s\\[\\]+-=|$><^/#@~&*.%!~`_:;',()]";
+const string VALID_FILE_CHARS = "[A-Za-z0-9_. ]";
+
+const string FLOAT_LITERAL = "[0-9]*\\.[0-9]+";
+const string INTEGER_LITERAL = "[0-9]+";
+const string HEX_LITERAL = "0x[0-9A-Fa-f]+";
+const string STRING_LITERAL = "\"" + VALID_CHARS + "*\"";
+const string CHAR_LITERAL = "'[a-zA-Z0-9_{}\\[\\]#()<>%:;.?*+-\\/^&|~!=,\"]'";
+
 const string PREPROCESSOR       = "#[A-Za-z_]+";
 const string COMMENT            = "(//.*$)|(\\/\\*[\\s\\S]*?\\*\\/)";
 /// terminals
 const string TYPES              = "(char)|(int)|(float)|(double)|(string)|(long)|(short)|(bool)|(void)";
 const string TYPE_MODIFIERS     = "(signed)|(unsigned)|(static)|(const)|(volatile)";
 const string KEYWORDS           = "(if)|(else)|(for)|(while)|(return)|(break)|(continue)|(switch)|(case)|(default)|(do)|(goto)|(sizeof)";
-const string VALID_SYMBOL_CHARS = "[A-Za-z0-9_]";
-const string VALID_CHARS        = "[\\w\\s\\[\\]+-=|$><^/#@~&*.%!~`_:;',()]";
-const string VALID_FILE_CHARS   = "[A-Za-z0-9_. ]";
-const string SYMBOL             = "_?[A-Za-z][A-Za-z0-9_]*";
+
+const string SYMBOL = "_?[A-Za-z][A-Za-z0-9_]*";
+const string CONFIG_PAIR = "\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*((" + VALID_SYMBOL_CHARS + "*)|(\"" + VALID_CHARS + "*\"))\\s*";
 // punctuations
 const string ASTERIK            = "\\*";
 const string AMPERSAND          = "&";
@@ -91,14 +110,13 @@ const string DECL                 = "(" + TYPES               + ")|" +
 //
 const string OPERATORS            = "([,/'\"$*#=+-:!%<>|.(){}\\]\\[])";
 const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
-const string FLOAT_LITERAL        = "([0-9]*\\.[0-9]+)";
-const string INTEGER_LITERAL      = "([0-9]+)";
-const string HEX_LITERAL          = "(0x[0-9A-Fa-f]+)";
-const string SYMBOL_NAME          = "\\$?_*[A-Za-z]" + VALID_SYMBOL_CHARS + "*";
-const string STRING_LITERAL       = "\"" + VALID_CHARS + "*\"";
-const string LITERAL              = "(" + STRING_LITERAL      + ")|" +
-                                    "(" + INTEGER_LITERAL     + ")|" +
-                                    "(" + FLOAT_LITERAL       + ")";
+const string SYMBOL_NAME = "\\$?_*[A-Za-z]" + VALID_SYMBOL_CHARS + "*";
+
+const string LITERAL = "(" + STRING_LITERAL + ")|" +
+                       "(" + FLOAT_LITERAL + ")|" +
+                       "(" + INTEGER_LITERAL + ")|" +
+                       "(" + HEX_LITERAL + ")|" +
+                       "(" + CHAR_LITERAL + ")";
 
 /**
  * @brief Enumeration of token IDs.
