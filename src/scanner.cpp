@@ -94,21 +94,30 @@ void start(string file)
         return;
     }
 
-    string str = sstrm.str( );
-
-    // cout << "File content: " << str << endl;
-    //  match_token(LITERAL, str);
-    //  cout << "..." << endl;
-    //  match_token(FLOAT_LITERAL, str);
-    //  match_token(INTEGER_LITERAL, str);
-    //  match_token(STRING_LITERAL, str);
-    //  cout << "..." << endl;
+    string str = sstrm.str();
     //  string s = "'[A-Za-z0-9_\\[\\]{}#()<>%:;.\"]'";
     match_token(LITERAL, str);
-    cout << "..." << endl;
-    // match_token( HEX_LITERAL, str);
     // match_token( OPERATORS, str);
     // match_token( LOGICAL_OPERATORS, str);
+}
+
+/**
+ * @brief match a token using regex
+ * @param exp The regular expression to match
+ * @param text The text to search for matches
+ */
+void match_token(const string &exp, const string &text)
+{
+    cout << "tokenize ..." << endl;
+    regex rexp = regex(exp, regex::ECMAScript);
+
+    sregex_iterator begin = sregex_iterator(text.begin(), text.end(), rexp);
+    sregex_iterator end;
+    for (std::sregex_iterator iter = begin; iter != end; ++iter)
+    {
+        std::smatch match = *iter;
+        cout << match.str() << endl;
+    }
 }
 
 int get_token(stringstream strm, string& token)
@@ -219,34 +228,6 @@ int get_token(stringstream strm, string& token)
         }
         }
     return ID_UNDEFINED;
-}
-
-
-/**
- * @brief match a token using regex
- * @param exp The regular expression to match
- * @param text The text to search for matches
- */
-void match_token(const string& exp, const string& text)
-{
-    regex rexp = regex(exp, regex::ECMAScript);
-    smatch sm;
-
-    sregex_iterator begin = sregex_iterator(text.begin(), text.end(), rexp);
-    sregex_iterator end;
-
-    for (std::sregex_iterator iter = begin; iter != end; ++iter)
-    {
-        std::smatch match = *iter;
-        std::string match_str = match.str();
-        std::cout << match[0] << " : " << match.position() << endl;
-        // int len = match.size();
-        // for (int i = 0; i < len; ++i)
-        // {
-        //     std::cout << match[i] << " : " << match.position() << endl;
-        // }
-        // match.format( cout, "match: $&\n" );
-    }
 }
 
 /**
