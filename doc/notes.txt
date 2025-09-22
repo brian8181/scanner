@@ -1,0 +1,34 @@
+
+# g++ warnings
+#-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror -Wundef
+#-fsanitize=undefined,address -Wfloat-equal -Wformat-nonliteral
+#-Wformat-security -Wformat-y2k -Wformat=2 -Wimport -Winvalid-pch
+#-Wlogical-op -Wmissing-declarations -Wmissing-field-initializers
+#-Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn
+#-Wnested-externs -Wpacked -Wpointer-arith -Wredundant-decls
+#-Wstack-protector -Wstrict-null-sentinel -Wswitch-enum -Wwrite-strings
+
+#CXXEXTRA=-Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wno-sign-conversion -Wno-unused-parameter
+#-Wno-unused-variable -Wno-unused-but-set-variable -Wno-missing-field-initializers -Wno-unknown-pragmas
+#-Wno-comment -Werror -Wfatal-errors -fsanitize=address,undefined -fno-omit-frame-pointer -D_GLIBCXX_USE_CXX11_ABI=1
+
+SHELL := bash
+# .ONESHELL:
+# .SHELLFLAGS := -eu -o pipefail -c
+# .DELETE_ON_ERROR:
+# MAKEFLAGS += --warn-undefined-variables
+# MAKEFLAGS += --no-builtin-rules
+
+# ifeq ($(origin .RECIPEPREFIX), undefined)
+#   $(error This Make does not support .RECIPEPREFIX. Please use GNU Make 4.0 or later)
+# endif
+# .RECIPEPREFIX = >
+# # Default - top level rule is what gets ran when you run just `make`
+# build: out/image-id
+# .PHONY: build
+
+# Clean up the output directories; since all the sentinel files go under tmp, this will cause everything to get rebuilt
+# clean:
+# > rm -rf tmp
+# > rm -rf out
+# .PHONY: clean

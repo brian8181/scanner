@@ -15,7 +15,7 @@ using std::string;
 */
 
 // valid characters
-const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]";
+const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
 const string VALID_CHARS          = "[\\w\\s\\[\\]+-=|$><^/#@~&*.%!~`_:;',()]";
 const string VALID_FILE_CHARS     = "[A-Za-z0-9_. ]";
 const string CONFIG_PAIR          = "\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*((" + VALID_SYMBOL_CHARS + "*)|(\"" + VALID_CHARS + "*\"))\\s*";
@@ -32,6 +32,11 @@ const string TYPES                = "(char)|(int)|(float)|(double)|(string)|(lon
 const string TYPE_MODIFIERS       = "(signed)|(unsigned)|(static)|(const)|(volatile)";
 const string SYMBOL               = "_?[A-Za-z][A-Za-z0-9_]*";
 const string KEYWORDS             = "(if)|(else)|(for)|(while)|(return)|(break)|(continue)|(switch)|(case)|(default)|(do)|(goto)|(sizeof)";
+
+const string OPERATORS            = "([,/'\"$*#=+-:!%<>|.(){}\\]\\[])";
+const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
+const string SYMBOL_NAME          = "\\$?_*[A-Za-z]" + VALID_SYMBOL_CHARS + "*";
+
 // punctuations
 const string ASTERIK              = "\\*";
 const string AMPERSAND            = "&";
@@ -70,52 +75,49 @@ const string LESS_THAN_EQUAL      = "<=";
 const string GREATER_THAN_EQUAL   = ">=";
 const string SCOPE_RESOLUTION     = "::";
 const string INDIRECT_SELECTION   = "->";
-
 //
-const string LOGICAL_OPERATORS    = "(" + EQUAL              + ")|" +
-                                    "(" + EXCLAMATION        + ")|" +
-                                    "(" + NOT_EQUAL          + ")|" +
-                                    "(" + AND                + ")|" +
-                                    "(" + OR                 + ")|" +
-                                    "(" + LESS_THAN          + ")|" +
-                                    "(" + GREATER_THAN       + ")|" +
-                                    "(" + LESS_THAN_EQUAL    + ")|" +
-                                    "(" + GREATER_THAN_EQUAL + ")";
-//
-const string PUNCTUATION          = "(" + SEMI_COLON         + ")|" +
-                                    "(" + COMMA              + ")|" +
-                                    "(" + DOT                + ")|" +
-                                    "(" + SCOPE_RESOLUTION   + ")|" +
-                                    "(" + OPEN_BRACE         + ")|" +
-                                    "(" + CLOSE_BRACE        + ")|" +
-                                    "(" + OPEN_PAREN         + ")|" +
-                                    "(" + CLOSE_PAREN        + ")|" +
-                                    "(" + OPEN_BRACKET       + ")|" +
-                                    "(" + CLOSE_BRACKET      + ")|" +
-                                    "(" + DOUBLE_QUOTE       + ")|" +
-                                    "(" + SINGLE_QUOTE       + ")|" +
-                                    "(" + TICK_MARK          + ")";
-
-const string ARITHMETIC_OPERATORS = "(" + PLUS               + ")|" +
-                                    "(" + MINUS              + ")|" +
-                                    "(" + ASTERIK            + ")|" +
-                                    "(" + FORWARD_SLASH      + ")|" +
-                                    "(" + PERCENT            + ")";
-
-const string DECL                 = "(" + TYPES              + ")|" +
-                                    "(" + TYPE_MODIFIERS     + ")|" +
-                                    "(" + SYMBOL             + ")";
-
-//
-const string OPERATORS            = "([,/'\"$*#=+-:!%<>|.(){}\\]\\[])";
-const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
-const string SYMBOL_NAME          = "\\$?_*[A-Za-z]" + VALID_SYMBOL_CHARS + "*";
-
-const string LITERAL              = "(" + STRING_LITERAL     + ")|" +
-                                    "(" + FLOAT_LITERAL      + ")|" +
-                                    "(" + INTEGER_LITERAL    + ")|" +
-                                    "(" + HEX_LITERAL        + ")|" +
-                                    "(" + CHAR_LITERAL       + ")";
+const string CPP_OPERATORS        = "(" + BIT_SHIFT_LEFT        + ")|" +
+                                    "(" + BIT_SHIFT_RIGHT       + ")|" +
+                                    "(" + NOT_EQUAL             + ")|" +
+                                    "(" + AND                   + ")|" +
+                                    "(" + OR                    + ")|" +
+                                    "(" + LESS_THAN             + ")|" +
+                                    "(" + GREATER_THAN          + ")|" +
+                                    "(" + LESS_THAN_EQUAL       + ")|" +
+                                    "(" + GREATER_THAN_EQUAL    + ")|" +
+                                    "(" + SCOPE_RESOLUTION      + ")|" +
+                                    "(" + INDIRECT_SELECTION    + ")";
+const string ARITHMETIC_OPERATORS = "(" + EQUAL                 + ")|" +
+                                    "(" + PLUS                  + ")|" +
+                                    "(" + MINUS                 + ")|" +
+                                    "(" + ASTERIK               + ")|" +
+                                    "(" + FORWARD_SLASH         + ")|" +
+                                    "(" + PERCENT               + ")";
+const string PUNCTUATION          = "(" + SEMI_COLON            + ")|" +
+                                    "(" + COMMA                 + ")|" +
+                                    "(" + DOT                   + ")|" +
+                                    "(" + OPEN_BRACE            + ")|" +
+                                    "(" + CLOSE_BRACE           + ")|" +
+                                    "(" + OPEN_PAREN            + ")|" +
+                                    "(" + CLOSE_PAREN           + ")|" +
+                                    "(" + OPEN_BRACKET          + ")|" +
+                                    "(" + CLOSE_BRACKET         + ")|" +
+                                    "(" + DOUBLE_QUOTE          + ")|" +
+                                    "(" + SINGLE_QUOTE          + ")|" +
+                                    "(" + TICK_MARK             + ")";
+const string DECL                 = "(" + TYPES                 + ")|" +
+                                    "(" + TYPE_MODIFIERS        + ")|" +
+                                    "(" + SYMBOL                + ")";
+const string LITERAL              = "(" + STRING_LITERAL        + ")|" +
+                                    "(" + FLOAT_LITERAL         + ")|" +
+                                    "(" + INTEGER_LITERAL       + ")|" +
+                                    "(" + HEX_LITERAL           + ")|" +
+                                    "(" + CHAR_LITERAL          + ")";
+const string EVERYTHING           =       LITERAL               + "|"
+                                        + CPP_OPERATORS         + "|"
+                                        + ARITHMETIC_OPERATORS  + "|"
+                                        + PUNCTUATION           + "|"
+                                        + DECL;
 /**
  * @brief Enumeration of token IDs
  */

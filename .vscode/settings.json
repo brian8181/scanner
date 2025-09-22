@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "C:/Users/brian/src/scanner/src",
+    "cmake.sourceDirectory": "C:/Users/brian/src/scanner",
     "files.associations": {
         "utility": "cpp",
         "iosfwd": "cpp",

@@ -96,9 +96,7 @@ void start(string file)
 
     string str = sstrm.str();
     //  string s = "'[A-Za-z0-9_\\[\\]{}#()<>%:;.\"]'";
-    match_token(LITERAL, str);
-    // match_token( OPERATORS, str);
-    // match_token( LOGICAL_OPERATORS, str);
+    match_token(EVERYTHING, str);
 }
 
 /**
@@ -268,7 +266,6 @@ int parse_options(int argc, char* argv[])
 
     map<string, string> pairs;
     get_name_value_pairs("test/config_match.txt", pairs);
-
     auto end = pairs.end();
     for (auto iter = pairs.begin(); iter != end; ++iter)
     {
