@@ -75,8 +75,8 @@ const string LESS_THAN_EQUAL      = "<=";
 const string GREATER_THAN_EQUAL   = ">=";
 const string SCOPE_RESOLUTION     = "::";
 const string INDIRECT_SELECTION   = "->";
-//
-const string CPP_OPERATORS        = "(" + BIT_SHIFT_LEFT        + ")|" +
+// groups
+const string OPERATORS            = "(" + BIT_SHIFT_LEFT        + ")|" +
                                     "(" + BIT_SHIFT_RIGHT       + ")|" +
                                     "(" + NOT_EQUAL             + ")|" +
                                     "(" + AND                   + ")|" +
@@ -86,8 +86,8 @@ const string CPP_OPERATORS        = "(" + BIT_SHIFT_LEFT        + ")|" +
                                     "(" + LESS_THAN_EQUAL       + ")|" +
                                     "(" + GREATER_THAN_EQUAL    + ")|" +
                                     "(" + SCOPE_RESOLUTION      + ")|" +
-                                    "(" + INDIRECT_SELECTION    + ")";
-const string ARITHMETIC_OPERATORS = "(" + EQUAL                 + ")|" +
+                                    "(" + INDIRECT_SELECTION    + ")|" +
+                                    "(" + EQUAL                 + ")|" +
                                     "(" + PLUS                  + ")|" +
                                     "(" + MINUS                 + ")|" +
                                     "(" + ASTERIK               + ")|" +
@@ -114,8 +114,7 @@ const string LITERAL              = "(" + STRING_LITERAL        + ")|" +
                                     "(" + HEX_LITERAL           + ")|" +
                                     "(" + CHAR_LITERAL          + ")";
 const string EVERYTHING           =       LITERAL               + "|"
-                                        + CPP_OPERATORS         + "|"
-                                        + ARITHMETIC_OPERATORS  + "|"
+                                        + OPERATORS             + "|"
                                         + PUNCTUATION           + "|"
                                         + DECL;
 /**
