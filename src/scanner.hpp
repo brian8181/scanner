@@ -1,3 +1,11 @@
+/**
+ * @file scanner.hpp
+ * @brief Header file for scanner.cpp
+ * @author Your Name
+ * @version 1.0
+ * @date 2024-06-01
+ */
+
 #ifndef _SCANNER_HPP_
 #define _SCANNER_HPP_
 
@@ -10,18 +18,16 @@
 using namespace std;
 
 
-void match_token( const string &exp, const string &text );
-
 void load_config( const string &path );
 
 void start(string file);
-/**
- * @file scanner.hpp
- * @brief Header file for scanner.cpp
- * @author Your Name
- * @version 1.0
- * @date 2024-06-01
+
+ /**
+ * @brief tokenize
+ * @param exp The regular expression to match
+ * @param text The text to search for matches
  */
+void tokenize(const string &exp, const string &text);
 
 void lex(const string& src, /* out*/ vector<pair<int, string>>& escapes);
 

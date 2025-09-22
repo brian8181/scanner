@@ -96,15 +96,15 @@ void start(string file)
 
     string str = sstrm.str();
     //  string s = "'[A-Za-z0-9_\\[\\]{}#()<>%:;.\"]'";
-    match_token(EVERYTHING, str);
+    tokenize(EVERYTHING, str);
 }
 
 /**
- * @brief match a token using regex
+ * @brief tokenize
  * @param exp The regular expression to match
  * @param text The text to search for matches
  */
-void match_token(const string &exp, const string &text)
+void tokenize(const string &exp, const string &text)
 {
     cout << "tokenize ..." << endl;
     regex rexp = regex(exp, regex::ECMAScript);
