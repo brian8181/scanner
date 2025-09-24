@@ -6,24 +6,61 @@
 #include <sstream>
 #include <fstream>
 #include <map>
-#include <string>
-#include <vector>
 #include <regex>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <string.h>
+#include "math.h"
+#include "fileio.hpp"
 #include "utility.hpp"
 
 using std::regex;
+using std::smatch;
 using std::string;
 using std::map;
 using std::vector;
 using std::ostringstream;
 using std::ifstream;
+using std::ifstream;
+using std::pair;
+using std::ios;
+
+const int ASCII_OFFSET = 48;
+
+/// name: getconfig
+/// info: git name -> value pairs/config
+/// path, path to config file
+/// config, out parma
+map<string, string>& get_config(const string& path, /* out */ map<string, string>& config)
+{
+    ifstream file;
+    file.open(path, ios::out); //open a file
+    pair<string, string> config_pair;
+
+    if (file.is_open())
+    {
+        string line;
+        while(getline(file, line))
+        {
+            size_t pos = line.find('=');
+            string name = line.substr(0, pos-1);
+            name = trim(name);
+            string value = line.substr(pos+1);
+            value = trim(value);
+            pair<string, string> p(name, value);
+            config.insert(p);
+        }
+        file.close(); //close the file
+    }
+    return config;
+}
 
 // returns true if only one match & match string size equals text size
 bool match_single(const string& pattern, const string& text, /* out */ smatch& match)
 {
     regex rgx = regex(pattern);
     regex_match(text, match, rgx);
-
     if(match.size() == 1 && match.str().size() == text.size())
         return true;
 
@@ -43,23 +80,114 @@ bool match_single(const string& pattern, const string& text)
     return false;
 }
 
-// // get file lines as vector
-// vector<string>& get_lines(const string& path, vector<string>& lines)
-// {
-//     ifstream file;
-//     file.open(path, std::ios::in);
-//     if (file.is_open())
-//     {
-//         string line;
-//         while (getline(file, line))
-//         {
-//             lines.push_back(line);
-//         }
-//         file.close();
-//     }
-//     return lines;
-// }
+std::vector<std::string> split(const std::string& s, char c)
+{
+  std::vector<std::string> result;
+  size_t begin = 0;
+  while (true)
+  {
+    size_t end = s.find_first_of(c, begin);
+    result.push_back(s.substr(begin, end - begin));
 
+    if (end == std::string::npos) {
+      break;
+    }
+
+    begin = end + 1;
+  }
+  return result;
+}
+
+
+/// name: digits
+/// info: reurn number of base 10 digits
+/// n, number to eval
+int digits10(int n)
+{
+    return std::floor(std::log10(n) + 1);
+}
+
+/// name: itoa
+/// info: int to ascii
+/// s, string to convert
+/// return: int result
+int atoi(const char* s)
+{
+    int num = 0;
+    int len = strlen(s);
+    for(int i = 0; i < len; ++i)
+    {
+        int digit = ASCII_OFFSET - i;
+        if(digit < 0 || digit > 10)
+            return -1;
+        num += digit * pow(10, i);
+    }
+    return num;
+}
+
+string& to_lower(const string& s, /* out */ string& r)
+{
+    int len = s.length();
+    r.clear();
+    for(int i = 0; i < len; ++i)
+    {
+        int c = std::tolower(s[i]);
+        r.push_back(c);
+    }
+    return r;
+}
+
+string& to_lower(string& s) // in place
+{
+    int len = s.length();
+    for(int i = 0; i < len; ++i)
+    {
+        int c = std::tolower(s[i]);
+        s[i] = c;
+    }
+    return s;
+}
+
+string& to_upper(const string& s, /* out */ string& r)
+{
+    int len = s.length();
+    r.clear();
+    for(int i = 0; i < len; ++i)
+    {
+        int c = std::toupper(s[i]);
+        r.push_back(c);
+    }
+    return r;
+}
+
+string& to_upper(string& s) // in place
+{
+    int len = s.length();
+    for(int i = 0; i < len; ++i)
+    {
+        int c = std::toupper(s[i]);
+        s[i] = c;
+    }
+    return s;
+}
+
+/// name: itoa
+/// info: int to ascii
+/// n, number to eval
+/// s, out parma
+/// return: void
+void itoa(int& n, char* s)
+{
+    int len = digits10(n);
+    for(int i = 0; i < len; ++i)
+    {
+        int c = n / pow(10, i);
+        c = std::floor( c );
+        c = c % 10;
+        s[(len-1)-i] = (char)(c + ASCII_OFFSET); // 0x30
+    }
+    s[len] = (char)'\0';
+}
 
 int read_bits(const smatch& m)
 {
@@ -70,46 +198,6 @@ int read_bits(const smatch& m)
         bits |= (int(m[i].matched) << i);
     }
     return bits;
-}
-
-// string& read_stream(const string& path, /* out */ string& s_out)
-// {
-//     std::ifstream ifstrm(path);
-//     std::string output((std::istreambuf_iterator<char>(ifstrm)), std::istreambuf_iterator<char>());
-//     s_out = output;
-//     return s_out;
-// }
-
-bool file_exist(const string& path)
-{
-    std::fstream strm(path);
-    strm.open(path, std::ios::in);
-    bool ret = strm.is_open();
-    strm.close();
-    return ret;
-}
-
-map<string, string>& get_name_value_pairs(string path, /* out */ map<string, string>& pairs)
-{
-    std::ifstream file;
-    file.open(path, std::ios::in); //open a file
-
-    if (file.is_open())
-    {
-        string line;
-        while(getline(file, line))
-        {
-            size_t pos = line.find('=');
-            string name = line.substr(0, pos-1);
-            name = trim(name);
-            string value = line.substr(pos+1);
-            value = trim(value);
-            std::pair<string, string> p(name, value);
-            pairs.insert(p);
-        }
-        file.close(); //close the file
-    }
-    return pairs;
 }
 
 string& trim(string &s, char c)

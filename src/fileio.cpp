@@ -19,10 +19,24 @@ using std::pair;
 using std::ios;
 
 /**
+ * @brief  check if file exist
+ * @param  const string& : path to file
+ * @return bool: ture file exsit otherwise false
+ */
+bool file_exist(const string& path)
+{
+    std::fstream strm(path);
+    strm.open(path, std::ios::in);
+    bool ret = strm.is_open();
+    strm.close();
+    return ret;
+}
+
+/**
  * @brief  read a character from a file stream
- * @param  strm The file stream to read from
- * @param  c : the character to read
- * @return file stream
+ * @param  ifstream& strm : The file stream to read from
+ * @param  char& c : the character to read
+ * @return ifstream&
  */
 ifstream& read_char(ifstream& strm, /* out */ char& c)
 {
@@ -44,9 +58,9 @@ ifstream& read_char(ifstream& strm, /* out */ char& c)
 
 /**
  * @brief  write a character to a file stream
- * @param  strm file stream to write
- * @param  c : character to write
- * @return file stream
+ * @param  ofstream& strm file stream to write
+ * @param  const char& c : character to write
+ * @return ofstream&
  */
 ofstream& write_char(ofstream& strm, /* in */ const char& c)
 {
@@ -68,10 +82,10 @@ ofstream& write_char(ofstream& strm, /* in */ const char& c)
 
 /**
  * @brief  read a file into a buffer
- * @param  file The file to read from
- * @param  buf : The buffer to store the file contents
- * @param  len : length of the buffer
- * @return number of bytes read, or -1 on error
+ * @param  const string& file : file to read from
+ * @param  unsigned char* buf : buffer to store the file contents
+ * @param  const int& len : length of the buffer
+ * @return int : number bytes read, or -1 on error
  */
 int read_buf(const string& file, /* out */ unsigned char* buf, const int& len)
 {
@@ -87,10 +101,10 @@ int read_buf(const string& file, /* out */ unsigned char* buf, const int& len)
 
 /**
  * @brief  write a buffer to a file
- * @param  file : file to write to
- * @param  buf : buffer to write
- * @param  len : length of the buffer
- * @return number of bytes written, or -1 on error
+ * @param  const string& file : file to write to
+ * @param  const unsigned char* buf : buffer to write
+ * @param  const int& len : length of the buffer
+ * @return int : number of bytes written, or -1 on error
  */
 int write_buf(const string& file, /* in */ const unsigned char* buf, const int& len)
 {
@@ -106,9 +120,9 @@ int write_buf(const string& file, /* in */ const unsigned char* buf, const int& 
 
 /**
  * @brief  read a file into a string
- * @param  file : file to read from
- * @param  out : string to store the file contents
- * @return number of characters read, or -1 on error
+ * @param  const string& file : file to read from
+ * @param  string& out : string to store the file contents
+ * @return int : number of characters read, or -1 on error
  */
 int read_str(const string& file, /* out */ string& out)
 {
@@ -129,9 +143,9 @@ int read_str(const string& file, /* out */ string& out)
 
 /**
  * @brief  write a string to a file
- * @param  file The file to write to
- * @param  in : string to write
- * @return number of characters written, or -1 on error
+ * @param  const string& file : The file to write to
+ * @param  const string& in : string to write
+ * @return int : number of characters written, or -1 on error
  */
 int write_str(const string& file, /* in */ const string& in)
 {
@@ -150,11 +164,11 @@ int write_str(const string& file, /* in */ const string& in)
 
 /**
  * @brief  read a file into a stringstream
- * @param  file : file to read from
- * @param  sstrm : stringstream to store the file contents
- * @return number of characters read, or -1 on error
+ * @param  const string& file : file to read from
+ * @param  stringstream& ostrm : stringstream to store the file contents
+ * @return int : number of characters read, or -1 on error
  */
-int read_sstream(const string& file, /* out */ stringstream& sstrm)
+int read_sstream(const string& file, /* out */ stringstream& ostrm)
 {
     ifstream stream(file, ios::in);
     if (stream.is_open())
@@ -162,37 +176,37 @@ int read_sstream(const string& file, /* out */ stringstream& sstrm)
         char c;
         while (stream.get(c))
         {
-            sstrm << c;
+            ostrm << c;
         }
         stream.close();
-        return sstrm.str().size();
+        return ostrm.str().size();
     }
     return -1;
 }
 
 /**
  * @brief  write a stringstream to a file
- * @param  file : file to write to
- * @param  sstrm : stringstream to write
- * @return number of characters written, or -1 on error
+ * @param  const string& file : file to write to
+ * @param  const stringstream& istrm : stringstream to write
+ * @return int : number of characters written, or -1 on error
  */
-int write_sstream(const string& file, /* in */ const stringstream& sstrm)
+int write_sstream(const string& file, /* in */ const stringstream& istrm)
 {
     ofstream stream(file, ios::out);
     if (stream.is_open())
     {
-        stream << sstrm.str();
+        stream << istrm.str();
         stream.close();
-        return sstrm.str().size();
+        return istrm.str().size();
     }
     return -1;
 }
 
 /**
  * @brief  read lines from a file into a vector of strings
- * @param  file : file to read from
- * @param  lines : vector to store the lines
- * @return number of lines read, or -1 on error
+ * @param  const string& file : file to read from
+ * @param  vector<string>& lines : vector to store the lines
+ * @return int : number of lines read, or -1 on error
  */
 vector<string>& read_lines(const string& file, /* out */ vector<string>& lines)
 {
@@ -211,9 +225,9 @@ vector<string>& read_lines(const string& file, /* out */ vector<string>& lines)
 
 /**
  * @brief  write lines to a file
- * @param  file : file to write to
- * @param  lines : lines to write
- * @return number of lines written, or -1 on error
+ * @param  const string& file : file to write to
+ * @param  const vector<string>& lines : lines to write
+ * @return int : number of lines written, or -1 on error
  */
 int write_lines(const string& file, /* in */ const vector<string>& lines)
 {

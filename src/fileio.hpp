@@ -19,6 +19,13 @@ using std::ofstream;
 using std::stringstream;
 
 /**
+ * @brief  check if file exist
+ * @param  const string& : path to file
+ * @return bool: ture file exsit otherwise false
+ */
+bool file_exist(const string& path);
+
+/**
  * @brief  read a character from a file stream
  * @param  strm The file stream to read from
  * @param  c : the character to read

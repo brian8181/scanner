@@ -391,7 +391,7 @@ int parse_options(int argc, char* argv[])
     }
 
     map<string, string> pairs;
-    get_name_value_pairs("test/config_match.txt", pairs);
+    get_config("test/config_match.txt", pairs);
     auto end = pairs.end();
     for (auto iter = pairs.begin(); iter != end; ++iter)
     {
