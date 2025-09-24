@@ -17,9 +17,70 @@
 
 using namespace std;
 
+// class Lexer
+// {
+// public:
+//     /**
+//      * @brief default constructor
+//      */
+//     Lexer();
 
+//     /**
+//      * @brief consturctor
+//      * @param const string& file
+//      */
+//     Lexer(const string& file);
+
+//     /**
+//      * @brief  load_config: load confiuration from file
+//      * @param  const string &path
+//      * @return void
+//      */
+//     void load_config( const string &path );
+
+//     /**
+//      * @brief start tokenizing file
+//      * @param file
+//      * @return void
+//      */
+//     void start(string file);
+
+//     /**
+//      * @brief tokenize
+//      * @param exp The regular expression to match
+//      * @param text The text to search for matches
+//      */
+//     void tokenize(const string &exp, const string &text);
+
+//     /**
+//      * @brief Lexical analysis of the input source code.
+//      * @param src The source code to analyze.`
+//      * @param escapes A vector to store the escape sequences found.
+//      * @return void
+//      */
+//     void lex(const string& src, /* out*/ vector<pair<int, string>>& escapes);
+
+//     /**
+//      *
+//      */
+//     int get_token(stringstream strm, string& token);
+
+// private:
+
+// };
+
+/**
+ * @brief load_config: load confiuration from file
+ * @param path
+ * @return void
+ */
 void load_config( const string &path );
 
+/**
+ * @brief start tokenizing file
+ * @param file
+ * @return void
+ */
 void start(string file);
 
  /**
@@ -29,6 +90,11 @@ void start(string file);
  */
 void tokenize(const string &exp, const string &text);
 
+/**
+ * @brief
+ * @param src
+ * @param escapes
+ */
 void lex(const string& src, /* out*/ vector<pair<int, string>>& escapes);
 
 /**

@@ -33,7 +33,6 @@ const string TYPE_MODIFIERS       = "(signed)|(unsigned)|(static)|(const)|(volat
 const string SYMBOL               = "_?[A-Za-z][A-Za-z0-9_]*";
 const string KEYWORDS             = "(if)|(else)|(for)|(while)|(return)|(break)|(continue)|(switch)|(case)|(default)|(do)|(goto)|(sizeof)";
 
-const string OPERATORS            = "([,/'\"$*#=+-:!%<>|.(){}\\]\\[])";
 const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
 const string SYMBOL_NAME          = "\\$?_*[A-Za-z]" + VALID_SYMBOL_CHARS + "*";
 
@@ -89,10 +88,7 @@ const string OPERATORS            = "(" + BIT_SHIFT_LEFT        + ")|" +
                                     "(" + INDIRECT_SELECTION    + ")|" +
                                     "(" + EQUAL                 + ")|" +
                                     "(" + PLUS                  + ")|" +
-                                    "(" + MINUS                 + ")|" +
-                                    "(" + ASTERIK               + ")|" +
-                                    "(" + FORWARD_SLASH         + ")|" +
-                                    "(" + PERCENT               + ")";
+                                    "(" + MINUS                 + ")";
 const string PUNCTUATION          = "(" + SEMI_COLON            + ")|" +
                                     "(" + COMMA                 + ")|" +
                                     "(" + DOT                   + ")|" +
@@ -104,7 +100,16 @@ const string PUNCTUATION          = "(" + SEMI_COLON            + ")|" +
                                     "(" + CLOSE_BRACKET         + ")|" +
                                     "(" + DOUBLE_QUOTE          + ")|" +
                                     "(" + SINGLE_QUOTE          + ")|" +
-                                    "(" + TICK_MARK             + ")";
+                                    "(" + TICK_MARK             + ")|" +
+                                    "(" + AMPERSAND             + ")|" +
+                                    "(" + FORWARD_SLASH         + ")|" +
+                                    "(" + BACKWARD_SLASH        + ")|" +
+                                    "(" + TILDE                 + ")|" +
+                                    "(" + VBAR                  + ")|" +
+                                    "(" + CARROT                + ")|" +
+                                    "(" + ASTERIK               + ")|" +
+                                    "(" + PERCENT               + ")|" +
+                                    "(" + EXCLAMATION           + ")";
 const string DECL                 = "(" + TYPES                 + ")|" +
                                     "(" + TYPE_MODIFIERS        + ")|" +
                                     "(" + SYMBOL                + ")";
@@ -116,7 +121,11 @@ const string LITERAL              = "(" + STRING_LITERAL        + ")|" +
 const string EVERYTHING           =       LITERAL               + "|"
                                         + OPERATORS             + "|"
                                         + PUNCTUATION           + "|"
-                                        + DECL;
+                                        + DECL                  + "|"
+                                        + TYPES                 + "|"
+                                        + TYPE_MODIFIERS        + "|"
+                                        + KEYWORDS              + "|"
+                                  + "(" + SYMBOL_NAME           + ")";
 /**
  * @brief Enumeration of token IDs
  */

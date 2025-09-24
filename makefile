@@ -74,7 +74,6 @@ dist:
 
 install:
 	cp ./$(BLD)/scanner ./$(prefix)/bin/scanner
-.PHONY: install
 
 uninstall:
 	-rm ./$(prefix)/bin/scanner

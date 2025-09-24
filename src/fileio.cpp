@@ -63,7 +63,7 @@ ofstream& write_char(ofstream& strm, /* in */ const char& c)
     {
         std::cerr << "Error: Unable to open file for writing character." << std::endl;
     }
-    return stream;
+    return strm;
 }
 
 /**
