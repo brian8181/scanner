@@ -32,6 +32,13 @@ const int ASCII_OFFSET = 48;
 /// info: git name -> value pairs/config
 /// path, path to config file
 /// config, out parma
+
+/**
+ * @brief
+ * @param path
+ * @param config
+ * @return
+ */
 map<string, string>& get_config(const string& path, /* out */ map<string, string>& config)
 {
     ifstream file;
@@ -57,6 +64,14 @@ map<string, string>& get_config(const string& path, /* out */ map<string, string
 }
 
 // returns true if only one match & match string size equals text size
+
+/**
+ * @brief
+ * @param pattern
+ * @param text
+ * @param match
+ * @return
+ */
 bool match_single(const string& pattern, const string& text, /* out */ smatch& match)
 {
     regex rgx = regex(pattern);
@@ -68,6 +83,13 @@ bool match_single(const string& pattern, const string& text, /* out */ smatch& m
 }
 
 // returns true if only one match & match string size equals text size
+
+/**
+ * @brief
+ * @param pattern
+ * @param text
+ * @return
+ */
 bool match_single(const string& pattern, const string& text)
 {
     regex rgx = regex(pattern);
@@ -80,6 +102,12 @@ bool match_single(const string& pattern, const string& text)
     return false;
 }
 
+/**
+ * @brief
+ * @param s
+ * @param c
+ * @return
+ */
 std::vector<std::string> split(const std::string& s, char c)
 {
   std::vector<std::string> result;
@@ -102,6 +130,12 @@ std::vector<std::string> split(const std::string& s, char c)
 /// name: digits
 /// info: reurn number of base 10 digits
 /// n, number to eval
+
+/**
+ * @brief
+ * @param n
+ * @return
+ */
 int digits10(int n)
 {
     return std::floor(std::log10(n) + 1);
@@ -111,6 +145,12 @@ int digits10(int n)
 /// info: int to ascii
 /// s, string to convert
 /// return: int result
+
+/**
+ * @brief
+ * @param s
+ * @return
+ */
 int atoi(const char* s)
 {
     int num = 0;
@@ -125,6 +165,12 @@ int atoi(const char* s)
     return num;
 }
 
+/**
+ * @brief
+ * @param s
+ * @param r
+ * @return
+ */
 string& to_lower(const string& s, /* out */ string& r)
 {
     int len = s.length();
@@ -137,6 +183,11 @@ string& to_lower(const string& s, /* out */ string& r)
     return r;
 }
 
+/**
+ * @brief
+ * @param s
+ * @return
+ */
 string& to_lower(string& s) // in place
 {
     int len = s.length();
@@ -148,6 +199,12 @@ string& to_lower(string& s) // in place
     return s;
 }
 
+/**
+ * @brief
+ * @param s
+ * @param r
+ * @return
+ */
 string& to_upper(const string& s, /* out */ string& r)
 {
     int len = s.length();
@@ -160,6 +217,11 @@ string& to_upper(const string& s, /* out */ string& r)
     return r;
 }
 
+/**
+ * @brief
+ * @param s
+ * @return
+ */
 string& to_upper(string& s) // in place
 {
     int len = s.length();
@@ -176,6 +238,12 @@ string& to_upper(string& s) // in place
 /// n, number to eval
 /// s, out parma
 /// return: void
+
+/**
+ * @brief
+ * @param n
+ * @param s
+ */
 void itoa(int& n, char* s)
 {
     int len = digits10(n);
@@ -189,6 +257,11 @@ void itoa(int& n, char* s)
     s[len] = (char)'\0';
 }
 
+/**
+ * @brief
+ * @param m
+ * @return
+ */
 int read_bits(const smatch& m)
 {
     int len = m.size();
@@ -200,6 +273,12 @@ int read_bits(const smatch& m)
     return bits;
 }
 
+/**
+ * @brief
+ * @param s
+ * @param c
+ * @return
+ */
 string& trim(string &s, char c)
 {
     if(s.at(s.length()-1) == c)
@@ -208,6 +287,11 @@ string& trim(string &s, char c)
     return s;
 }
 
+/**
+ * @brief
+ * @param s
+ * @return
+ */
 string& ltrim(std::string &s)
 {
     int len = s.size();
@@ -222,6 +306,11 @@ string& ltrim(std::string &s)
     return s;
 }
 
+/**
+ * @brief
+ * @param s
+ * @return
+ */
 string& rtrim(std::string &s)
 {
     int len = s.size();
@@ -236,6 +325,11 @@ string& rtrim(std::string &s)
     return s;
 }
 
+/**
+ * @brief
+ * @param s
+ * @return
+ */
 string& trim(std::string &s)
 {
     rtrim(s);
