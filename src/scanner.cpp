@@ -218,17 +218,6 @@ void start(string file)
     string str = sstrm.str();
     cout << EVERYTHING << endl;
     tokenize(EVERYTHING, str);
-
-    // std::string s ("int abc; if( x == 2);");
-    // std::smatch m;
-    // std::regex e (EVERYTHING);
-    // std::regex_search ( s, m, e );
-
-    // for (unsigned i=0; i <m.size(); ++i)
-    // {
-    //     std::cout << "match " << i << " (" << m[i] << ") ";
-    //     std::cout << "at position " << m.position(i) << std::endl;
-    // }
 }
 
 /**

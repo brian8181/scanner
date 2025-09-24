@@ -18,6 +18,7 @@ using std::string;
 const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
 const string VALID_CHARS          = "[\\w\\s\\[\\]+-=|$><^/#@~&*.%!~`_:;',()]";
 const string VALID_FILE_CHARS     = "[A-Za-z0-9_. ]";
+// utility
 const string CONFIG_PAIR          = "\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*((" + VALID_SYMBOL_CHARS + "*)|(\"" + VALID_CHARS + "*\"))\\s*";
 const string PREPROCESSOR         = "#[A-Za-z_]+";
 const string COMMENT              = "(//.*$)|(\\/\\*[\\s\\S]*?\\*\\/)";
@@ -27,15 +28,13 @@ const string INTEGER_LITERAL      = "[0-9]+";
 const string HEX_LITERAL          = "0x[0-9A-Fa-f]+";
 const string STRING_LITERAL       = "\"" + VALID_CHARS + "*\"";
 const string CHAR_LITERAL         = "'[a-zA-Z0-9_{}\\[\\]#()<>%:;.?*+-\\/^&|~!=,\"]'";
-//
+// declaration
 const string TYPES                = "(char)|(int)|(float)|(double)|(string)|(long)|(short)|(bool)|(void)";
 const string TYPE_MODIFIERS       = "(signed)|(unsigned)|(static)|(const)|(volatile)";
 const string SYMBOL               = "_?[A-Za-z][A-Za-z0-9_]*";
 const string KEYWORDS             = "(if)|(else)|(for)|(while)|(return)|(break)|(continue)|(switch)|(case)|(default)|(do)|(goto)|(sizeof)";
-
 const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
 const string SYMBOL_NAME          = "\\$?_*[A-Za-z]" + VALID_SYMBOL_CHARS + "*";
-
 // punctuations
 const string ASTERIK              = "\\*";
 const string AMPERSAND            = "&";
