@@ -42,3 +42,110 @@ UNARY_OP = OPERATIOR | UNARY;
 MULTI_SIGN = ASTRIEK | BINARY_OP;
 DEREFERENCE_OP = ASTRIEK || UNARY_OP;
 MULTI_OPRATION = BINARY | OPERATION | MULTI_SIGN;
+
+while( !strm.eof() )
+    {
+        unsigned int id;
+        // strm.get(c);
+        // if(isspace(c))
+        // {
+        //     if(!token.empty())
+        //     {
+        //         return 1;
+        //     }
+        //     continue;
+        // }
+        smach
+        switch(id)
+        {
+            case '(':
+                token += c;
+                return ID_OPEN_PAREN;
+            case '{':
+                token += c;
+                return ID_OPEN_BRACE;
+            case '[':
+                token += c;
+                return ID_OPEN_BRACKET;
+            case ';':
+                token += c;
+                return ID_SEMI_COLON;
+            case '.':
+                token += c;
+                return ID_DOT;
+            case ':':
+            case '^':
+                token += c;
+                return ID_CARROT;
+            case '*':
+                token += c;
+                return ID_ASTERIK;
+            case '+':
+                token += c;
+                return ID_PLUS;
+            case '=':
+                token += c;
+                return ID_EQUAL;
+            case '>':
+                token += c;
+                return ID_GREATER_THAN;
+            case '&':
+                token += c;
+                return ID_AMPERSAND;
+            case ')':
+                token += c;
+                return ID_CLOSE_PAREN;
+            case '}':
+                token += c;
+                return ID_CLOSE_BRACE;
+            case ']':
+                token += c;
+                return ID_CLOSE_BRACKET;
+            case ',':
+                token += c;
+                return ID_COMMA;
+            case '?':
+                token += c;
+                return ID_QUESTION_MARK;
+            case '~':
+                token += c;
+                return ID_TILDE;
+            case '%':
+                token += c;
+                return ID_PERCENT;
+            case '/':
+                token += c;
+                return ID_FORWARD_SLASH;
+            case '-':
+                token += c;
+                return ID_MINUS;
+            case '<':
+                token += c;
+                return ID_LESS_THAN;
+            case '!':
+                token += c;
+                return ID_LOGICAL_NOT;
+            case '|':
+                token += c;
+                return ID_LOGICAL_OR;
+
+            default:
+            {
+                if ( isalnum( c ) || c == '_' )
+                {
+                    continue;
+                    }
+                else
+                    {
+                    if ( !token.empty( ) )
+                        {
+                        return 1;
+                        }
+                    token += c;
+                    return 1;
+                    }
+                break;
+            }
+        }
+        }
+    return ID_UNDEFINED;

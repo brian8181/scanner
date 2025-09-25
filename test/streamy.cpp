@@ -1,7 +1,8 @@
-// File Name:  streamy.cpp
-// Build Date: Thu Dec 21 09:06:55 AM CST 2023
-// Version:    0.0.2
-
+/**
+ * @name streamy.cpp
+ * @date Thu Dec 21 09:06:55 AM CST 2023
+ * @version 0.0.2
+ */
 #include <iostream>
 #include <sstream>
 #include <map>

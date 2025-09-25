@@ -1,6 +1,4 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
@@ -19,7 +17,7 @@
             }
         },
         {
-            "label": "CYGWIN-g++",
+            "label": "CYWIN-GDB",
             "type": "cppbuild",
             "command": "C:/cygwin64/bin/g++.exe",
             "args": [
@@ -40,11 +38,6 @@
                 "isDefault": false
             },
             "detail": "compiler: C:/cygwin64/bin/g++.exe"
-        },
-        {
-            "label": "echo",
-            "type": "shell",
-            "command": "echo Hello"
         }
     ]
 }

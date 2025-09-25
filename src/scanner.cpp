@@ -1,4 +1,4 @@
-/**
+/*
  * @file Name:  ./scanner.cpp
  * @date: Thu, Sep 11, 2025  4:06:25 PM
  * @version:    0.0.1
@@ -13,6 +13,7 @@
 #include <regex>
 #include <map>
 #include <vector>
+#include <utility>
 #include <filesystem>
 #include "utility.hpp"
 #include "fileio.hpp"
@@ -143,6 +144,8 @@ using namespace std;
 //     }
 // }
 
+
+
 // map
 map<string, string> map_config;
 // todo : revert to no configuration sections!
@@ -151,7 +154,46 @@ map<string, string> map_vars;
 map<string, string> map_const;
 map<string, vector<string>> map_arrays;
 map<string, pair<string, vector<string>>> map_objects;
-map<int, string> token_map;
+
+map<string, unsigned int> _token_map = {  {"{", ID_OPEN_BRACE}, {"}", ID_CLOSE_BRACE},
+                                          {"*", ID_ASTERIK}, {"$", ID_DOLLAR_SIGN},
+                                          {"=", ID_EQUAL}, {"|", ID_VBAR},
+                                          {":", ID_COLON}, {"\"", ID_DOUBLE_QUOTE},
+                                          {"'", ID_SINGLE_QUOTE}, {".", ID_DOT},
+                                          {"+", ID_PLUS}, {"-", ID_MINUS}, {"&", ID_AMPERSAND}, {"*", ID_ASTERIK}, {"<<", ID_BIT_SHIFT_LEFT}, {">>", ID_BIT_SHIFT_RIGHT}, {"%", ID_PERCENT},
+                                          {"[", ID_OPEN_BRACE}, {"]", ID_CLOSE_BRACE}, {";", ID_SEMI_COLON},
+                                          {"&&", ID_LOGICAL_AND}, {"||", ID_LOGICAL_OR}, {"!", ID_LOGICAL_NOT},
+                                          {"if", ID_IF}, {"ELSEIF", ID_ELSEIF}, {"ELSE", ID_ELSE} };
+
+map<string, std::pair<unsigned int, string>> _token_map2 = {
+                                                                {"{",      {ID_OPEN_BRACE,      "ID_OPEN_BRACE"     }},
+                                                                {"}",      {ID_CLOSE_BRACE,     "ID_CLOSE_BRACE"    }},
+                                                                {"*",      {ID_ASTERIK,         "ID_ASTERIK"        }},
+                                                                {"$",      {ID_DOLLAR_SIGN,     "ID_DOLLAR_SIGN"    }},
+                                                                {"=",      {ID_EQUAL,           "ID_EQUAL"          }},
+                                                                {"|",      {ID_VBAR,            "ID_VBAR"           }},
+                                                                {":",      {ID_COLON,           "ID_COLON"          }},
+                                                                {"\"",     {ID_DOUBLE_QUOTE,    "ID_DOUBLE_QUOTE"   }},
+                                                                {"'",      {ID_SINGLE_QUOTE,    "ID_SINGLE_QUOTE"   }},
+                                                                {".",      {ID_DOT,             "ID_DOT"            }},
+                                                                {"+",      {ID_PLUS,            "ID_PLUS"           }},
+                                                                {"-",      {ID_MINUS,           "ID_MINUS"          }},
+                                                                {"&",      {ID_AMPERSAND,       "ID_AMPERSAND"      }},
+                                                                {"*",      {ID_ASTERIK,         "ID_ASTERIK"        }},
+                                                                {"<<",     {ID_BIT_SHIFT_LEFT,  "ID_BIT_SHIFT_LEFT" }},
+                                                                {">>",     {ID_BIT_SHIFT_RIGHT, "ID_BIT_SHIFT_RIGHT"}},
+                                                                {"%",      {ID_PERCENT,         "ID_PERCENT"        }},
+                                                                {"[",      {ID_OPEN_BRACE,      "ID_OPEN_BRACE"     }},
+                                                                {"]",      {ID_CLOSE_BRACE,     "ID_CLOSE_BRACE"    }},
+                                                                {";",      {ID_SEMI_COLON,      "ID_SEMI_COLON"     }},
+                                                                {"&&",     {ID_LOGICAL_AND,     "ID_LOGICAL_AND"    }},
+                                                                {"||",     {ID_LOGICAL_OR,      "ID_LOGICAL_OR"     }},
+                                                                {"!",      {ID_LOGICAL_NOT,     "ID_LOGICAL_NOT"    }},
+                                                                {"if",     {ID_IF,              "ID_IF"             }},
+                                                                {"ELSEIF", {ID_ELSEIF,          "ID_ELSEIF"         }},
+                                                                {"ELSE",   {ID_ELSE,            "ID_ELSE"           }}
+                                                            };
+
 
 void load_config(const string &path)
 {
@@ -214,10 +256,7 @@ void start(string file)
         cout << "Error: Unable to open file for reading." << endl;
         return;
     }
-
-    string str = sstrm.str();
-    cout << EVERYTHING << endl;
-    tokenize(EVERYTHING, str);
+    tokenize(EVERYTHING, sstrm.str());
 }
 
 /**
@@ -234,124 +273,32 @@ void tokenize(const string &exp, const string &text)
     sregex_iterator end;
     for (std::sregex_iterator iter = begin; iter != end; ++iter)
     {
-        std::smatch match = *iter;
-        cout << "token = '" << match.str() << "' : pos = " << match.position(0) << endl;
-        //for (unsigned i=0; i < match.size(); ++i)
-        //{
-            //std::cout << "match " << i << " (" << match(i) << std::endl;
-            //std::cout << "at position " << match.position(i) << std::endl;
-        //}
+        std::smatch m = *iter;
+        if( _token_map2.contains(m.str()) )
+        {
+            int id = _token_map2[m.str()].first;
+            string name = _token_map2[m.str()].second;
+            cout << "{\n\tid: " << id << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n};" << endl;
+        }
+        else
+        {
+            cout << "{\n\tid: null" << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n};" << endl;
+        }
     }
 }
 
-int get_token(stringstream strm, string& token)
+/**
+ * @brief
+ * @param iter
+ * @param id
+ * @return
+ */
+int get_token(sregex_iterator iter, unsigned int& token)
 {
-    while( !strm.eof() )
-    {
-        char c;
-        strm.get(c);
-        if(isspace(c))
-        {
-            if(!token.empty())
-            {
-                return 1;
-            }
-            continue;
-        }
-
-        switch(c)
-        {
-            case '(':
-                token += c;
-                return ID_OPEN_PAREN;
-            case '{':
-                token += c;
-                return ID_OPEN_BRACE;
-            case '[':
-                token += c;
-                return ID_OPEN_BRACKET;
-            case ';':
-                token += c;
-                return ID_SEMI_COLON;
-            case '.':
-                token += c;
-                return ID_DOT;
-            case ':':
-            case '^':
-                token += c;
-                return ID_CARROT;
-            case '*':
-                token += c;
-                return ID_ASTERIK;
-            case '+':
-                token += c;
-                return ID_PLUS;
-            case '=':
-                token += c;
-                return ID_EQUAL;
-            case '>':
-                token += c;
-                return ID_GREATER_THAN;
-            case '&':
-                token += c;
-                return ID_AMPERSAND;
-            case ')':
-                token += c;
-                return ID_CLOSE_PAREN;
-            case '}':
-                token += c;
-                return ID_CLOSE_BRACE;
-            case ']':
-                token += c;
-                return ID_CLOSE_BRACKET;
-            case ',':
-                token += c;
-                return ID_COMMA;
-            case '?':
-                token += c;
-                return ID_QUESTION_MARK;
-            case '~':
-                token += c;
-                return ID_TILDE;
-            case '%':
-                token += c;
-                return ID_PERCENT;
-            case '/':
-                token += c;
-                return ID_FORWARD_SLASH;
-            case '-':
-                token += c;
-                return ID_MINUS;
-            case '<':
-                token += c;
-                return ID_LESS_THAN;
-            case '!':
-                token += c;
-                return ID_LOGICAL_NOT;
-            case '|':
-                token += c;
-                return ID_LOGICAL_OR;
-
-            default:
-            {
-                if ( isalnum( c ) || c == '_' )
-                {
-                    continue;
-                    }
-                else
-                    {
-                    if ( !token.empty( ) )
-                        {
-                        return 1;
-                        }
-                    token += c;
-                    return 1;
-                    }
-                break;
-            }
-        }
-        }
-    return ID_UNDEFINED;
+    iter++;
+    std::smatch m = *iter;
+    token = _token_map2[m.str()].first;
+    return 0;
 }
 
 /**

@@ -40,24 +40,27 @@ endif
 .PHONY all: help
 all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
 
-$(BLD)/scanner: $(BLD)/utility.o $(BLD)/fileio.o $(BLD)/scanner.o
+$(BLD)/scanner: $(OBJ)/utility.o $(BLD)/utility.hpp $(OBJ)/fileio.o $(OBJ)/scanner.o
 	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ -o $@
 
-$(BLD)/libscanner.so: ./$(BLD)/scanner.o
+$(BLD)/libscanner.so: ./$(OBJ)/scanner.o
 	$(CXX) $(CXXFLAGS) $(CXXEXTRA) --shared ./$(BLD)/scanner.o -o ./$(BLD)/libscanner.so
 	-chmod 755 ./$(BLD)/libscanner.so
 
-$(BLD)/libscanner.a: ./$(BLD)/scanner.o
+$(BLD)/libscanner.a: ./$(OBJ)/scanner.o
 	-ar rvs ./$(BLD)/libscanner.a ./$(BLD)/scanner.o
 	-chmod 755 ./$(BLD)/libscanner.a
 
-$(BLD)/libstreamy.so: $(OBJ)/fileio.o $(OBJ)/compiler.o $(BLD)/streamy.o
+$(BLD)/libstreamy.so: $(OBJ)/fileio.o $(OBJ)/compiler.o $(OBJ)/streamy.o
 	$(CXX) $(CXXFLAGS) $(CXXEXTRA) -fPIC --shared $(OBJ)/fileio.o $(OBJ)/compiler.o $(OBJ)/streamy.o -o $(BLD)/libstreamy.so
 	chmod 755 $(BLD)/libstreamy.so
 
-$(BLD)/libstreamy.a: $(BLD)/streamy.o
+$(BLD)/libstreamy.a: $(OBJ)/streamy.o
 	ar rvs $(BLD)/libstreamy.a $(OBJ)/streamy.o
 	chmod 755 $(BLD)/libstreamy.a
+
+$(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp
+	cp $(SRC)/*.hpp $(BLD)/
 
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<

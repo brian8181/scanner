@@ -14,3 +14,13 @@ eee>>...
 gg<<...
 1 + 2 * (5 % 3);
 int abc = 15;
+class
+while( x == 5 )
+{
+    x++;
+}
+2 < 3;
+IF( x <= y )
+{
+    // todo
+}
