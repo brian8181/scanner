@@ -28,15 +28,10 @@ using std::ios;
 
 const int ASCII_OFFSET = 48;
 
-/// name: getconfig
-/// info: git name -> value pairs/config
-/// path, path to config file
-/// config, out parma
-
 /**
- * @brief
- * @param path
- * @param config
+ * @name get_config
+ * @param path to config file
+ * @param config, out parma
  * @return
  */
 map<string, string>& get_config(const string& path, /* out */ map<string, string>& config)
@@ -63,14 +58,12 @@ map<string, string>& get_config(const string& path, /* out */ map<string, string
     return config;
 }
 
-// returns true if only one match & match string size equals text size
-
 /**
  * @brief
  * @param pattern
  * @param text
  * @param match
- * @return
+ * @return true if only one match & match string size equals text size
  */
 bool match_single(const string& pattern, const string& text, /* out */ smatch& match)
 {
@@ -82,13 +75,11 @@ bool match_single(const string& pattern, const string& text, /* out */ smatch& m
     return false;
 }
 
-// returns true if only one match & match string size equals text size
-
 /**
  * @brief
  * @param pattern
  * @param text
- * @return
+ * @return true if only one match & match string size equals text size
  */
 bool match_single(const string& pattern, const string& text)
 {
@@ -126,30 +117,21 @@ std::vector<std::string> split(const std::string& s, char c)
   return result;
 }
 
-
-/// name: digits
-/// info: reurn number of base 10 digits
-/// n, number to eval
-
 /**
- * @brief
- * @param n
- * @return
+ * @name digits10
+ * @param n, number to eval
+ * @return number of base 10 digits
  */
 int digits10(int n)
 {
     return std::floor(std::log10(n) + 1);
 }
 
-/// name: itoa
-/// info: int to ascii
-/// s, string to convert
-/// return: int result
-
 /**
- * @brief
- * @param s
- * @return
+ * @name itoa
+ * @info: int to ascii
+ * @param s, string to convert
+ * @return int : result
  */
 int atoi(const char* s)
 {
