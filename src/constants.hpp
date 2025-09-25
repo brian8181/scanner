@@ -28,7 +28,7 @@ const string COMMENT              = "(//.*$)|(\\/\\*[\\s\\S]*?\\*\\/)";
 const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
 // literals
 const string FLOAT_LITERAL        = "[0-9]*\\.[0-9]+";
-const string INTEGER_LITERAL      = "DIGIT" + "+";
+const string INTEGER_LITERAL      = DIGIT + "+";
 const string HEX_LITERAL          = "0x" + HEX_DIGIT+ "+";
 const string STRING_LITERAL       = "\"" + VALID_CHARS + "*\"";
 const string CHAR_LITERAL         = "'[a-zA-Z0-9_{}\\[\\]#()<>%:;.?*+-\\/^&|~!=,\"]'";
@@ -76,6 +76,7 @@ const string LESS_THAN_EQUAL      = "<=";
 const string GREATER_THAN_EQUAL   = ">=";
 const string SCOPE_RESOLUTION     = "::";
 const string INDIRECT_SELECTION   = "->";
+
 // groups
 const string OPERATORS            = "(" + BIT_SHIFT_LEFT        + ")|" +
                                     "(" + BIT_SHIFT_RIGHT       + ")|" +
@@ -140,12 +141,15 @@ enum token_id : unsigned long
     ID_POUND_SIGN                 = 140,
     ID_DOLLAR_SIGN                = 150,
     ID_DOT                        = 160,
+    ID_COMMA                      = 165,
     ID_EQUAL                      = 170,
     ID_VBAR                       = 190,
     ID_COLON                      = 200,
     ID_SEMI_COLON                 = 210,
     ID_LESS_THAN                  = 230,
+    ID_LESS_THAN_EQUAL            = 235,
     ID_GREATER_THAN               = 240,
+    ID_GREATER_THAN_EQUAL         = 245,
     ID_MINUS                      = 250,
     ID_PLUS                       = 260,
     ID_OPEN_PAREN                 = 270,
@@ -155,15 +159,19 @@ enum token_id : unsigned long
     ID_LOGICAL_AND                = 300,
     ID_LOGICAL_OR                 = 310,
     ID_LOGICAL_EQUAL              = 340,
-    ID_COMMA                      = 470,
     ID_QUESTION_MARK              = 480,
     ID_TILDE                      = 490,
+    ID_TICK_MARK                  = 495,
     ID_CARROT                     = 500,
     ID_AMPERSAND                  = 515,
     ID_BIT_SHIFT_LEFT             = 540,
     ID_BIT_SHIFT_RIGHT            = 550,
     ID_NUMERIC_LITERAL            = 600,
     ID_STRING_LITERAL             = 610,
-    ID_SYMBOL_NAME                = 620
+    ID_SYMBOL_NAME                = 620,
+    ID_SCOPE_RESOLUTION           = 630,
+    ID_INDIRECT_SELECTION         = 640,
+    ID_DIRECT_SELECTION           = 650
+
 };
 #endif // _CTERMINALS_HPP

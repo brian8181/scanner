@@ -180,6 +180,8 @@ map<string, std::pair<unsigned int, string>> _token_map2 = {
                                                                 {"-",      {ID_MINUS,           "ID_MINUS"          }},
                                                                 {"&",      {ID_AMPERSAND,       "ID_AMPERSAND"      }},
                                                                 {"*",      {ID_ASTERIK,         "ID_ASTERIK"        }},
+                                                                {"~",      {ID_TILDE,           "ID_TILDE"          }},
+                                                                {"`",      {ID_TICK_MARK,       "ID_TICK_MARK"      }},
                                                                 {"<<",     {ID_BIT_SHIFT_LEFT,  "ID_BIT_SHIFT_LEFT" }},
                                                                 {">>",     {ID_BIT_SHIFT_RIGHT, "ID_BIT_SHIFT_RIGHT"}},
                                                                 {"%",      {ID_PERCENT,         "ID_PERCENT"        }},
