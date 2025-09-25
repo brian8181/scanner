@@ -14,8 +14,6 @@
 #include <map>
 #include <vector>
 #include <utility>
-#include <filesystem>
-#include "utility.hpp"
 #include "fileio.hpp"
 #include "scanner.hpp"
 #include "config.hpp"
@@ -339,13 +337,13 @@ int parse_options(int argc, char* argv[])
         }
     }
 
-    map<string, string> pairs;
-    get_config("test/config_match.txt", pairs);
-    auto end = pairs.end();
-    for (auto iter = pairs.begin(); iter != end; ++iter)
-    {
-        cout << "name = " << iter->first << " : value = " << iter->second << endl;
-    }
+    // map<string, string> pairs;
+    // get_config("test/config_match.txt", pairs);
+    // auto end = pairs.end();
+    // for (auto iter = pairs.begin(); iter != end; ++iter)
+    // {
+    //     cout << "name = " << iter->first << " : value = " << iter->second << endl;
+    // }
 
     start(file);
     return 0;

@@ -1,7 +1,8 @@
-
-/ File Name:  compiler.hpp
-// Build Date: Sat Nov 25 06:03:48 AM CST 2023
-// Version:    0.0.1
+/**
+ * @file     compiler.hpp
+ * @date:    Sat Nov 25 06:03:48 AM CST 2023
+ * @version: 0.0.1
+ */
 
 #include <iostream>
 #include <regex>
