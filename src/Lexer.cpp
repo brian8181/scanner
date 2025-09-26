@@ -5,7 +5,17 @@
  * @date    Fri, 26 Sep 2025 17:05:10 +0000
  * @info    ...
  */
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
+#include <map>
 #include "Lexer.hpp"
+
+using std::string;
+using std::vector;
+using std::map;
+using std::pair;
 
 Lexer::Lexer()
 {

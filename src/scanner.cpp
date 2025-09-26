@@ -22,7 +22,6 @@
 
 using namespace std;
 
-
 // map
 map<string, string> map_config;
 // todo : revert to no configuration sections!
@@ -175,7 +174,6 @@ int parse_options(int argc, char* argv[])
     }
 
     //Lexer lexer;
-
     start(file);
     return 0;
 }

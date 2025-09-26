@@ -11,8 +11,8 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 #include <regex>
 
 using namespace std;
@@ -30,6 +30,14 @@ void load_config( const string &path );
  * @return void
  */
 void start(string file);
+
+/**
+ * @brief
+ * @param iter
+ * @param id
+ * @return
+ */
+int get_token(sregex_iterator iter, unsigned int& token);
 
  /**
  * @brief tokenize
