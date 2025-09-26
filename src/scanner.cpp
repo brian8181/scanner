@@ -14,6 +14,7 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include "Lexer.hpp"
 #include "fileio.hpp"
 #include "scanner.hpp"
 #include "config.hpp"
@@ -173,13 +174,7 @@ int parse_options(int argc, char* argv[])
         }
     }
 
-    // map<string, string> pairs;
-    // get_config("test/config_match.txt", pairs);
-    // auto end = pairs.end();
-    // for (auto iter = pairs.begin(); iter != end; ++iter)
-    // {
-    //     cout << "name = " << iter->first << " : value = " << iter->second << endl;
-    // }
+    //Lexer lexer;
 
     start(file);
     return 0;

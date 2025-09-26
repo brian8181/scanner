@@ -7,6 +7,9 @@
 #ifndef _Lexer_HPP_
 #define _Lexer_HPP_
 #include <iostream>
+#include <string>
+
+using std::string;
 
 /**
   * @brief class Lexer
@@ -31,14 +34,14 @@ public:
  * @param  const string &path
  * @return void
  */
-void Lexer::load_config( const string &path );
+void load_config( const string &path );
 
 /**
  * @brief start tokenizing file
  * @param file
  * @return void
  */
-void Lexer::start(string file);
+void start(string file);
 
 
 /**
