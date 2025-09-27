@@ -6,16 +6,21 @@
  */
 #ifndef _Lexer_HPP_
 #define _Lexer_HPP_
+
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
 #include <map>
+#include <regex>
 
 using std::string;
 using std::vector;
 using std::map;
 using std::pair;
+using std::regex;
+
+//typedef regex_iterator<string::const_iterator> sregex_iterator;
 
 /**
   * @brief class Lexer
@@ -26,7 +31,6 @@ public:
 	Lexer();
 	Lexer( const Lexer& src );
 	virtual ~Lexer();
-	bool operator<( const Lexer& that );
 
 	/**
 	  * @brief
@@ -48,6 +52,14 @@ public:
 	 * @return void
 	 */
 	void start(string file);
+
+	/**
+	 * @brief
+	 * @param iter
+	 * @param id
+	 * @return
+	 */
+	//int get_token(std::regex_iterator iter, unsigned int& token);
 
 
 	/**

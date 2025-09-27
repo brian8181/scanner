@@ -22,120 +22,109 @@
 
 using namespace std;
 
-// map
-map<string, string> map_config;
-// todo : revert to no configuration sections!
-map<string, map<string, string>> map_sections_config;
-map<string, string> map_vars;
-map<string, string> map_const;
-map<string, vector<string>> map_arrays;
-map<string, pair<string, vector<string>>> map_objects;
 
-void load_config(const string &path)
-{
-    const unsigned int ID_NAME_VALUE_PAIR = 0;
-    const unsigned int ID_NAME = 1;
-    const unsigned int ID_VALUE = 2;
-    const unsigned int ID_NUMERIC_LITERAL = 2;
-    const unsigned int ID_STRING_LITERAL = 3;
+// // map
+// map<string, string> map_config;
+// // todo : revert to no configuration sections!
+// map<string, map<string, string>> map_sections_config;
+// map<string, string> map_vars;
+// map<string, string> map_const;
+// map<string, vector<string>> map_arrays;
+// map<string, pair<string, vector<string>>> map_objects;
 
-    // get configuration file by lines
-    vector<string> lines;
-    lines = read_lines(path, lines);
-    // create one only section (global)
-    string section_name = "global";
-    map<string, string> section_map;
-    pair<string, map<string, string>> sp(section_name, section_map);
-    map_sections_config.insert(sp);
+// void load_config(const string &path)
+// {
+//     const unsigned int ID_NAME_VALUE_PAIR = 0;
+//     const unsigned int ID_NAME = 1;
+//     const unsigned int ID_VALUE = 2;
+//     const unsigned int ID_NUMERIC_LITERAL = 2;
+//     const unsigned int ID_STRING_LITERAL = 3;
 
-    int len = lines.size();
-    for (int i = 0; i < len; ++i)
-    {
-        string line = lines[i];
-        regex rgx = regex(CONFIG_PAIR);
-        smatch match;
-        regex_match(line, match, rgx);
+//     // get configuration file by lines
+//     vector<string> lines;
+//     lines = read_lines(path, lines);
+//     // create one only section (global)
+//     string section_name = "global";
+//     map<string, string> section_map;
+//     pair<string, map<string, string>> sp(section_name, section_map);
+//     map_sections_config.insert(sp);
 
-        if (match[ID_NAME_VALUE_PAIR].matched)
-        {
-            // get name
-            string symbol_name = match[ID_NAME].str();
-            // get value
-            string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str() : match[ID_STRING_LITERAL].str();
-            // create pair
-            pair<string, string> p(symbol_name, value);
-            map_sections_config[section_name].insert(p);
-        }
-    }
-}
+//     int len = lines.size();
+//     for (int i = 0; i < len; ++i)
+//     {
+//         string line = lines[i];
+//         regex rgx = regex(CONFIG_PAIR);
+//         smatch match;
+//         regex_match(line, match, rgx);
 
-/**
- * @brief start the lexical analysis process
- * @param file The file to analyze
- */
-void start(string file)
-{
-    cout << "Starting lexical analysis on file: " << file << endl;
-    stringstream sstrm;
-    ifstream strm(file, ios::in);
-    if (strm.is_open())
-    {
-        cout << file << "-> opened ..." << endl;
-        char c;
-        while (strm.get(c))
-        {
-            sstrm << c;
-        }
-    }
-    else
-    {
-        cout << "Error: Unable to open file for reading." << endl;
-        return;
-    }
-    tokenize(EVERYTHING, sstrm.str());
-}
+//         if (match[ID_NAME_VALUE_PAIR].matched)
+//         {
+//             // get name
+//             string symbol_name = match[ID_NAME].str();
+//             // get value
+//             string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str() : match[ID_STRING_LITERAL].str();
+//             // create pair
+//             pair<string, string> p(symbol_name, value);
+//             map_sections_config[section_name].insert(p);
+//         }
+//     }
+// }
 
-/**
- * @brief tokenize
- * @param exp The regular expression to match
- * @param text The text to search for matches
- */
-void tokenize(const string &exp, const string &text)
-{
-    cout << "tokenize ..." << endl;
-    regex rexp = regex(exp, regex::ECMAScript);
+// /**
+//  * @brief start the lexical analysis process
+//  * @param file The file to analyze
+//  */
+// void start(string file)
+// {
+//     cout << "Starting lexical analysis on file: " << file << endl;
+//     stringstream sstrm;
+//     ifstream strm(file, ios::in);
+//     if (strm.is_open())
+//     {
+//         cout << file << "-> opened ..." << endl;
+//         char c;
+//         while (strm.get(c))
+//         {
+//             sstrm << c;
+//         }
+//     }
+//     else
+//     {
+//         cout << "Error: Unable to open file for reading." << endl;
+//         return;
+//     }
+//     tokenize(EVERYTHING, sstrm.str());
+// }
 
-    sregex_iterator begin = sregex_iterator(text.begin(), text.end(), rexp);
-    sregex_iterator end;
-    for (std::sregex_iterator iter = begin; iter != end; ++iter)
-    {
-        std::smatch m = *iter;
-        if( _token_map2.contains(m.str()) )
-        {
-            int id = _token_map2[m.str()].first;
-            string name = _token_map2[m.str()].second;
-            cout << "{\n\tid: " << id << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n};" << endl;
-        }
-        else
-        {
-            cout << "{\n\tid: null" << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n};" << endl;
-        }
-    }
-}
+// /**
+//  * @brief tokenize
+//  * @param exp The regular expression to match
+//  * @param text The text to search for matches
+//  */
+// void tokenize(const string &exp, const string &text)
+//     {
+//         cout << "tokenize ..." << endl;
+//         regex rexp = regex(exp, regex::ECMAScript);
 
-/**
- * @brief
- * @param iter
- * @param id
- * @return
- */
-int get_token(sregex_iterator iter, unsigned int& token)
-{
-    iter++;
-    std::smatch m = *iter;
-    token = _token_map2[m.str()].first;
-    return 0;
-}
+//         sregex_iterator begin = sregex_iterator(text.begin(), text.end(), rexp);
+//         sregex_iterator end;
+//         for (std::sregex_iterator iter = begin; iter != end; ++iter)
+//         {
+//             // std::smatch m = *iter;
+//             // if( _token_map2.contains(m.str()) )
+//             // {
+//             //     int id = _token_map2[m.str()].first;
+//             //     string name = _token_map2[m.str()].second;
+//             //     cout << "{\n\tid: " << id << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n};" << endl;
+//             // }
+//             // else
+//             // {
+//             //     cout << "{\n\tid: null" << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n};" << endl;
+//             // }
+//         }
+// }
+
+
 
 /**
  * @brief parse command line options
@@ -173,8 +162,9 @@ int parse_options(int argc, char* argv[])
         }
     }
 
-    //Lexer lexer;
-    start(file);
+    Lexer lexer;
+    lexer.start(file);
+
     return 0;
 }
 

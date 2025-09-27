@@ -40,7 +40,7 @@ endif
 .PHONY all: help
 all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
 
-$(BLD)/scanner: $(OBJ)/utility.o $(BLD)/utility.hpp $(OBJ)/fileio.o $(OBJ)/scanner.o
+$(BLD)/scanner: $(OBJ)/utility.o $(BLD)/utility.hpp $(OBJ)/fileio.o $(BLD)/fileio.hpp $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp
 	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ -o $@
 
 $(BLD)/libscanner.so: ./$(OBJ)/scanner.o
@@ -59,7 +59,7 @@ $(BLD)/libstreamy.a: $(OBJ)/streamy.o
 	ar rvs $(BLD)/libstreamy.a $(OBJ)/streamy.o
 	chmod 755 $(BLD)/libstreamy.a
 
-$(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp
+$(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp $(SRC)/Lexer.hpp
 	cp $(SRC)/*.hpp $(BLD)/
 
 $(OBJ)/%.o: $(SRC)/%.cpp
