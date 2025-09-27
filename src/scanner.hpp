@@ -18,49 +18,6 @@
 using namespace std;
 
 /**
- * @brief load_config: load confiuration from file
- * @param path
- * @return void
- */
-void load_config( const string &path );
-
-/**
- * @brief start tokenizing file
- * @param file
- * @return void
- */
-void start(string file);
-
-/**
- * @brief
- * @param iter
- * @param id
- * @return
- */
-int get_token(sregex_iterator iter, unsigned int& token);
-
- /**
- * @brief tokenize
- * @param exp The regular expression to match
- * @param text The text to search for matches
- */
-void tokenize(const string &exp, const string &text);
-
-/**
- * @brief
- * @param src
- * @param escapes
- */
-void lex(const string& src, /* out*/ vector<pair<int, string>>& escapes);
-
-/**
- * @brief Lexical analysis of the input source code.
- * @param src The source code to analyze.`
- * @param escapes A vector to store the escape sequences found.
- */
-void _lex(const string& src, /* out*/ vector<pair<int, string>>& escapes);
-
-/**
  * @brief parse command line options
  * @param argc
  * @param argv

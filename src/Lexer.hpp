@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <iterator>
 #include <vector>
 #include <map>
 #include <regex>
@@ -20,7 +21,6 @@ using std::map;
 using std::pair;
 using std::regex;
 
-//typedef regex_iterator<string::const_iterator> sregex_iterator;
 
 /**
   * @brief class Lexer
@@ -31,13 +31,6 @@ public:
 	Lexer();
 	Lexer( const Lexer& src );
 	virtual ~Lexer();
-
-	/**
-	  * @brief
-	  * @brief c++ comment ...
-	  * @brief place future addtions here ...
-	  *
-	*/
 
 	/**
 	 * @brief  load_config: load confiuration from file
@@ -59,13 +52,13 @@ public:
 	 * @param id
 	 * @return
 	 */
-	//int get_token(std::regex_iterator iter, unsigned int& token);
+	int get_token(std::sregex_iterator& iter, unsigned int& token);
 
 
 	/**
 	 * @brief tokenize
-	 * @param exp The regular expression to match
-	 * @param text The text to search for matches
+	 * @param exp : regular expression
+	 * @param text : search text
 	 */
 	void tokenize(const string &exp, const string &text);
 

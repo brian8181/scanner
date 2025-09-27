@@ -4,35 +4,25 @@
 # Version:    0.1.0
 
 cmake_minimum_required(VERSION 3.2)
-project(streamy)
+project(scanner)
 
 #set(BUILD_SHARED_LIBS YES)
 
-add_executable(index.cgi
-    streamy.cpp
-    index.cpp
+add_executable(scanner
+    scanner.cpp
+    Lexer.cpp
     utility.cpp
+    fileio.cpp
 )
 
-add_executable(index2.cgi
-    streamy.cpp
-    index2.cpp
-    utility.cpp
-)
 
-add_executable(index3.cgi
-    streamy.cpp
-    index3.cpp
-    utility.cpp
-)
+# # add_library(streamy_so SHARED
+# #     streamy.cpp
+# # )
 
-add_library(streamy_so SHARED
-    streamy.cpp
-)
-
-add_library(streamy_a STATIC
-    streamy.cpp
-)
+# # add_library(streamy_a STATIC
+# #     streamy.cpp
+# )
 
 # target_link_libraries(streamy_a
 #     STATIC index.cgi
