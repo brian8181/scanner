@@ -21,7 +21,6 @@ using std::map;
 using std::pair;
 using std::regex;
 
-
 /**
   * @brief class Lexer
   */
@@ -52,7 +51,7 @@ public:
 	 * @param id
 	 * @return
 	 */
-	int get_token(std::sregex_iterator& iter, unsigned int& token);
+	int get_token(std::sregex_iterator*& iter, const string& text, unsigned int& token);
 
 
 	/**
@@ -70,6 +69,11 @@ private:
 	map<string, string> map_const;
 	map<string, vector<string>> map_arrays;
 	map<string, pair<string, vector<string>>> map_objects;
+
+	regex rexp;
+	//sregex_iterator begin;
+	std::regex_iterator<std::string::const_iterator> begin;
+	//sregex_iterator begin = sregex_iterator(text.begin(), text.end(), rexp);
 };
 
 #endif

@@ -40,7 +40,7 @@ endif
 .PHONY all: help
 all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
 
-$(BLD)/scanner: $(OBJ)/utility.o $(BLD)/utility.hpp $(OBJ)/fileio.o $(BLD)/fileio.hpp $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp
+$(BLD)/scanner: $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp
 	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ -o $@
 
 $(BLD)/libscanner.so: ./$(OBJ)/scanner.o
