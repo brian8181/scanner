@@ -70,16 +70,12 @@ private:
 	map<string, vector<string>> map_arrays;
 	map<string, pair<string, vector<string>>> map_objects;
 
-
-	//sregex_iterator begin;
-	//std::regex_iterator<std::string::const_iterator> _begin;
-
+	// current position & state : i.e. --> get_token
 	std::string _search_text;
 	std::regex _rexp;
 	std::sregex_iterator _begin;
 	std::sregex_iterator _end;
 	std::sregex_iterator* _p_iter;
-
 };
 
 #endif
