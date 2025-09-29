@@ -38,6 +38,21 @@ Lexer::~Lexer()
 }
 
 /**
+ * @brief initialize state
+ */
+bool Lexer::init(const string& file)
+{
+    stringstream sstrm;
+    int r = read_sstream(file, sstrm);
+    _search_text = sstrm.str();
+    _rexp = regex(EVERYTHING, regex::ECMAScript);
+    _begin = sregex_iterator(_search_text.begin(), _search_text.end(), _rexp);
+    _p_iter = &_begin;
+
+    return r;
+}
+
+/**
  * @brief  load_config: load confiuration from file
  * @param  const string &path
  * @return void
@@ -110,7 +125,6 @@ void Lexer::start(string file)
     _rexp = regex(EVERYTHING, regex::ECMAScript);
     _begin = sregex_iterator(_search_text.begin(), _search_text.end(), _rexp);
     _p_iter = &_begin;
-
     while(get_token(token));
 }
 

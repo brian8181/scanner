@@ -32,6 +32,11 @@ public:
 	virtual ~Lexer();
 
 	/**
+	 * @brief initialize state
+	 */
+	bool init(const string& file);
+
+	/**
 	 * @brief  load_config: load confiuration from file
 	 * @param  const string &path
 	 * @return void
