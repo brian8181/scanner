@@ -146,6 +146,11 @@ int Lexer::get_token(unsigned int& token)
             int token = _token_map[m.str()].first;
             string name = _token_map[m.str()].second;
             cout << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n\tcount: " << ++count << "\n};" << endl;
+            // create token ...
+            string match = m.str();
+            std::pair<int, std::string> id(token, name);
+            std::pair<std::string, std::pair<int, std::string>> tok(match, id);
+            _tokens[match] = tok;
         }
         else
         {

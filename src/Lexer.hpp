@@ -81,6 +81,8 @@ private:
 	std::sregex_iterator _begin;
 	std::sregex_iterator _end;
 	std::sregex_iterator* _p_iter;
+
+	map<string, pair<string, pair<int, string>>> _tokens;
 };
 
 #endif
