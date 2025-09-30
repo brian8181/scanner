@@ -1,33 +1,33 @@
 
-# File Name:  streamy/src/CMakeLists.txt
-# Build Date: Wed Mar  6 08:41:13 AM CST 2024
-# Version:    0.1.0
+# @file:    CMakeLists.txt
+# @date:    Mon, Sep 29, 2025 10:54:01 PM
+# @version: 0.1.0
 
 cmake_minimum_required(VERSION 3.2)
 project(scanner)
 
+set(CMAKE_CXX_STANDARD 20)
+
 #set(BUILD_SHARED_LIBS YES)
 
+if(CMAKE_SYSTEM_NAME STREQUAL "CYGWIN")
+    message(STATUS "Building under Cygwin, defining CYGWIN macro")
+    add_definitions(-DCYGWIN)
+endif()
+
 add_executable(scanner
-    scanner.cpp
-    Lexer.cpp
-    utility.cpp
-    fileio.cpp
+    src/scanner.cpp
+    src/Lexer.cpp
+    src/utility.cpp
+    src/fileio.cpp
 )
 
 
-# # add_library(streamy_so SHARED
-# #     streamy.cpp
-# # )
-
-# # add_library(streamy_a STATIC
-# #     streamy.cpp
-# )
-
-# target_link_libraries(streamy_a
-#     STATIC index.cgi
-#     STATIC index2.cgi
-# )
+add_library(lexer_a STATIC
+    src/Lexer.cpp
+    src/utility.cpp
+    src/fileio.cpp
+)
 
 #[=[
     # Add Library
