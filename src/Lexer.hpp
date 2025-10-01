@@ -43,6 +43,10 @@ public:
 	 */
 	void load_config( const string &path );
 
+	void dump_config( );
+
+	void dump_config( const string& file );
+
 	/**
 	 * @brief start tokenizing file
 	 * @param file

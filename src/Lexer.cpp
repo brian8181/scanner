@@ -95,6 +95,27 @@ void Lexer::load_config( const string &path )
     }
 }
 
+void Lexer::dump_config( )
+{
+    string section_name = "global";
+    //int len = map_sections_config[section_name].size();
+    auto end = map_sections_config[section_name].end();
+    for(auto iter = map_sections_config[section_name].begin(); iter != end; ++iter)
+    {
+        string key = (*iter).first;
+        string value = (*iter).second;
+
+        cout << "Key: " << key << endl;
+        cout << "Value: " << value << endl;
+    }
+}
+
+void Lexer::dump_config( const string& file )
+{
+    load_config( file );
+    dump_config();
+}
+
 /**
  * @brief start tokenizing file
  * @param file

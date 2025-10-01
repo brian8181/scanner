@@ -58,6 +58,8 @@ int parse_options(int argc, char* argv[])
     }
 
     Lexer lexer;
+    lexer.load_config("test/config.txt");
+    lexer.dump_config();
     lexer.start(file);
 
     return 0;
