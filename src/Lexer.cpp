@@ -38,7 +38,8 @@ Lexer::~Lexer()
 }
 
 /**
- * @brief initialize state
+ * @brief  initialize state
+ * @return bool
  */
 bool Lexer::init(const string& file)
 {
@@ -160,9 +161,9 @@ void Lexer::start(string file)
 
 /**
  * @brief
- * @param iter
- * @param id
- * @return
+ * @param  iter
+ * @param  id
+ * @return int
  */
 int Lexer::get_token(unsigned int& token)
 {
@@ -192,9 +193,10 @@ int Lexer::get_token(unsigned int& token)
 }
 
 /**
- * @brief tokenize
- * @param exp The regular expression to match
- * @param text The text to search for matches
+ * @brief  tokenize
+ * @param  exp The regular expression to match
+ * @param  text The text to search for matches
+ * @return void
  */
 void Lexer::tokenize(const string &exp, const string &text)
 {
