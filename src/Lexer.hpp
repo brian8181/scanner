@@ -43,8 +43,17 @@ public:
 	 */
 	void load_config( const string &path );
 
+	/**
+	 * @brief dump current config
+	 * @return void
+	 */
 	void dump_config( );
 
+	/**
+	 * @brief dump config
+	 * @param const string& file : config to dump
+	 * @return void
+	 */
 	void dump_config( const string& file );
 
 	/**

@@ -95,6 +95,10 @@ void Lexer::load_config( const string &path )
     }
 }
 
+/**
+ * @brief  dump current config
+ * @return void
+ */
 void Lexer::dump_config( )
 {
     string section_name = "global";
@@ -110,6 +114,11 @@ void Lexer::dump_config( )
     }
 }
 
+/**
+ * @brief  dump config
+ * @param  const string& file : config to dump
+ * @return void
+ */
 void Lexer::dump_config( const string& file )
 {
     load_config( file );
@@ -117,8 +126,8 @@ void Lexer::dump_config( const string& file )
 }
 
 /**
- * @brief start tokenizing file
- * @param file
+ * @brief  start tokenizing file
+ * @param  file
  * @return void
  */
 void Lexer::start(string file)
