@@ -1,4 +1,3 @@
-
 /**
  * @file    Lexer.hpp
  * @version 0.0.1
@@ -22,7 +21,7 @@
 
 using namespace std;
 
-Lexer::Lexer()
+Lexer::Lexer( )
 {
 
 }
@@ -32,7 +31,7 @@ Lexer::Lexer( const Lexer& src )
 
 }
 
-Lexer::~Lexer()
+Lexer::~Lexer( )
 {
 
 }
@@ -41,13 +40,13 @@ Lexer::~Lexer()
  * @brief  initialize state
  * @return bool
  */
-bool Lexer::init(const string& file)
+bool Lexer::init( const string& file )
 {
     stringstream sstrm;
-    int r = read_sstream(file, sstrm);
-    _search_text = sstrm.str();
-    _rexp = regex(EVERYTHING, regex::ECMAScript);
-    _begin = sregex_iterator(_search_text.begin(), _search_text.end(), _rexp);
+    int r = read_sstream( file, sstrm );
+    _search_text = sstrm.str( );
+    _rexp = regex( EVERYTHING, regex::ECMAScript );
+    _begin = sregex_iterator( _search_text.begin(), _search_text.end(), _rexp );
     _p_iter = &_begin;
 
     return r;
@@ -68,30 +67,30 @@ void Lexer::load_config( const string &path )
 
     // get configuration file by lines
     vector<string> lines;
-    lines = read_lines(path, lines);
+    lines = read_lines( path, lines );
     // create one only section (global)
     string section_name = "global";
     map<string, string> section_map;
-    pair<string, map<string, string>> sp(section_name, section_map);
-    map_sections_config.insert(sp);
+    pair<string, map<string, string>> sp( section_name, section_map );
+    map_sections_config.insert( sp );
 
-    int len = lines.size();
-    for (int i = 0; i < len; ++i)
+    int len = lines.size( );
+    for(int i = 0; i < len; ++i)
     {
         string line = lines[i];
-        regex rgx = regex(CONFIG_PAIR);
+        regex rgx = regex( CONFIG_PAIR );
         smatch match;
-        regex_match(line, match, rgx);
+        regex_match( line, match, rgx );
 
-        if (match[ID_NAME_VALUE_PAIR].matched)
+        if(match[ID_NAME_VALUE_PAIR].matched)
         {
             // get name
-            string symbol_name = match[ID_NAME].str();
+            string symbol_name = match[ID_NAME].str( );
             // get value
-            string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str() : match[ID_STRING_LITERAL].str();
+            string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( );
             // create pair
-            pair<string, string> p(symbol_name, value);
-            map_sections_config[section_name].insert(p);
+            pair<string, string> p( symbol_name, value );
+            map_sections_config[section_name].insert( p );
         }
     }
 }
@@ -104,8 +103,8 @@ void Lexer::dump_config( )
 {
     string section_name = "global";
     //int len = map_sections_config[section_name].size();
-    auto end = map_sections_config[section_name].end();
-    for(auto iter = map_sections_config[section_name].begin(); iter != end; ++iter)
+    auto end = map_sections_config[section_name].end( );
+    for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
     {
         string key = (*iter).first;
         string value = (*iter).second;
@@ -123,7 +122,7 @@ void Lexer::dump_config( )
 void Lexer::dump_config( const string& file )
 {
     load_config( file );
-    dump_config();
+    dump_config( );
 }
 
 /**
@@ -131,16 +130,16 @@ void Lexer::dump_config( const string& file )
  * @param  file
  * @return void
  */
-void Lexer::start(string file)
+void Lexer::start( string file )
 {
     cout << "Starting lexical analysis on file: " << file << endl;
     stringstream sstrm;
-    ifstream strm(file, ios::in);
-    if (strm.is_open())
+    ifstream strm( file, ios::in );
+    if( strm.is_open( ) )
     {
         cout << file << "-> opened ..." << endl;
         char c;
-        while (strm.get(c))
+        while( strm.get( c ) )
         {
             sstrm << c;
         }
@@ -151,12 +150,12 @@ void Lexer::start(string file)
         return;
     }
 
-    _search_text = sstrm.str();
     unsigned int token = ID_UNDEFINED;
-    _rexp = regex(EVERYTHING, regex::ECMAScript);
-    _begin = sregex_iterator(_search_text.begin(), _search_text.end(), _rexp);
+    _search_text = sstrm.str( );
+    _rexp = regex( EVERYTHING, regex::ECMAScript );
+    _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
-    while(get_token(token));
+    while( get_token( token ) );
 }
 
 /**
@@ -165,27 +164,27 @@ void Lexer::start(string file)
  * @param  id
  * @return int
  */
-int Lexer::get_token(unsigned int& token)
+int Lexer::get_token( unsigned int& token )
 {
     static int count = 0;
     if(*_p_iter != _end)
     {
         ++(*_p_iter);
         std::smatch m = *(*_p_iter);
-        if( _token_map.contains(m.str()) )
+        if( _token_map.contains( m.str( ) ) )
         {
-            int token = _token_map[m.str()].first;
-            string name = _token_map[m.str()].second;
-            cout << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n\tcount: " << ++count << "\n};" << endl;
+            int token = _token_map[m.str( )].first;
+            string name = _token_map[m.str( )].second;
+            cout << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
             // create token ...
-            string match = m.str();
-            std::pair<int, std::string> id(token, name);
-            std::pair<std::string, std::pair<int, std::string>> tok(match, id);
+            string match = m.str( );
+            std::pair<int, std::string> id( token, name );
+            std::pair<std::string, std::pair<int, std::string>> tok( match, id );
             _tokens[match] = tok;
         }
         else
         {
-            cout << "{\n\ttoken: null" << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n\tcount: " << ++count << "\n};" << endl;
+            cout << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
         }
         return 1;
     }
@@ -198,25 +197,25 @@ int Lexer::get_token(unsigned int& token)
  * @param  text The text to search for matches
  * @return void
  */
-void Lexer::tokenize(const string &exp, const string &text)
+void Lexer::tokenize( const string &exp, const string &text )
 {
     int count = 0;
-    regex rexp = regex(exp, regex::ECMAScript);
-    sregex_iterator begin = sregex_iterator(text.begin(), text.end(), rexp);
+    regex rexp = regex( exp, regex::ECMAScript );
+    sregex_iterator begin = sregex_iterator( text.begin( ), text.end( ), rexp );
     //sregex_iterator end = sregex_iterator();
     sregex_iterator end;
     for (std::sregex_iterator iter = begin; iter != end; ++iter)
     {
         std::smatch m = *iter;
-        if( _token_map.contains(m.str()) )
+        if( _token_map.contains( m.str( ) ) )
         {
-            int token = _token_map[m.str()].first;
-            string name = _token_map[m.str()].second;
-            cout << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n\tcount: " << ++count << "\n};" << endl;
+            int token = _token_map[m.str( )].first;
+            string name = _token_map[m.str( )].second;
+            cout << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
         }
         else
         {
-            cout << "{\n\ttoken: null" << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position(0) << "\n\tcount: " << ++count << "\n};" << endl;
+            cout << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
         }
     }
 }

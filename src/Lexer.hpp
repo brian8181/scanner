@@ -61,7 +61,7 @@ public:
 	 * @param file
 	 * @return void
 	 */
-	void start(string file);
+	void start( string file );
 
 	/**
 	 * @brief
@@ -69,7 +69,7 @@ public:
 	 * @param id
 	 * @return
 	 */
-	int get_token(unsigned int& token);
+	int get_token( unsigned int& token );
 
 
 	/**
@@ -77,7 +77,7 @@ public:
 	 * @param exp : regular expression
 	 * @param text : search text
 	 */
-	void tokenize(const string &exp, const string &text);
+	void tokenize( const string &exp, const string &text );
 
 private:
 	map<string, string> map_config;
