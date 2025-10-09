@@ -6,13 +6,19 @@
  */
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <utility>
 #include <vector>
 #include <map>
 #include <regex>
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/color.h>
 #include "constants.hpp"
 #include "fileio.hpp"
 #include "Lexer.hpp"
+#include "utility.hpp"
+
 
 // using std::string;
 // using std::vector;
@@ -166,6 +172,7 @@ void Lexer::start( string file )
  */
 int Lexer::get_token( unsigned int& token )
 {
+    stringstream ss;
     static int count = 0;
     if(*_p_iter != _end)
     {
@@ -175,7 +182,9 @@ int Lexer::get_token( unsigned int& token )
         {
             int token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
-            cout << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
+            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
+            color_print(ss.str(), fg(fmt::color::blue) | fmt::emphasis::bold);
+            ss.clear();
             // create token ...
             string match = m.str( );
             std::pair<int, std::string> id( token, name );
@@ -184,7 +193,9 @@ int Lexer::get_token( unsigned int& token )
         }
         else
         {
-            cout << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
+            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
+            color_print(ss.str(), fg(fmt::color::red) | fmt::emphasis::bold);
+            ss.clear();
         }
         return 1;
     }

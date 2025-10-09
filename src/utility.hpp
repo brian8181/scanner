@@ -11,6 +11,7 @@ using std::map;
 
 std::map<string, string>& get_config(const string& path, /* out */ map<string, string>& config);
 
+void color_print(const string& s, fmt::text_style ts);
 string& to_lower(const string& s, /* out */ string& r);
 string& to_lower(string& s); // in place
 string& to_upper(const string& s, /* out */ string& r);
@@ -25,7 +26,7 @@ void print(const Args& ...args);
 int digits10(int n);
 int atoi(const char* s);
 void itoa(int& n, char* s);
-;
+
 
 typedef string line_t;
 typedef vector<line_t> lines_t;

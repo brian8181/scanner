@@ -19,7 +19,7 @@ AST = ast
 
 LIBS = -L/usr/local/lib/
 INCLUDES = -I./build/
-LDFLAGS = $(LIBS) $(INCLUDES)
+LDFLAGS = -lfmt $(LIBS) $(INCLUDES)
 
 ifndef RELEASE
 	CXXFLAGS +=-ggdb -DDEBUG
@@ -40,8 +40,8 @@ endif
 .PHONY all: help
 all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
 
-$(BLD)/scanner: $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp
-	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ -o $@
+$(BLD)/scanner: $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
+	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ /usr/local/lib/libfmt.a -o $@
 
 $(BLD)/libscanner.so: ./$(OBJ)/scanner.o
 	$(CXX) $(CXXFLAGS) $(CXXEXTRA) --shared ./$(BLD)/scanner.o -o ./$(BLD)/libscanner.so

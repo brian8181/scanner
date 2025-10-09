@@ -11,6 +11,9 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <fmt/color.h>
+#include <fmt/compile.h>
+#include <fmt/format.h>
 #include "math.h"
 #include "fileio.hpp"
 #include "utility.hpp"
@@ -27,6 +30,15 @@ using std::pair;
 using std::ios;
 
 const int ASCII_OFFSET = 48;
+
+/**
+ * @brief print color
+ * @param s
+ */
+void color_print(const string& s, fmt::text_style ts)
+{
+    fmt::print(ts, "{}\n", s);
+}
 
 /**
  * @name get_config
