@@ -62,8 +62,7 @@ int parse_options(int argc, char* argv[])
                 return 1;
         }
     }
-
-
+    // begin lexing ...
     Lexer lexer;
     if(argc > 1)
     {

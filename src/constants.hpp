@@ -25,9 +25,10 @@ const string LETTER               = "[a-z]";
 const string DIGIT                = "[0-9]";
 const string HEX_DIGIT            = "[A-F0-9]";
 const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
-const string VALID_CHARS          = "[\\w\\s\\[\\]+-=|$><^/#@~&*.%!~`_:;',()]";
+const string VALID_CHARS          = "[ [:punct:][:alnum:]]"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`
 const string VALID_FILE_CHARS     = "[A-Za-z0-9_. ]";
-const string CONFIG_PAIR          = "\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*((" + VALID_SYMBOL_CHARS + "*)|(\"" + VALID_CHARS + "*\"))\\s*";
+const string CONFIG_PAIR          = "\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*((" + VALID_CHARS + "*))\\s*";
+const string CONFIG_COMMENT       = "^\\s*#.*$";
 const string PREPROCESSOR         = "#[A-Za-z_]+";
 const string COMMENT              = "(//.*$)|(\\/\\*[\\s\\S]*?\\*\\/)";
 const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
