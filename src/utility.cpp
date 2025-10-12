@@ -40,10 +40,16 @@ void color_print(const string& s, fmt::text_style ts)
     fmt::print(ts, "{}\n", s);
 }
 
+// string color_fmt(const string& s, fmt::text_style ts)
+// {
+//     string out = fmt::format(s, ts);
+//     return out;
+// }
+
 /**
  * @name get_config
  * @param path to config file
- * @param config, out parma
+ * @param config, out parmas
  * @return
  */
 map<string, string>& get_config(const string& path, /* out */ map<string, string>& config)
@@ -119,11 +125,10 @@ std::vector<std::string> split(const std::string& s, char c)
   {
     size_t end = s.find_first_of(c, begin);
     result.push_back(s.substr(begin, end - begin));
-
-    if (end == std::string::npos) {
+    if (end == std::string::npos)
+    {
       break;
     }
-
     begin = end + 1;
   }
   return result;
@@ -273,7 +278,6 @@ string& trim(string &s, char c)
 {
     if(s.at(s.length()-1) == c)
         s.pop_back();
-
     return s;
 }
 
