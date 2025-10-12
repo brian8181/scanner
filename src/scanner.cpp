@@ -23,6 +23,10 @@
 
 using namespace std;
 
+const int EXEs_IDX = 0;
+const int SRC_IDX = 1;
+const int CONFIG_IDX = 2;
+
 /**
  * @brief parse command line options
  * @param argc
@@ -39,7 +43,7 @@ int parse_options(int argc, char* argv[])
         {"file",        required_argument,  NULL,   'f'},
         {NULL,          0,                  NULL,    0 }
     };
-    string file = argv[1];
+    string file = argv[SRC_IDX];
     while ((opt = getopt_long(argc, argv, optstring, longopts, NULL)) != -1)
     {
         switch (opt)
@@ -59,11 +63,20 @@ int parse_options(int argc, char* argv[])
         }
     }
 
-    Lexer lexer;
-    lexer.load_config("test/config.txt");
-    lexer.dump_config();
-    lexer.start(file);
 
+    Lexer lexer;
+    if(argc > 1)
+    {
+        cout << "configuartion loading ..." << endl;
+        string config = argv[CONFIG_IDX];
+        lexer.load_config(config);
+        lexer.dump_config();
+    }
+    else
+    {
+        cout << "missing config paramater @ index 3 ..." << std::endl;
+    }
+    //lexer.start(file);
     return 0;
 }
 

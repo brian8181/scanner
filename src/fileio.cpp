@@ -43,17 +43,10 @@ ifstream& read_char(ifstream& strm, /* out */ char& c)
     if (strm.is_open())
     {
         strm.get(c);
-        if (!strm.good())
-        {
-            std::cerr << "Error: Unable to read character." << std::endl;
-            exit(-1);
-        }
+        if (strm.good())
+            return strm;
     }
-    else
-    {
-        std::cerr << "Error: Unable to open file for reading character." << std::endl;
-    }
-    return strm;
+   exit(-1);
 }
 
 /**
@@ -67,17 +60,10 @@ ofstream& write_char(ofstream& strm, /* in */ const char& c)
     if (strm.is_open())
     {
         strm.put(c);
-        if (!strm.good())
-        {
-            std::cerr << "Error: Unable to write character." << std::endl;
-            exit(-1);
-        }
+        if (strm.good())
+            return strm;
     }
-    else
-    {
-        std::cerr << "Error: Unable to open file for writing character." << std::endl;
-    }
-    return strm;
+    exit(-1);
 }
 
 /**
@@ -206,21 +192,20 @@ int write_sstream(const string& file, /* in */ const stringstream& istrm)
  * @brief  read lines from a file into a vector of strings
  * @param  const string& file : file to read from
  * @param  vector<string>& lines : vector to store the lines
- * @return int : number of lines read, or -1 on error
+ * @return int : number of lines written, or -1 on error
  */
-vector<string>& read_lines(const string& file, /* out */ vector<string>& lines)
+int read_lines(const string& file, /* out */ vector<string>& lines)
 {
     ifstream stream(file, ios::in );
-    if (stream.is_open())
+    if (!stream.is_open())
+        return -1;
+    string line;
+    while (getline(stream, line))
     {
-        string line;
-        while (getline(stream, line))
-        {
-            lines.push_back(line);
-        }
-        stream.close();
+        lines.push_back(line);
     }
-    return lines;
+    stream.close();
+    return lines.size();
 }
 
 /**

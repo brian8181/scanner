@@ -5,6 +5,7 @@
  * @info    ...
  */
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <sstream>
 #include <utility>
@@ -19,6 +20,9 @@
 #include "Lexer.hpp"
 #include "utility.hpp"
 
+using std::cerr;
+using std::cout;
+using std::endl;
 
 // using std::string;
 // using std::vector;
@@ -73,7 +77,10 @@ void Lexer::load_config( const string &path )
 
     // get configuration file by lines
     vector<string> lines;
-    lines = read_lines( path, lines );
+    if(! read_lines( path, lines ) )
+    {
+        cerr << "error: read_lines ..." << endl;
+    }
     // create one only section (global)
     string section_name = "global";
     map<string, string> section_map;
@@ -99,6 +106,7 @@ void Lexer::load_config( const string &path )
             map_sections_config[section_name].insert( p );
         }
     }
+    cout << "config loaded ..." << endl;
 }
 
 /**
@@ -107,6 +115,7 @@ void Lexer::load_config( const string &path )
  */
 void Lexer::dump_config( )
 {
+    cout << "config dump ..." << endl;
     string section_name = "global";
     //int len = map_sections_config[section_name].size();
     auto end = map_sections_config[section_name].end( );
@@ -114,9 +123,7 @@ void Lexer::dump_config( )
     {
         string key = (*iter).first;
         string value = (*iter).second;
-
-        cout << "Key: " << key << endl;
-        cout << "Value: " << value << endl;
+        cout << "Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
     }
 }
 

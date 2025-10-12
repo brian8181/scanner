@@ -95,9 +95,9 @@ int write_sstream(const string& file, /* in */ const stringstream& sstrm);
  * @brief  read lines from a file into a vector of strings
  * @param  file : file to read from
  * @param  lines : vector to store the lines
- * @return number of lines read, or -1 on error
+ * @return number of lines written, or -1 on errors
  */
-vector<string>& read_lines(const string& file, /* out */ vector<string>& lines);
+int read_lines(const string& file, /* out */ vector<string>& lines);
 
 /**
  * @brief  write lines to a file
