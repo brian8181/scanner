@@ -23,24 +23,33 @@
 using std::cerr;
 using std::cout;
 using std::endl;
-
-// using std::string;
-// using std::vector;
-// using std::map;
-// using std::pair;
+using std::string;
+using std::vector;
+using std::map;
+using std::pair;
 
 using namespace std;
 
+/**
+ * @brief ctop
+ */
 Lexer::Lexer( )
 {
 
 }
 
+/**
+ * @brief copy ctor
+ * @param src
+ */
 Lexer::Lexer( const Lexer& src )
 {
 
 }
 
+/**
+ * @brief
+ */
 Lexer::~Lexer( )
 {
 
@@ -58,7 +67,6 @@ bool Lexer::init( const string& file )
     _rexp = regex( EVERYTHING, regex::ECMAScript );
     _begin = sregex_iterator( _search_text.begin(), _search_text.end(), _rexp );
     _p_iter = &_begin;
-
     return r;
 }
 
@@ -117,7 +125,6 @@ void Lexer::dump_config( )
 {
     cout << "config dump ..." << endl;
     string section_name = "global";
-    //int len = map_sections_config[section_name].size();
     auto end = map_sections_config[section_name].end( );
     for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
     {
@@ -172,7 +179,7 @@ void Lexer::start( string file )
 }
 
 /**
- * @brief
+ * @brief  get_token
  * @param  iter
  * @param  id
  * @return int
