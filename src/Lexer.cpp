@@ -77,9 +77,10 @@ bool Lexer::init( const string& file )
  */
 void Lexer::load_config( const string &path )
 {
-    const unsigned int ID_NAME_VALUE_PAIR = 0;
-    const unsigned int ID_NAME = 1;
-    const unsigned int ID_VALUE = 2;
+    const unsigned int ID_NAME_VALUE_PAIR = 1;
+    const unsigned int ID_NAME = 2;
+    const unsigned int ID_VALUE = 5;
+    const unsigned int ID_CONFIG_COMMENT = 6;
     const unsigned int ID_NUMERIC_LITERAL = 2;
     const unsigned int ID_STRING_LITERAL = 3;
 
@@ -99,7 +100,7 @@ void Lexer::load_config( const string &path )
     for(int i = 0; i < len; ++i)
     {
         string line = lines[i];
-        regex rgx = regex( CONFIG_PAIR );
+        regex rgx = regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
         smatch match;
         regex_match( line, match, rgx );
 
@@ -130,7 +131,8 @@ void Lexer::dump_config( )
     {
         string key = (*iter).first;
         string value = (*iter).second;
-        cout << "Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
+        cout << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
+        //cout << "Section: " << left << setw(15) << FMT_FG_GREEN << section_name << FMT_RESET << left << " Key: " << left << setw(25) << FMT_FG_GREEN << key << FMT_RESET << "Value: " << setw(25) << FMT_FG_RED << value << FMT_RESET << endl;
     }
 }
 

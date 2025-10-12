@@ -1,3 +1,6 @@
+# @file config.txt
+# @date Sun, Oct 12, 2025  1:04:58 PM
+
 VALID_SYMBOL_CHARS = [A-Za-z0-9_]
 VALID_CHARS        = [ [:punct:][:alnum:]]
 VALID_FILE_CHARS   = [A-Za-z0-9_. ]
