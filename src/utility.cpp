@@ -130,8 +130,8 @@ std::vector<std::string> split(const std::string& s, char c)
 }
 
 /**
- * @name digits10
- * @param n, number to eval
+ * @name   digits10
+ * @param  n, number to eval
  * @return number of base 10 digits
  */
 int digits10(int n)
@@ -140,9 +140,9 @@ int digits10(int n)
 }
 
 /**
- * @name itoa
- * @info: int to ascii
- * @param s, string to convert
+ * @name   itoa
+ * @info:  int to ascii
+ * @param  s, string to convert
  * @return int : result
  */
 int atoi(const char* s)
@@ -160,10 +160,10 @@ int atoi(const char* s)
 }
 
 /**
- * @brief
- * @param s
- * @param r
- * @return
+ * @brief to_lower: transform string chars to lower case
+ * @param s: string parameter to transform
+ * @param r: out param same as return value
+ * @return string&: same as out param
  */
 string& to_lower(const string& s, /* out */ string& r)
 {
@@ -178,9 +178,9 @@ string& to_lower(const string& s, /* out */ string& r)
 }
 
 /**
- * @brief
- * @param s
- * @return
+ * @brief to_lower: transform string chars to lower case
+ * @param s: string parameter to transform
+ * @return string&
  */
 string& to_lower(string& s) // in place
 {
@@ -194,10 +194,10 @@ string& to_lower(string& s) // in place
 }
 
 /**
- * @brief
- * @param s
- * @param r
- * @return
+ * @brief to_upper: transform string chars to upper case
+ * @param s: string parameter to transform
+ * @param r: out param same as return value
+ * @return string&: same as out param
  */
 string& to_upper(const string& s, /* out */ string& r)
 {
@@ -212,9 +212,9 @@ string& to_upper(const string& s, /* out */ string& r)
 }
 
 /**
- * @brief
- * @param s
- * @return
+ * @brief to_upper: transform string chars to upper case
+ * @param s: string parameter to transform
+ * @return string&
  */
 string& to_upper(string& s) // in place
 {
@@ -227,17 +227,13 @@ string& to_upper(string& s) // in place
     return s;
 }
 
-/// name: itoa
-/// info: int to ascii
-/// n, number to eval
-/// s, out parma
-/// return: void
-
 /**
- * @brief
- * @param n
- * @param s
- */
+ * @name itoa
+ * @info int to ascii
+ * @param number to eval
+ * @param s, out parma
+ * @return void
+*/
 void itoa(int& n, char* s)
 {
     int len = digits10(n);
