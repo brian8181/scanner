@@ -124,6 +124,7 @@ void Lexer::load_config( const string &path )
  */
 void Lexer::dump_config( )
 {
+    stringstream ss;
     cout << "config dump ..." << endl;
     string section_name = "global";
     auto end = map_sections_config[section_name].end( );
@@ -131,8 +132,8 @@ void Lexer::dump_config( )
     {
         string key = (*iter).first;
         string value = (*iter).second;
-        cout << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
-        //cout << "Section: " << left << setw(15) << FMT_FG_GREEN << section_name << FMT_RESET << left << " Key: " << left << setw(25) << FMT_FG_GREEN << key << FMT_RESET << "Value: " << setw(25) << FMT_FG_RED << value << FMT_RESET << endl;
+        ss << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
+        color_print(ss.str(), fg(fmt::color::blue) | fmt::emphasis::bold);
     }
 }
 
