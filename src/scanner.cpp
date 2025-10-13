@@ -138,3 +138,65 @@ int main(int argc, char* argv[])
 		std::exit(-1);
 	}
 }
+
+#ifdef BISON_BRIDGE
+#define BISON_BRIDGE
+
+#include <ctype.h>
+#include <stdlib.h>
+#define NUM 1
+#define YYEOF 0
+
+char* yylval;
+int yyparse();
+
+/**
+ * @brief
+ * @param
+ * @return
+ */
+int yylex (void)
+{
+    int c = getchar ();
+    /* skip white space */
+    while (c == ' ' || c == '\t')
+        c = getchar ();
+    /* Process numbers. */
+    if (c == '.' || isdigit (c))
+    {
+        ungetc (c, stdin);
+        if (scanf ("%lf", &yylval) != 1)
+            abort ();
+        return NUM;
+    }
+    /* return end-of-input */
+    else if (c == EOF)
+        return YYEOF;
+    /* return a single char */
+    else
+        return c;
+}
+
+/**
+ * @brief
+ * @param
+ */
+void yyerror (char const *s)
+{
+    printf("%s\n", s);
+}
+
+
+/**
+ * @brief main function
+ * @param argc : param count in argv
+ * @param argv : command line parameters
+ * @return 0 success : or error
+ */
+
+int __main(int argc, char* argv[])
+{
+    return yyparse();
+}
+
+#endif

@@ -40,4 +40,18 @@ int stdin_ready (int filedes);
  */
 int main(int argc, char* argv[]);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
+int yylex (void);
+
+/**
+ * @brief
+ * @param
+ */
+void yyerror (char const *);
+
+
 #endif // _SCANNER_HPP_

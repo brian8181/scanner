@@ -170,14 +170,15 @@ enum token_id : unsigned long
     ID_SINGLE_QUOTE               = 60,
     ID_DOUBLE_QUOTE               = 50,
     ID_LESS_THAN                  = 230,
+    ID_LT                         = 230,
     ID_COMMA                      = 165,
     ID_GREATER_THAN               = 240,
+    ID_GT                         = 240,
     ID_DOT                        = 160,
     ID_FORWARD_SLASH              = 139,
     ID_DIVISION_OP                = 139,
     ID_QUESTION_MARK              = 480,
 
-    //
     ID_IF                         = 10,
     ID_ELSE                       = 20,
     ID_WHILE                      = 30,
@@ -187,9 +188,9 @@ enum token_id : unsigned long
     ID_RETURN                     = 46,
 
     ID_LESS_THAN_EQUAL            = 235,
+    ID_LE                         = 235,
     ID_GREATER_THAN_EQUAL         = 245,
-
-
+    ID_GE                         = 245,
 
     ID_LOGICAL_EQUAL              = 340,
     ID_LOGICAL_OR                 = 322,
