@@ -75,7 +75,7 @@ int parse_options(int argc, char* argv[])
     {
         cout << "missing config paramater @ index 3 ..." << std::endl;
     }
-    //lexer.start(file);
+    lexer.start(file);
     return 0;
 }
 

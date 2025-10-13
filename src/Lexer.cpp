@@ -83,6 +83,7 @@ void Lexer::load_config( const string &path )
     const unsigned int ID_CONFIG_COMMENT = 6;
     const unsigned int ID_NUMERIC_LITERAL = 2;
     const unsigned int ID_STRING_LITERAL = 3;
+    map_sections_config.clear();
 
     // get configuration file by lines
     vector<string> lines;
@@ -133,8 +134,10 @@ void Lexer::dump_config( )
         string key = (*iter).first;
         string value = (*iter).second;
         ss << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
-        color_print(ss.str(), fg(fmt::color::blue) | fmt::emphasis::bold);
+
+        //color_print(ss.str(), fg(fmt::color::blue) | fmt::emphasis::bold);
     }
+    cout << ss.str();
 }
 
 /**
@@ -144,7 +147,7 @@ void Lexer::dump_config( )
  */
 void Lexer::dump_config( const string& file )
 {
-    load_config( file );
+    //load_config( file );
     dump_config( );
 }
 
@@ -173,12 +176,25 @@ void Lexer::start( string file )
         return;
     }
 
-    unsigned int token = ID_UNDEFINED;
-    _search_text = sstrm.str( );
-    _rexp = regex( EVERYTHING, regex::ECMAScript );
-    _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
-    _p_iter = &_begin;
-    while( get_token( token ) );
+    stringstream ss;
+    string section_name = "global";
+    auto end = map_sections_config[section_name].end( );
+    for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
+    {
+        string key = (*iter).first;
+        string value = (*iter).second;
+        ss << "(" << value << ")|";
+    }
+    string ALL_CONFIG_EXPRS = ss.str();
+    ALL_CONFIG_EXPRS.pop_back();
+    cout << ALL_CONFIG_EXPRS << endl;
+
+    // unsigned int token = ID_UNDEFINED;
+    // _search_text = sstrm.str( );
+    // _rexp = regex( EVERYTHING, regex::ECMAScript );
+    // _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
+    // _p_iter = &_begin;
+    // while( get_token( token ) );
 }
 
 /**
