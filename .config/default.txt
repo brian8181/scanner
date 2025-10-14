@@ -1,0 +1,30 @@
+# @brief default configuration file
+# @file .config/default.txt
+# @date Tue, Oct 14, 2025  2:28:02 AM
+
+# punctuations
+ASTERIK                = *
+AMPERSAND              = &
+SEMI_COLON             = :
+COMMA                  = ,
+DOT                    = .
+OPEN_PAREN             = (
+CLOSE_PAREN            = )
+OPEN_BRACKET           = [
+CLOSE_BRACKET          = ]
+OPEN_BRACE             = {
+CLOSE_BRACE            = }
+DOUBLE_QUOTE           = \
+SINGLE_QUOTE           = '
+TICK_MARK              = `
+FORWARD_SLASH          = /
+BACKWARD_SLASH         = \
+EQUAL                  = =
+TILDE                  = ~
+VBAR                   = |
+CARROT                 = ^
+PERCENT                = %
+EXCLAMATION            = !
+# operators
+PLUS                   = +
+MINUS                  = -

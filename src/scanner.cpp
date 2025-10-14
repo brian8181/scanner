@@ -62,20 +62,20 @@ int parse_options(int argc, char* argv[])
                 return 1;
         }
     }
-    // begin lexing ...
+
+
+    // get configuration ...
+    cout << "configuartion loading ..." << optind << endl;
+    string config_file = ".config/default.txt";
+    if(argc > optind+1)
+        config_file = argv[optind+1];
+
+    // begin lexer ...
     Lexer lexer;
-    if(argc > 1)
-    {
-        cout << "configuartion loading ..." << endl;
-        string config = argv[CONFIG_IDX];
-        lexer.load_config(config);
-        lexer.dump_config();
-    }
-    else
-    {
-        cout << "missing config paramater @ index 3 ..." << std::endl;
-    }
+    lexer.load_config(config_file);
+    lexer.dump_config();
     lexer.start(file);
+
     return 0;
 }
 
