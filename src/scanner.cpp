@@ -23,9 +23,8 @@
 
 using namespace std;
 
-const int EXEs_IDX = 0;
-const int SRC_IDX = 1;
-const int CONFIG_IDX = 2;
+const int SRC_IDX_OFFSET = 0;
+const int CONFIG_IDX_OFFSET = 1;
 
 /**
  * @brief parse command line options
@@ -43,7 +42,8 @@ int parse_options(int argc, char* argv[])
         {"file",        required_argument,  NULL,   'f'},
         {NULL,          0,                  NULL,    0 }
     };
-    string file = argv[SRC_IDX];
+
+    //string file;
     while ((opt = getopt_long(argc, argv, optstring, longopts, NULL)) != -1)
     {
         switch (opt)
@@ -55,20 +55,20 @@ int parse_options(int argc, char* argv[])
                 cout << "Version 0.0.1" << endl;
                 return 0;
             case 'f':
-                file = optarg;
+                //file = optarg;
                 break;
             default:
                 cerr << "Unknown option" << endl;
                 return 1;
         }
     }
-
+    string file = argv[optind + SRC_IDX_OFFSET];
 
     // get configuration ...
     cout << "configuartion loading ..." << optind << endl;
     string config_file = ".config/default.txt";
-    if(argc > optind+1)
-        config_file = argv[optind+1];
+    if( argc > (optind + CONFIG_IDX_OFFSET) )
+        config_file = argv[optind + CONFIG_IDX_OFFSET];
 
     // begin lexer ...
     Lexer lexer;
