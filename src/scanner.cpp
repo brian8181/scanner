@@ -10,16 +10,9 @@
 #include <sys/select.h>     /* for pselect   */
 #include <string>
 #include <getopt.h>
-#include <regex>
-#include <map>
-#include <vector>
-#include <utility>
-#include <fmt/color.h>
 #include "Lexer.hpp"
-#include "fileio.hpp"
 #include "scanner.hpp"
 #include "config.hpp"
-#include "utility.hpp"
 
 using namespace std;
 
