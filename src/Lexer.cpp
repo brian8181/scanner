@@ -31,9 +31,18 @@ using std::pair;
 using namespace std;
 
 /**
- * @brief ctop
+ * @brief default ctor
  */
 Lexer::Lexer( )
+{
+
+}
+
+/**
+ * @brief ctor
+ * @param config
+ */
+Lexer::Lexer(const string& config) : _config(config)
 {
 
 }

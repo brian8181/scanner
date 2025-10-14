@@ -27,8 +27,24 @@ using std::regex;
 class Lexer
 {
 public:
+	/**
+	 *
+	 */
 	Lexer();
+
+	/**
+	 *
+	 */
+	Lexer(const string& config);
+
+	/**
+	 *
+	 */
 	Lexer( const Lexer& src );
+
+	/**
+	 *
+	 */
 	virtual ~Lexer();
 
 	/**
@@ -80,6 +96,7 @@ public:
 	void tokenize( const string &exp, const string &text );
 
 private:
+	string _config;
 	map<string, string> map_config;
 	// todo : revert to no configuration sections!
 	map<string, map<string, string>> map_sections_config;
