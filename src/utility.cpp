@@ -47,10 +47,10 @@ void color_print(const string& s, fmt::text_style ts)
 // }
 
 /**
- * @name get_config
- * @param path to config file
- * @param config, out parmas
- * @return
+ * @name   get_config
+ * @param  path to config file
+ * @param  config, out parmas
+ * @return map<string, string>&
  */
 map<string, string>& get_config(const string& path, /* out */ map<string, string>& config)
 {
@@ -77,7 +77,7 @@ map<string, string>& get_config(const string& path, /* out */ map<string, string
 }
 
 /**
- * @brief
+ * @brief single match
  * @param pattern
  * @param text
  * @param match
@@ -94,7 +94,7 @@ bool match_single(const string& pattern, const string& text, /* out */ smatch& m
 }
 
 /**
- * @brief
+ * @brief single match
  * @param pattern
  * @param text
  * @return true if only one match & match string size equals text size
@@ -112,10 +112,10 @@ bool match_single(const string& pattern, const string& text)
 }
 
 /**
- * @brief
- * @param s
- * @param c
- * @return
+ * @brief split string
+ * @param s : input string
+ * @param c : delimter
+ * @return std::vector<std::string> // ???
  */
 std::vector<std::string> split(const std::string& s, char c)
 {
@@ -269,10 +269,10 @@ int read_bits(const smatch& m)
 }
 
 /**
- * @brief
- * @param s
- * @param c
- * @return
+ * @brief trim left & right
+ * @param s : input string
+ * @param c : char to trim
+ * @return string&
  */
 string& trim(string &s, char c)
 {
@@ -282,9 +282,9 @@ string& trim(string &s, char c)
 }
 
 /**
- * @brief
- * @param s
- * @return
+ * @brief left trim
+ * @param s : input string
+ * @return string&
  */
 string& ltrim(std::string &s)
 {
@@ -301,9 +301,9 @@ string& ltrim(std::string &s)
 }
 
 /**
- * @brief
- * @param s
- * @return
+ * @brief right trim
+ * @param s : input string
+ * @return string&
  */
 string& rtrim(std::string &s)
 {
@@ -320,9 +320,9 @@ string& rtrim(std::string &s)
 }
 
 /**
- * @brief
- * @param s
- * @return
+ * @brief trim left & right
+ * @param s : input string
+ * @return string&
  */
 string& trim(std::string &s)
 {
