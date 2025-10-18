@@ -51,6 +51,12 @@ public:
 	virtual ~Lexer();
 
 	/**
+	 * @brief start tokenizing file
+	 * @return void
+	 */
+	void start( );
+
+	/**
 	 * @brief  initialize state
 	 * @param const string& file, scan file
 	 * @param const string &config_file, config file
@@ -78,11 +84,6 @@ public:
 	 */
 	void dump_config( const string& file );
 
-	/**
-	 * @brief start tokenizing file
-	 * @return void
-	 */
-	void start( );
 
 	/**
 	 * @brief

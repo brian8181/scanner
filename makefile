@@ -41,7 +41,7 @@ endif
 all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
 
 $(BLD)/scanner: $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
-	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $^ /usr/local/lib/libfmt.a -o $@
+	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o /usr/local/lib/libfmt.a -o $@
 
 $(BLD)/libscanner.so: ./$(OBJ)/scanner.o
 	$(CXX) $(CXXFLAGS) $(CXXEXTRA) --shared ./$(BLD)/scanner.o -o ./$(BLD)/libscanner.so

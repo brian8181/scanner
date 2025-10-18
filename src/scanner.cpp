@@ -10,8 +10,10 @@
 #include <sys/select.h>     /* for pselect   */
 #include <string>
 #include <getopt.h>
-#include "Lexer.hpp"
+#include <set>
 #include "scanner.hpp"
+#include "Lexer.hpp"
+#include "constants.hpp"
 #include "config.hpp"
 
 using namespace std;
@@ -61,8 +63,9 @@ int parse_options(int argc, char* argv[])
 
     // begin lexer ...
     Lexer lexer(file, config_file);
+    unsigned int token = ID_UNDEFINED;
+    while( lexer.get_token( token ) );
     lexer.dump_config();
-    lexer.start();
 
     return 0;
 }
