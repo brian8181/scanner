@@ -39,12 +39,14 @@ Lexer::Lexer( )
 }
 
 /**
- * @brief ctor
- * @param config
+ * @brief  ctor
+ * @param const string& file, scan file
+ * @param const string &config_file, config file
+ * @return bool
  */
-Lexer::Lexer(const string& config) : _config(config)
+Lexer::Lexer(const string& file, const string &config_file) : _scan_file(file), _config_file(config_file)
 {
-
+    init(_scan_file, _config_file);
 }
 
 /**
@@ -66,10 +68,14 @@ Lexer::~Lexer( )
 
 /**
  * @brief  initialize state
+ * @param const string& file, scan file
+ * @param const string &config_file, config file
  * @return bool
  */
-bool Lexer::init( const string& file )
+bool Lexer::init( const string& file, const string &config_file )
 {
+    load_config(config_file);
+    _scan_file = file;
     stringstream sstrm;
     int r = read_sstream( file, sstrm );
     _search_text = sstrm.str( );
@@ -86,6 +92,7 @@ bool Lexer::init( const string& file )
  */
 void Lexer::load_config( const string &path )
 {
+    _config_file = path;
     const unsigned int ID_NAME_VALUE_PAIR = 1;
     const unsigned int ID_NAME = 2;
     const unsigned int ID_VALUE = 5;
@@ -96,7 +103,7 @@ void Lexer::load_config( const string &path )
 
     // get configuration file by lines
     vector<string> lines;
-    if(! read_lines( path, lines ) )
+    if(! read_lines( _config_file, lines ) )
     {
         cerr << "error: read_lines ..." << endl;
     }
@@ -143,7 +150,6 @@ void Lexer::dump_config( )
         string key = (*iter).first;
         string value = (*iter).second;
         ss << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
-
         //color_print(ss.str(), fg(fmt::color::blue) | fmt::emphasis::bold);
     }
     cout << ss.str();
@@ -162,17 +168,16 @@ void Lexer::dump_config( const string& file )
 
 /**
  * @brief  start tokenizing file
- * @param  file
  * @return void
  */
-void Lexer::start( string file )
+void Lexer::start( )
 {
-    cout << "Starting lexical analysis on file: " << file << endl;
+    cout << "Starting lexical analysis on file: " << _scan_file << endl;
     stringstream sstrm;
-    ifstream strm( file, ios::in );
+    ifstream strm( _scan_file, ios::in );
     if( strm.is_open( ) )
     {
-        cout << file << "-> opened ..." << endl;
+        cout << _scan_file << "-> opened ..." << endl;
         char c;
         while( strm.get( c ) )
         {
@@ -185,25 +190,12 @@ void Lexer::start( string file )
         return;
     }
 
-    stringstream ss;
-    string section_name = "global";
-    auto end = map_sections_config[section_name].end( );
-    for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
-    {
-        string key = (*iter).first;
-        string value = (*iter).second;
-        ss << "(" << value << ")|";
-    }
-    string ALL_CONFIG_EXPRS = ss.str();
-    ALL_CONFIG_EXPRS.pop_back();
-    cout << ALL_CONFIG_EXPRS << endl;
-
-    // unsigned int token = ID_UNDEFINED;
-    // _search_text = sstrm.str( );
-    // _rexp = regex( EVERYTHING, regex::ECMAScript );
-    // _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
-    // _p_iter = &_begin;
-    // while( get_token( token ) );
+    unsigned int token = ID_UNDEFINED;
+    _search_text = sstrm.str( );
+    _rexp = regex( EVERYTHING, regex::ECMAScript );
+    _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
+    _p_iter = &_begin;
+    while( get_token( token ) );
 }
 
 /**
@@ -218,7 +210,6 @@ int Lexer::get_token( unsigned int& token )
     static int count = 0;
     if(*_p_iter != _end)
     {
-        ++(*_p_iter);
         std::smatch m = *(*_p_iter);
         if( _token_map.contains( m.str( ) ) )
         {
@@ -239,8 +230,10 @@ int Lexer::get_token( unsigned int& token )
             color_print(ss.str(), fg(fmt::color::red) | fmt::emphasis::bold);
             ss.clear();
         }
+        ++(*_p_iter);
         return 1;
     }
+    count = 0;
     return 0;
 }
 

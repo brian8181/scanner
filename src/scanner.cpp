@@ -28,7 +28,7 @@ const int CONFIG_IDX_OFFSET = 1;
 int parse_options(int argc, char* argv[])
 {
     int opt;
-    const char* optstring = "hVf:";
+    const char* optstring = "hV";
     const struct option longopts[] = {
         {"help",        no_argument,        NULL,   'h'},
         {"version",     no_argument,        NULL,   'V'},
@@ -36,7 +36,6 @@ int parse_options(int argc, char* argv[])
         {NULL,          0,                  NULL,    0 }
     };
 
-    //string file;
     while ((opt = getopt_long(argc, argv, optstring, longopts, NULL)) != -1)
     {
         switch (opt)
@@ -47,27 +46,23 @@ int parse_options(int argc, char* argv[])
             case 'V':
                 cout << "Version 0.0.1" << endl;
                 return 0;
-            case 'f':
-                //file = optarg;
-                break;
             default:
                 cerr << "Unknown option" << endl;
                 return 1;
         }
     }
-    string file = argv[optind + SRC_IDX_OFFSET];
 
-    // get configuration ...
-    cout << "configuartion loading ..." << optind << endl;
+    // configure scannner ...
+    cout << "configure scannner ..." << optind << endl;
+    string file = argv[optind + SRC_IDX_OFFSET];
     string config_file = ".config/default.txt";
     if( argc > (optind + CONFIG_IDX_OFFSET) )
         config_file = argv[optind + CONFIG_IDX_OFFSET];
 
     // begin lexer ...
-    Lexer lexer;
-    lexer.load_config(config_file);
+    Lexer lexer(file, config_file);
     lexer.dump_config();
-    lexer.start(file);
+    lexer.start();
 
     return 0;
 }

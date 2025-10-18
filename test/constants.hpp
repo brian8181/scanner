@@ -138,7 +138,7 @@ enum token_id : unsigned long
     ID_MODIFIER_DATE_FORMAT    = 0x10000000000ul,
     ID_MODIFIER_ESCAPE         = 0x20000000000ul,
     ID_UNESCAPED_TEXT          = 0x40000000000ul,
-    ID_INCLUDE_FILE = 0x80000000000ul
+    ID_INCLUDE_FILE        = 0x80000000000ul
     ID_COMMA               = 0x100000000000ul,
     ID_QUESTION_MARK       = 0x200000000000ul,
     ID_TILDE               = 0x400000000000ul,
@@ -148,8 +148,8 @@ enum token_id : unsigned long
     ID_LESS_THAN           = 0x4000000000000ul,
     ID_LOGICAL_NOT         = 0x8000000000000ul,
     ID_LOGICAL_OR          = 0x10000000000000ul,
+};
 
-    };
 
 #endif
 

@@ -33,9 +33,12 @@ public:
 	Lexer();
 
 	/**
-	 *
+	 * @brief  ctor
+	 * @param const string& file, scan file
+	 * @param const string &config_file, config file
+	 * @return bool
 	 */
-	Lexer(const string& config);
+	Lexer(const string& file, const string &config_file);
 
 	/**
 	 *
@@ -48,9 +51,12 @@ public:
 	virtual ~Lexer();
 
 	/**
-	 * @brief initialize state
+	 * @brief  initialize state
+	 * @param const string& file, scan file
+	 * @param const string &config_file, config file
+	 * @return bool
 	 */
-	bool init(const string& file);
+	bool init( const string& file, const string &config_file );
 
 	/**
 	 * @brief  load_config: load confiuration from file
@@ -74,10 +80,9 @@ public:
 
 	/**
 	 * @brief start tokenizing file
-	 * @param file
 	 * @return void
 	 */
-	void start( string file );
+	void start( );
 
 	/**
 	 * @brief
@@ -96,7 +101,7 @@ public:
 	void tokenize( const string &exp, const string &text );
 
 private:
-	string _config;
+	string _config_file;
 	map<string, string> map_config;
 	// todo : revert to no configuration sections!
 	map<string, map<string, string>> map_sections_config;
@@ -106,6 +111,7 @@ private:
 	map<string, pair<string, vector<string>>> map_objects;
 
 	// current position & state : i.e. --> get_token
+	std::string _scan_file;
 	std::string _search_text;
 	std::regex _rexp;
 	std::sregex_iterator _begin;
