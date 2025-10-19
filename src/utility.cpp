@@ -145,8 +145,8 @@ int digits10(int n)
 }
 
 /**
- * @name   itoa
- * @info:  int to ascii
+ * @name   atoi
+ * @info:  ascii to int
  * @param  s, string to convert
  * @return int : result
  */

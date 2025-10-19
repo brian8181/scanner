@@ -145,7 +145,6 @@ map<string, std::pair<unsigned int, string>> _token_map = {
  */
 Lexer::Lexer( )
 {
-
 }
 
 /**
@@ -165,7 +164,6 @@ Lexer::Lexer(const string& file, const string &config_file) : _scan_file(file), 
  */
 Lexer::Lexer( const Lexer& src )
 {
-
 }
 
 /**
@@ -173,7 +171,6 @@ Lexer::Lexer( const Lexer& src )
  */
 Lexer::~Lexer( )
 {
-
 }
 
 /**
@@ -227,6 +224,7 @@ void Lexer::load_config( const string &path )
     for(int i = 0; i < len; ++i)
     {
         string line = lines[i];
+        //regex rgx = regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")|(" + CONFIG_PAIR_VAR + ")" );
         regex rgx = regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
         smatch match;
         regex_match( line, match, rgx );
@@ -341,4 +339,23 @@ void Lexer::tokenize( const string &exp, const string &text )
             cout << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
         }
     }
+}
+
+/**
+ * @brief print regex expression to stdout
+ */
+void Lexer::print_expr()
+{
+    stringstream ss;
+    cout << "print expression ..." << endl;
+    string section_name = "global";
+    auto end = map_sections_config[section_name].end( );
+    for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
+    {
+        string value = (*iter).second;
+        ss << "(" + value + ")|";
+    }
+    string s = ss.str();
+    s.pop_back();
+    cout << s << endl;
 }

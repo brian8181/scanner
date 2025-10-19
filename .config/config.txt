@@ -16,6 +16,7 @@ TYPE_MODIFIERS         = (signed)|(unsigned)|(static)|(const)|(volatile)
 SYMBOL                 = _?[A-Za-z][A-Za-z0-9_]*
 KEYWORDS               = (if)|(else)|(for)|(while)|(return)|(break)|(continue)|(switch)|(case)|(default)|(do)|(goto)|(sizeof)
 SYMBOL                 = _?[A-Za-z][A-Za-z0-9_]*
+TEST                   = $SYMBOL
 # punctuations
 ASTERIK                = *
 AMPERSAND              = &

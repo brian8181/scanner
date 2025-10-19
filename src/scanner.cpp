@@ -66,6 +66,7 @@ int parse_options(int argc, char* argv[])
     unsigned int token = ID_UNDEFINED;
     while( lexer.get_token( token ) );
     lexer.dump_config();
+    lexer.print_expr();
 
     return 0;
 }

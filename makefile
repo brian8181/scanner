@@ -51,14 +51,6 @@ $(BLD)/libscanner.a: ./$(OBJ)/scanner.o
 	-ar rvs ./$(BLD)/libscanner.a ./$(BLD)/scanner.o
 	-chmod 755 ./$(BLD)/libscanner.a
 
-$(BLD)/libstreamy.so: $(OBJ)/fileio.o $(OBJ)/compiler.o $(OBJ)/streamy.o
-	$(CXX) $(CXXFLAGS) $(CXXEXTRA) -fPIC --shared $(OBJ)/fileio.o $(OBJ)/compiler.o $(OBJ)/streamy.o -o $(BLD)/libstreamy.so
-	chmod 755 $(BLD)/libstreamy.so
-
-$(BLD)/libstreamy.a: $(OBJ)/streamy.o
-	ar rvs $(BLD)/libstreamy.a $(OBJ)/streamy.o
-	chmod 755 $(BLD)/libstreamy.a
-
 $(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp $(SRC)/Lexer.hpp
 	cp $(SRC)/*.hpp $(BLD)/
 
