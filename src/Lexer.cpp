@@ -200,15 +200,12 @@ bool Lexer::init( const string& file, const string &config_file )
 void Lexer::load_config( const string &path )
 {
     _config_file = path;
-    const unsigned int ID_PAIR_WITH_VAR = 1;
-    const unsigned int ID_PAIR = 4;
-    const unsigned int ID_NAME = 5;
-    const unsigned int ID_VALUE = 7;
+    const unsigned int ID_NAME_VALUE_PAIR = 1;
+    const unsigned int ID_NAME = 2;
+    const unsigned int ID_VALUE = 5;
     const unsigned int ID_CONFIG_COMMENT = 6;
     const unsigned int ID_NUMERIC_LITERAL = 2;
     const unsigned int ID_STRING_LITERAL = 3;
-    const unsigned int ID_VALUE_WITH_VAR = 3;
-    const unsigned int ID_VARIABLE_NAME = 7;
     map_sections_config.clear();
 
     // get configuration file by lines
@@ -227,42 +224,18 @@ void Lexer::load_config( const string &path )
     for(int i = 0; i < len; ++i)
     {
         string line = lines[i];
-        string all_config_regex =  "(" + CONFIG_PAIR_VAR + ")|(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")" ;
-        regex rgx = regex(all_config_regex);
-        //regex rgx = regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
+        regex rgx = regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
         smatch match;
         regex_match( line, match, rgx );
 
-        if(match[ID_PAIR].matched)
+        if(match[ID_NAME_VALUE_PAIR].matched)
         {
-            // get name
-            string symbol_name = match[ID_NAME].str( );
-            // get value
-            string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( );
-            // create pair
-            pair<string, string> p( symbol_name, value );
+            string symbol_name = match[ID_NAME].str( );                                                                    // get name
+            string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
+            pair<string, string> p( symbol_name, value );                                                                  // create pair
             map_sections_config[section_name].insert( p );
         }
-        else if(match[ID_PAIR_WITH_VAR].matched)
-        {
-            // get name
-            // string symbol_name = match[ID_NAME].str( );
-            // //smatch sm = match[ID_VALUE_WITH_VAR];
-            // if(match[ID_VARIABLE_NAME].matched && map_vars.contains(match[ID_VARIABLE_NAME].str()))
-            // {
-            //     string var_value = map_vars[match[ID_VARIABLE_NAME].str()];
-            //     // replace var with mapped value
-            //     string v = match.prefix().str() + var_value + match.suffix().str();
-            //     map_vars[match[ID_VARIABLE_NAME].str()] = v;
-            // }
-            // // get value
-            // string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( );
-            // // create pair
-            // pair<string, string> p( symbol_name, value );
-            // map_sections_config[section_name].insert( p );
-        }
     }
-    cout << "config loaded ..." << endl;
 }
 
 /**
@@ -283,14 +256,13 @@ void Lexer::dump_config( const string& file )
 void Lexer::dump_config( )
 {
     stringstream ss;
-    cout << "config dump ..." << endl;
     string section_name = "global";
     auto end = map_sections_config[section_name].end( );
     for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
     {
         string key = (*iter).first;
         string value = (*iter).second;
-        ss << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << setw(25) << value << endl;
+        ss << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << "\"" << value << "\"" << endl;
     }
     cout << ss.str();
 }
@@ -312,8 +284,8 @@ int Lexer::get_token( unsigned int& token )
         {
             int token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
-            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
-            color_print(ss.str(), fg(fmt::color::blue) | fmt::emphasis::bold);
+            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            color_print(ss.str(), fg(fmt::color::antique_white));
             ss.clear();
             // create token ...
             string match = m.str( );
@@ -369,7 +341,6 @@ void Lexer::tokenize( const string &exp, const string &text )
 void Lexer::print_expr()
 {
     stringstream ss;
-    cout << "print expression ..." << endl;
     string section_name = "global";
     auto end = map_sections_config[section_name].end( );
     for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)

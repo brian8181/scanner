@@ -56,18 +56,30 @@ int parse_options(int argc, char* argv[])
 
     // configure scannner ...
     cout << "configure scannner ..." << optind << endl;
+
+    cout << "load configuartion ..." << endl;
     string file = argv[optind + SRC_IDX_OFFSET];
     string config_file = ".config/default.txt";
     if( argc > (optind + CONFIG_IDX_OFFSET) )
         config_file = argv[optind + CONFIG_IDX_OFFSET];
+    cout << "configuartion loaded." << endl;
 
     // begin lexer ...
     Lexer lexer(file, config_file);
+    cout << "sannner configured." << endl;
+
+    cout << "scanning ..." << endl;
     unsigned int token = ID_UNDEFINED;
     while( lexer.get_token( token ) );
-    lexer.dump_config();
-    lexer.print_expr();
+    cout << "finished scanning. " << endl;
 
+    cout << "dumping configuration ... " << endl;
+    lexer.dump_config();
+    cout << "configuration dumped." << endl;
+
+    cout << "print expression ..." << endl;
+    lexer.print_expr();
+    cout << "printed." << endl;
     return 0;
 }
 

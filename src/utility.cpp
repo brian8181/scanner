@@ -37,7 +37,7 @@ const int ASCII_OFFSET = 48;
  */
 void color_print(const string& s, fmt::text_style ts)
 {
-    fmt::print(ts, "{}\n", s);
+    fmt::print(ts, "{}", s);
 }
 
 // string color_fmt(const string& s, fmt::text_style ts)
