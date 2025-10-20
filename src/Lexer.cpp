@@ -148,8 +148,8 @@ Lexer::Lexer( )
 
 /**
  * @brief  ctor
- * @param const string& file, scan file
- * @param const string &config_file, config file
+ * @param  const string& file, scan file
+ * @param  const string &config_file, config file
  * @return bool
  */
 Lexer::Lexer(const string& file, const string &config_file) : _scan_file(file), _config_file(config_file)
@@ -174,8 +174,8 @@ Lexer::~Lexer( )
 
 /**
  * @brief  initialize state
- * @param const string& file, scan file
- * @param const string &config_file, config file
+ * @param  const string& file, scan file
+ * @param  const string &config_file, config file
  * @return bool
  */
 bool Lexer::init( const string& file, const string &config_file )
@@ -268,8 +268,7 @@ void Lexer::dump_config( )
 
 /**
  * @brief  get_token
- * @param  iter
- * @param  id
+ * @param  unsigned int& token
  * @return int
  */
 int Lexer::get_token( unsigned int& token )
@@ -305,8 +304,8 @@ int Lexer::get_token( unsigned int& token )
 
 /**
  * @brief  tokenize
- * @param  exp The regular expression to match
- * @param  text The text to search for matches
+ * @param  const string &exp, regular expression to match
+ * @param  const string &text, text to tokenize
  * @return void
  */
 void Lexer::tokenize( const string &exp, const string &text )
