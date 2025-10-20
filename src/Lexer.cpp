@@ -274,12 +274,13 @@ void Lexer::dump_config( )
 int Lexer::get_token( /*out*/ unsigned int& token )
 {
     stringstream ss;
+    token = ID_UNDEFINED;
     if(*_p_iter != _end)
     {
         std::smatch m = *(*_p_iter);
         if( _token_map.contains( m.str( ) ) )
         {
-            int token = _token_map[m.str( )].first;
+            token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
             ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
             color_print( ss.str( ), fg( fmt::color::antique_white ) );
@@ -297,9 +298,19 @@ int Lexer::get_token( /*out*/ unsigned int& token )
             ss.clear( );
         }
         ++(*_p_iter);
-        return 1;
+        on_token( token );
+        return token;
     }
     return 0;
+}
+
+/**
+ * @brief override virtual, on_token, for each token ...
+ * @param token
+ */
+void Lexer::on_token( unsigned int& token )
+{
+    cout << "on_token( " << token << " );" << endl;
 }
 
 /**

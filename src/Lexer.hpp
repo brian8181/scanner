@@ -79,12 +79,17 @@ public:
 	void dump_config( const string& file );
 
 	/**
-	 * @brief
-	 * @param iter
-	 * @param id
-	 * @return
+	 * @brief  get_token
+	 * @param  unsigned int& token, out param, a token
+	 * @return int
 	 */
 	int get_token( unsigned int& token );
+
+	/**
+	 * @brief virtual, virtaul for each token ...
+	 * @param token
+	 */
+	virtual void on_token( unsigned int& token );
 
 
 	/**
