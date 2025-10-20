@@ -268,10 +268,10 @@ void Lexer::dump_config( )
 
 /**
  * @brief  get_token
- * @param  unsigned int& token
+ * @param  unsigned int& token, out param, a token
  * @return int
  */
-int Lexer::get_token( unsigned int& token )
+int Lexer::get_token( /*out*/ unsigned int& token )
 {
     stringstream ss;
     if(*_p_iter != _end)
