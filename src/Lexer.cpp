@@ -152,9 +152,9 @@ Lexer::Lexer( )
  * @param  const string &config_file, config file
  * @return bool
  */
-Lexer::Lexer(const string& file, const string &config_file) : _scan_file(file), _config_file(config_file)
+Lexer::Lexer( const string& file, const string &config_file ) : _scan_file(file), _config_file(config_file)
 {
-    init(_scan_file, _config_file);
+    init( _scan_file, _config_file );
 }
 
 /**
@@ -180,13 +180,13 @@ Lexer::~Lexer( )
  */
 bool Lexer::init( const string& file, const string &config_file )
 {
-    load_config(config_file);
+    load_config( config_file );
     _scan_file = file;
     stringstream sstrm;
     int r = read_sstream( file, sstrm );
     _search_text = sstrm.str( );
     _rexp = regex( EVERYTHING, regex::ECMAScript );
-    _begin = sregex_iterator( _search_text.begin(), _search_text.end(), _rexp );
+    _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
     return r;
 }
@@ -282,8 +282,8 @@ int Lexer::get_token( /*out*/ unsigned int& token )
             int token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
             ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
-            color_print(ss.str(), fg(fmt::color::antique_white));
-            ss.clear();
+            color_print( ss.str( ), fg( fmt::color::antique_white ) );
+            ss.clear( );
             // create token ...
             string match = m.str( );
             std::pair<int, std::string> id( token, name );
@@ -293,8 +293,8 @@ int Lexer::get_token( /*out*/ unsigned int& token )
         else
         {
             ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
-            color_print(ss.str(), fg(fmt::color::red) | fmt::emphasis::bold);
-            ss.clear();
+            color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
+            ss.clear( );
         }
         ++(*_p_iter);
         return 1;
@@ -323,14 +323,14 @@ void Lexer::tokenize( const string &exp, const string &text )
             int token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
             ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
-            color_print(ss.str(), fg(fmt::color::antique_white));
-            ss.clear();
+            color_print( ss.str( ), fg( fmt::color::antique_white ) );
+            ss.clear( );
         }
         else
         {
             ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
-            color_print(ss.str(), fg(fmt::color::red) | fmt::emphasis::bold);
-            ss.clear();
+            color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
+            ss.clear( );
         }
     }
 }
@@ -338,7 +338,7 @@ void Lexer::tokenize( const string &exp, const string &text )
 /**
  * @brief print regex expression to stdout
  */
-void Lexer::print_expr()
+void Lexer::print_expr( )
 {
     stringstream ss;
     string section_name = "global";
@@ -348,7 +348,7 @@ void Lexer::print_expr()
         string value = (*iter).second;
         ss << "(" + value + ")|";
     }
-    string s = ss.str();
-    s.pop_back();
+    string s = ss.str( );
+    s.pop_back( );
     cout << s << endl;
 }
