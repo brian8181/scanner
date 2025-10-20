@@ -275,7 +275,6 @@ void Lexer::dump_config( )
 int Lexer::get_token( unsigned int& token )
 {
     stringstream ss;
-    static int count = 0;
     if(*_p_iter != _end)
     {
         std::smatch m = *(*_p_iter);
@@ -301,7 +300,6 @@ int Lexer::get_token( unsigned int& token )
         ++(*_p_iter);
         return 1;
     }
-    count = 0;
     return 0;
 }
 
@@ -313,7 +311,7 @@ int Lexer::get_token( unsigned int& token )
  */
 void Lexer::tokenize( const string &exp, const string &text )
 {
-    int count = 0;
+    stringstream ss;
     regex rexp = regex( exp, regex::ECMAScript );
     sregex_iterator begin = sregex_iterator( text.begin( ), text.end( ), rexp );
     //sregex_iterator end = sregex_iterator();
@@ -325,11 +323,15 @@ void Lexer::tokenize( const string &exp, const string &text )
         {
             int token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
-            cout << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str() << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
+            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            color_print(ss.str(), fg(fmt::color::antique_white));
+            ss.clear();
         }
         else
         {
-            cout << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
+            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
+            color_print(ss.str(), fg(fmt::color::red) | fmt::emphasis::bold);
+            ss.clear();
         }
     }
 }
