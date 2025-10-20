@@ -28,7 +28,9 @@ endif
 ifdef CYGWIN
 	CXXFLAGS +=-DCYGWIN
 	#LDFLAGS += /usr/lib/libcppunit.dll.a
-	LDFLAGS /usr/local/lib/libfmt.a
+	LDFLAGS=/usr/local/lib/libfmt.a
+else
+	LDFLAGS=/usr/local/lib64/libfmt.a
 endif
 
 ifdef REFLEX
@@ -39,7 +41,7 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: ./$(BLD)/scanner # ./$(BLD)/$(APP)_test ./$(BLD)/libscanner.so ./$(BLD)/libscanner.a
+all: $(BLD)/scanner $(BLD)/libscanner.a # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
 $(BLD)/scanner: $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
 	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
@@ -56,9 +58,6 @@ $(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BL
 	cp $(SRC)/*.hpp $(BLD)/
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-$(OBJ)/%.o: $(AST)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 .PHONY: all rebuild dist install uninstall clean help
@@ -79,9 +78,10 @@ clean:
 	-rm -f ./$(BLD)/*.o
 
 help:
-	@echo  '  all         - build all'
+	@echo  '  all              - build all'
 	@echo  '  scanner          - build scanner executable'
 	@echo  '  scanner.o        - build not link'
+	@echo  '  libscanner.a     - build cppunit test'
 	@echo  '  scanner_test     - build cppunit test'
 	@echo  '  scanner_test.o   - build cppunit test'
 	@echo  '  clean            - remove all files from build dir'
