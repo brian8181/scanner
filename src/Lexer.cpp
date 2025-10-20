@@ -99,7 +99,6 @@ map<string, std::pair<unsigned int, string>> _token_map = {
                                                                 {"#",        {ID_POUND_SIGN,       "ID_POUND_SIGN"     }},
                                                                 {"$",        {ID_DOLLAR_SIGN,      "ID_DOLLAR_SIGN"    }},
                                                                 {"%",        {ID_PERCENT_SIGN,     "ID_PERCENT_SIGN"   }},
-
                                                                 {"^",        {ID_CARROT_SIGN,      "ID_CARROT_SIGN"    }},
                                                                 {"&",        {ID_AMPERSAND,        "ID_AMPERSAND"      }},
                                                                 {"*",        {ID_ASTERIK,          "ID_ASTERIK"        }},
