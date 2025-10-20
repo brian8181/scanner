@@ -245,7 +245,7 @@ void Lexer::load_config( const string &path )
         }
         else if(match[ID_PAIR_WITH_VAR].matched)
         {
-             // get name
+            // get name
             // string symbol_name = match[ID_NAME].str( );
             // //smatch sm = match[ID_VALUE_WITH_VAR];
             // if(match[ID_VARIABLE_NAME].matched && map_vars.contains(match[ID_VARIABLE_NAME].str()))
