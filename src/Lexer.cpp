@@ -294,7 +294,7 @@ int Lexer::get_token( unsigned int& token )
         }
         else
         {
-            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n\tcount: " << ++count << "\n};" << endl;
+            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
             color_print(ss.str(), fg(fmt::color::red) | fmt::emphasis::bold);
             ss.clear();
         }
