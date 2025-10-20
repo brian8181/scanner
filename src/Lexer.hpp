@@ -95,8 +95,8 @@ public:
 	void tokenize( const string &exp, const string &text );
 
 	/**
-	 *
-	 */
+     * @brief print regex expression to stdout
+ 	 */
 	void print_expr();
 
 
