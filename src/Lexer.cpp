@@ -298,7 +298,7 @@ int Lexer::get_token( /*out*/ unsigned int& token )
             ss.clear( );
         }
         ++(*_p_iter);
-        on_token( token );
+        on_token( token, m );
         return token;
     }
     return 0;
@@ -308,9 +308,11 @@ int Lexer::get_token( /*out*/ unsigned int& token )
  * @brief override virtual, on_token, for each token ...
  * @param token
  */
-void Lexer::on_token( unsigned int& token )
+void Lexer::on_token( const unsigned int& token_, const std::smatch& m )
 {
-    cout << "on_token( " << token << " );" << endl;
+    stringstream ss;
+    unsigned int token = ID_UNDEFINED;
+    cout << "on_token( " << token << ", \"" << m.str() << "\" );" << endl;
 }
 
 /**

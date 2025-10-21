@@ -89,7 +89,7 @@ public:
 	 * @brief virtual, virtaul for each token ...
 	 * @param token
 	 */
-	virtual void on_token( unsigned int& token );
+	virtual void on_token( const unsigned int& token_, const std::smatch& m );
 
 
 	/**
