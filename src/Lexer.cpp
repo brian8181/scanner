@@ -229,9 +229,10 @@ void Lexer::load_config( const string &path )
 
         if(match[ID_NAME_VALUE_PAIR].matched)
         {
-            string symbol_name = match[ID_NAME].str( );                                                                    // get name
+            string symbol_name = match[ID_NAME].str( ); // get name
             string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
-            pair<string, string> p( symbol_name, value );                                                                  // create pair
+            // create pair
+            pair<string, string> p( symbol_name, value );
             map_sections_config[section_name].insert( p );
         }
     }
