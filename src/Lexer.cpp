@@ -150,7 +150,6 @@ Lexer::Lexer( )
  * @brief  ctor
  * @param  const string& file, scan file
  * @param  const string &config_file, config file
- * @return bool
  */
 Lexer::Lexer( const string& file, const string &config_file ) : _scan_file(file), _config_file(config_file)
 {
@@ -159,14 +158,14 @@ Lexer::Lexer( const string& file, const string &config_file ) : _scan_file(file)
 
 /**
  * @brief copy ctor
- * @param src
+ * @param const Lexer& src
  */
 Lexer::Lexer( const Lexer& src )
 {
 }
 
 /**
- * @brief
+ * @brief virtual dtor
  */
 Lexer::~Lexer( )
 {

@@ -28,7 +28,7 @@ class Lexer
 {
 public:
 	/**
-	 * @brief ctor
+	 * @brief default ctor
 	 */
 	Lexer();
 
@@ -40,12 +40,13 @@ public:
 	Lexer(const string& file, const string &config_file);
 
 	/**
-	 *
+	 * @brief copy ctor
+	 * @param const Lexer& src
 	 */
 	Lexer( const Lexer& src );
 
 	/**
-	 *
+	 * @brief virtual dtor
 	 */
 	virtual ~Lexer();
 
