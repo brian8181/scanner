@@ -28,15 +28,14 @@ class Lexer
 {
 public:
 	/**
-	 *
+	 * @brief ctor
 	 */
 	Lexer();
 
 	/**
-	 * @brief  ctor
+	 * @brief ctor
 	 * @param const string& file, scan file
 	 * @param const string &config_file, config file
-	 * @return bool
 	 */
 	Lexer(const string& file, const string &config_file);
 
@@ -52,8 +51,8 @@ public:
 
 	/**
 	 * @brief  initialize state
-	 * @param const string& file, scan file
-	 * @param const string &config_file, config file
+	 * @param  const string& file, scan file
+	 * @param  const string &config_file, config file
 	 * @return bool
 	 */
 	bool init( const string& file, const string &config_file );
@@ -66,14 +65,14 @@ public:
 	void load_config( const string &path );
 
 	/**
-	 * @brief dump current config
+	 * @brief  dump current config
 	 * @return void
 	 */
 	void dump_config( );
 
 	/**
-	 * @brief dump config
-	 * @param const string& file : config to dump
+	 * @brief  dump config
+	 * @param  const string& file : config to dump
 	 * @return void
 	 */
 	void dump_config( const string& file );
@@ -86,16 +85,17 @@ public:
 	int get_token( unsigned int& token );
 
 	/**
-	 * @brief virtual, virtaul for each token ...
-	 * @param token
+	 * @brief virtual, virtual for each token ...
+	 * @param const unsigned int& token_
+	 * @param const std::smatch& m
 	 */
 	virtual void on_token( const unsigned int& token_, const std::smatch& m );
 
 
 	/**
 	 * @brief tokenize
-	 * @param exp : regular expression
-	 * @param text : search text
+	 * @param const string &exp, regular expression
+	 * @param const string &text, search text
 	 */
 	void tokenize( const string &exp, const string &text );
 
@@ -105,7 +105,7 @@ public:
 	void print_expr();
 
 
-private:
+protected:
 	string _config_file;
 	map<string, string> map_config;
 	// todo : revert to no configuration sections!
@@ -121,7 +121,7 @@ private:
 	std::regex _rexp;
 	std::sregex_iterator _begin;
 	std::sregex_iterator _end;
-	std::sregex_iterator* _p_iter;
+	std::sregex_iterator* _p_iter;s
 	map<string, pair<string, pair<int, string>>> _tokens;
 };
 
