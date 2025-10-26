@@ -105,6 +105,11 @@ public:
  	 */
 	void print_expr();
 
+	/**
+     * @brief print token to stdout
+ 	 */
+	void print_token( );
+
 
 protected:
 	string _config_file;
@@ -122,7 +127,7 @@ protected:
 	std::regex _rexp;
 	std::sregex_iterator _begin;
 	std::sregex_iterator _end;
-	std::sregex_iterator* _p_iter;s
+	std::sregex_iterator* _p_iter;
 	map<string, pair<string, pair<int, string>>> _tokens;
 };
 

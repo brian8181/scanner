@@ -280,11 +280,11 @@ int Lexer::get_token( /*out*/ unsigned int& token )
         std::smatch m = *(*_p_iter);
         if( _token_map.contains( m.str( ) ) )
         {
-            token = _token_map[m.str( )].first;
+            // token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
-            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
-            color_print( ss.str( ), fg( fmt::color::antique_white ) );
-            ss.clear( );
+            // ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            // color_print( ss.str( ), fg( fmt::color::antique_white ) );
+            // ss.clear( );
             // create token ...
             string match = m.str( );
             std::pair<int, std::string> id( token, name );
@@ -310,9 +310,9 @@ int Lexer::get_token( /*out*/ unsigned int& token )
  */
 void Lexer::on_token( const unsigned int& token_, const std::smatch& m )
 {
-    stringstream ss;
-    unsigned int token = ID_UNDEFINED;
-    cout << "on_token( " << token << ", \"" << m.str() << "\" );" << endl;
+    //stringstream ss;
+    //unsigned int token = ID_UNDEFINED;
+    cout << "on_token( " << token_ << ", \"" << m.str() << "\" );" << endl;
 }
 
 /**
@@ -364,4 +364,24 @@ void Lexer::print_expr( )
     string s = ss.str( );
     s.pop_back( );
     cout << s << endl;
+}
+
+/**
+ * @brief print token to stdout
+ */
+void Lexer::print_token( )
+{
+    if(*_p_iter != _end)
+    {
+        stringstream ss;
+        std::smatch m = *(*_p_iter);
+        if( _token_map.contains( m.str( ) ) )
+        {
+            unsigned int token = _token_map[m.str( )].first;
+            string name = _token_map[m.str( )].second;
+            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            color_print( ss.str( ), fg( fmt::color::antique_white ) );
+            ss.clear( );
+        }
+    }
 }
