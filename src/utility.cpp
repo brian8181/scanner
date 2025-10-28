@@ -145,8 +145,28 @@ int digits10(int n)
 }
 
 /**
+ * @name itoa
+ * @brief int to ascii
+ * @param number to eval
+ * @param s, out parma
+ * @return void
+*/
+void itoa(int& n, char* s)
+{
+    int len = digits10(n);
+    for(int i = 0; i < len; ++i)
+    {
+        int c = n / pow(10, i);
+        c = std::floor( c );
+        c = c % 10;
+        s[(len-1)-i] = (char)(c + ASCII_OFFSET); // 0x30
+    }
+    s[len] = (char)'\0';
+}
+
+/**
  * @name   atoi
- * @info:  ascii to int
+ * @brief  ascii to int
  * @param  s, string to convert
  * @return int : result
  */
@@ -233,55 +253,6 @@ string& to_upper(string& s) // in place
 }
 
 /**
- * @name itoa
- * @info int to ascii
- * @param number to eval
- * @param s, out parma
- * @return void
-*/
-void itoa(int& n, char* s)
-{
-    int len = digits10(n);
-    for(int i = 0; i < len; ++i)
-    {
-        int c = n / pow(10, i);
-        c = std::floor( c );
-        c = c % 10;
-        s[(len-1)-i] = (char)(c + ASCII_OFFSET); // 0x30
-    }
-    s[len] = (char)'\0';
-}
-
-/**
- * @brief
- * @param m
- * @return
- */
-int read_bits(const smatch& m)
-{
-    int len = m.size();
-    unsigned int bits = 0;
-    for(int i = 0; i < len && i < 32; ++i)
-    {
-        bits |= (int(m[i].matched) << i);
-    }
-    return bits;
-}
-
-/**
- * @brief trim left & right
- * @param s : input string
- * @param c : char to trim
- * @return string&
- */
-string& trim(string &s, char c)
-{
-    if(s.at(s.length()-1) == c)
-        s.pop_back();
-    return s;
-}
-
-/**
  * @brief left trim
  * @param s : input string
  * @return string&
@@ -329,4 +300,34 @@ string& trim(std::string &s)
     rtrim(s);
     ltrim(s);
     return s;
+}
+
+/**
+ * @brief trim left & right
+ * @param s : input string
+ * @param c : char to trim
+ * @return string&
+ */
+string& trim(string &s, char c)
+{
+    if(s.at(s.length()-1) == c)
+        s.pop_back();
+    return s;
+}
+
+
+/**
+ * @brief
+ * @param m
+ * @return
+ */
+int read_bits(const smatch& m)
+{
+    int len = m.size();
+    unsigned int bits = 0;
+    for(int i = 0; i < len && i < 32; ++i)
+    {
+        bits |= (int(m[i].matched) << i);
+    }
+    return bits;
 }
