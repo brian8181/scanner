@@ -291,12 +291,6 @@ int Lexer::get_token( /*out*/ unsigned int& token )
             std::pair<std::string, std::pair<int, std::string>> tok( match, id );
             _tokens[match] = tok;
         }
-        else
-        {
-            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
-            color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
-            ss.clear( );
-        }
         ++(*_p_iter);
         on_token( token, m );
         return token;
@@ -381,6 +375,12 @@ void Lexer::print_token( )
             string name = _token_map[m.str( )].second;
             ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
             color_print( ss.str( ), fg( fmt::color::antique_white ) );
+            ss.clear( );
+        }
+        else
+        {
+            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
+            color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
             ss.clear( );
         }
     }
