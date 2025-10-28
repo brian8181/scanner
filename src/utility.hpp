@@ -9,10 +9,19 @@ using std::string;
 using std::vector;
 using std::map;
 
+/**
+ * @name   get_config
+ * @param  path to config file
+ * @param  config, out parmas
+ * @return map<string, string>&
+ */
 std::map<string, string>& get_config(const string& path, /* out */ map<string, string>& config);
 
+/**
+ * @brief print color
+ * @param s
+ */
 void color_print(const string& s, fmt::text_style ts);
-
 
 /**
  * @brief to_lower: transform string chars to lower case
