@@ -13,7 +13,7 @@
 #include <set>
 #include "scanner.hpp"
 #include "Lexer.hpp"
-#include "constants.hpp"
+//#include "constants.hpp"
 #include "config.hpp"
 
 using namespace std;
@@ -68,8 +68,11 @@ int parse_options(int argc, char* argv[])
     cout << "sannner configured." << endl;
 
     cout << "scanning ..." << endl;
-    unsigned int token = ID_UNDEFINED;
-    while( lexer.get_token( token ) );
+    unsigned int token = 0;
+    while( lexer.get_token( token ) )
+    {
+        //lexer.print_token();
+    }
     cout << "finished scanning. " << endl;
 
     cout << "dumping configuration ... " << endl;
