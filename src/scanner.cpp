@@ -15,6 +15,7 @@
 #include "Lexer.hpp"
 //#include "constants.hpp"
 #include "config.hpp"
+#include "parser.tab.h"
 
 using namespace std;
 

@@ -4,8 +4,8 @@
 
 APP = inflex
 CXX = g++
-FLEX = reflex
-FLEX = flex
+LEX = reflex
+LEX = flex
 YACC = bison -y
 YACC = bison
 YFLAGS =
@@ -41,10 +41,19 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: $(BLD)/scanner $(BLD)/libscanner.a # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
+all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/parser.tab.c #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
-$(BLD)/scanner: $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
-	$(CXX) $(CXXFLAGS) -fPIC -I$(PREFIX)/include $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
+$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
+	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
+
+# parser # USING C COMPLIER ON CPP! BUT IT BUILDS?
+$(BLD)/parser: $(BLD)/parser.tab.h $(BLD)/parser.tab.c
+	@echo -e "\nBuilding \"lexer & parser\" ...\n"
+	$(CC) $(CCFLAGS) -Ibuild $^ -lfl -o $@
+
+$(BLD)/parser.tab.c $(BLD)/parser.tab.h: $(SRC)/parser.y
+	@echo -e "\nGererating \"parser\" ...\n"
+	$(YACC) -Wcounterexamples --header $^ -o $@
 
 $(BLD)/libscanner.so: ./$(OBJ)/scanner.o
 	$(CXX) $(CXXFLAGS) $(CXXEXTRA) --shared ./$(BLD)/scanner.o -o ./$(BLD)/libscanner.so
@@ -57,11 +66,11 @@ $(BLD)/libscanner.a: ./$(OBJ)/scanner.o
 # $(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp $(SRC)/Lexer.hpp
 # 	cp $(SRC)/*.hpp $(BLD)/
 
-$(OBJ)/%.hpp: $(SRC)/%.hpp
-	cp $@ $<
+$(BLD)/%.hpp: $(SRC)/%.hpp
+	cp $< $@
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -I./$(BLD) -c -o $@ $<
 
 .PHONY: all rebuild dist install uninstall clean help
 
@@ -77,8 +86,8 @@ uninstall:
 	-rm ./$(prefix)/bin/scanner
 
 clean:
-	-rm -f ./$(OBJ)/*.o
-	-rm -f ./$(BLD)/*.o
+	-rm -f ./$(OBJ)/*
+	-rm -f ./$(BLD)/*
 
 help:
 	@echo  '  all              - build all'
