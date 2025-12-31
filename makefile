@@ -54,8 +54,11 @@ $(BLD)/libscanner.a: ./$(OBJ)/scanner.o
 	-ar rvs ./$(BLD)/libscanner.a ./$(BLD)/scanner.o
 	-chmod 755 ./$(BLD)/libscanner.a
 
-$(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp $(SRC)/Lexer.hpp
-	cp $(SRC)/*.hpp $(BLD)/
+# $(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp $(SRC)/Lexer.hpp
+# 	cp $(SRC)/*.hpp $(BLD)/
+
+$(OBJ)/%.hpp: $(SRC)/%.hpp
+	cp $@ $<
 
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<

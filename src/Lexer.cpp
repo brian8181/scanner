@@ -96,7 +96,7 @@ void Lexer::load_config( const string &path )
     const unsigned int ID_CONFIG_COMMENT = 6;
     const unsigned int ID_NUMERIC_LITERAL = 2;
     const unsigned int ID_STRING_LITERAL = 3;
-    map_sections_config.clear();
+    _map_sections_config.clear();
 
     // get configuration file by lines
     vector<string> lines;
@@ -108,7 +108,7 @@ void Lexer::load_config( const string &path )
     string section_name = "global";
     map<string, string> section_map;
     pair<string, map<string, string>> sp( section_name, section_map );
-    map_sections_config.insert( sp );
+    _map_sections_config.insert( sp );
 
     int len = lines.size( );
     for(int i = 0; i < len; ++i)
@@ -126,7 +126,7 @@ void Lexer::load_config( const string &path )
             //trim(value); // just in case, the rexp may do this
             // create pair
             pair<string, string> p( symbol_name, value );
-            map_sections_config[section_name].insert( p );
+            _map_sections_config[section_name].insert( p );
         }
     }
 }
@@ -150,8 +150,8 @@ void Lexer::dump_config( )
 {
     stringstream ss;
     string section_name = "global";
-    auto end = map_sections_config[section_name].end( );
-    for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
+    auto end = _map_sections_config[section_name].end( );
+    for(auto iter = _map_sections_config[section_name].begin( ); iter != end; ++iter)
     {
         string key = (*iter).first;
         string value = (*iter).second;
@@ -243,8 +243,8 @@ void Lexer::print_expr( )
 {
     stringstream ss;
     string section_name = "global";
-    auto end = map_sections_config[section_name].end( );
-    for(auto iter = map_sections_config[section_name].begin( ); iter != end; ++iter)
+    auto end = _map_sections_config[section_name].end( );
+    for(auto iter = _map_sections_config[section_name].begin( ); iter != end; ++iter)
     {
         string value = (*iter).second;
         ss << "(" + value + ")|";

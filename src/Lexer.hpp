@@ -113,12 +113,12 @@ public:
 
 protected:
 	string _config_file;
-	map<string, string> map_config;
+	map<string, string> _map_config;
 	// todo : revert to no configuration sections!
-	map<string, map<string, string>> map_sections_config;
-	map<string, string> map_vars;
-	map<string, string> map_const;
-	map<string, vector<string>> map_arrays;
+	map<string, map<string, string>> _map_sections_config;
+	map<string, string> _map_vars;
+	map<string, string> _map_const;
+	map<string, vector<string>> _map_arrays;
 	map<string, pair<string, vector<string>>> map_objects;
 
 	// current position & state : i.e. --> get_token

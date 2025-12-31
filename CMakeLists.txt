@@ -13,6 +13,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "CYGWIN")
     add_definitions(-DCYGWIN)
 endif()
 
+#add_subdirectory(/cygdrive/c/Users/brian/src/fmt-11.1.3/src)
+ 
+
 add_library(lexer_a STATIC
     src/Lexer.cpp
     src/utility.cpp
@@ -27,6 +30,9 @@ add_executable(scanner
     src/utility.cpp
     src/fileio.cpp
 )
+
+#target_link_libraries(scanner PRIVATE fmt::fmt)
+
 
 #[=[
     # Add Library
