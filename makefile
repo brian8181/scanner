@@ -2,24 +2,35 @@
 # @date: Mon Sep  8 00:03:12 CDT 2025
 # @version: 0.0.1
 
-APP = inflex
+APP = scanner
 CXX = g++
+CC = gcc
 LEX = reflex
 LEX = flex
 YACC = bison -y
 YACC = bison
 YFLAGS =
 CXXFLAGS = -std=c++20 -fPIC
+CCFLAGS =
 FLEXFLAGS = --flex
 BISONFLAGS = -y -d --html --graph
 BLD = build
 OBJ = build
 SRC = src
 AST = ast
+TST = test
 
-LIBS = -L/usr/local/lib/
-INCLUDES = -I./build/
-LDFLAGS = -lfmt $(LIBS) $(INCLUDES)
+FMT_RESET=\e[0m
+FMT_RED='\e[31m'
+FMT_GREEN=\e[32m
+FMT_YELLOW='\e[33m'
+FMT_BLUE='\e[34m'
+FMT_CYAN='\e[36m'
+
+
+# LIBS = -L/usr/local/lib/
+# INCLUDES = -I./build/
+# LDFLAGS = -lfmt $(LIBS) $(INCLUDES)
 
 ifndef RELEASE
 	CXXFLAGS +=-ggdb -DDEBUG
@@ -48,11 +59,11 @@ $(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/s
 
 # parser # USING C COMPLIER ON CPP! BUT IT BUILDS?
 $(BLD)/parser: $(BLD)/parser.tab.h $(BLD)/parser.tab.c
-	@echo -e "\nBuilding \"lexer & parser\" ...\n"
+	@echo -e "$(FMT_GREEN)\nBuilding \"parser\"$(FMT_RESET) ...\n"
 	$(CC) $(CCFLAGS) -Ibuild $^ -lfl -o $@
 
 $(BLD)/parser.tab.c $(BLD)/parser.tab.h: $(SRC)/parser.y
-	@echo -e "\nGererating \"parser\" ...\n"
+	@echo -e "$(FMT_GREEN)\nGenerate \"parser.tab.c\"$(FMT_RESET) ...\n"
 	$(YACC) -Wcounterexamples --header $^ -o $@
 
 $(BLD)/libscanner.so: ./$(OBJ)/scanner.o
@@ -86,6 +97,7 @@ uninstall:
 	-rm ./$(prefix)/bin/scanner
 
 clean:
+	@echo -e "$(FMT_GREEN)cleaning ...$(FMT_RESET)"
 	-rm -f ./$(OBJ)/*
 	-rm -f ./$(BLD)/*
 
