@@ -44,7 +44,7 @@ int lex(void)
     }
     unsigned int token;
     lexer.get_token(token);
-    return 0;
+    return token;
 }
 
 /**
@@ -80,11 +80,13 @@ int parse_options(int argc, char* argv[])
     }
 
     // configure scannner ...
-    cout << "configure scannner ..." << optind << endl;
-
-    cout << "load configuartion ..." << endl;
+    cout << "configure scannner ..." << endl;
     string file = argv[optind + SRC_IDX_OFFSET];
     string config_file = ".config/default.txt";
+    cout << FMT_FG_BLUE << "load configuartion file=\"" << FMT_RESET
+         << FMT_FG_GREEN << FMT_ITALIC <<  config_file << "\"" << FMT_RESET << endl;
+    cout << FMT_FG_BLUE << "input file=\"" << FMT_RESET
+         << FMT_FG_GREEN << FMT_ITALIC <<  file << "\"" << FMT_RESET << endl;
 
     g_config_file = config_file;
     g_scan_file = file;
@@ -97,26 +99,19 @@ int parse_options(int argc, char* argv[])
     Lexer lexer(file, config_file);
     cout << "sannner configured." << endl;
 
-    cout << "scanning ..." << endl;
+    cout << "test scanning ..." << endl;
     unsigned int token = 0;
-    while( lexer.get_token( token ) )
+    while( lex() )
     {
         //lexer.print_token();
     }
+
     cout << "finished scanning. " << endl;
-
-    cout << "dumping configuration ... " << endl;
-    lexer.dump_config();
-    cout << "configuration dumped." << endl;
-
-    cout << "print expression ..." << endl;
-    lexer.print_expr();
-    cout << "printed." << endl;
-
-    string s("testing std:string ....");
-
-    string CUSTOM_FMT(FMT_FG_GREEN + FMT_ITALIC);
-    cout << CUSTOM_FMT << s << FMT_FG_CYAN << "more text" << FMT_RESET <<  endl;
+    //cout << "dumping configuration ... " << endl;
+    //lexer.dump_config();
+    //cout << "configuration dumped." << endl;
+    //cout << "print expression ..." << endl;
+    //lexer.print_expr();
     return 0;
 }
 
