@@ -54,7 +54,7 @@ endif
 .PHONY all: help
 all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/parser.tab.c #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
-$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
+$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.h $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
 
 # parser # USING C COMPLIER ON CPP! BUT IT BUILDS?
@@ -74,7 +74,28 @@ $(BLD)/libscanner.a: ./$(OBJ)/scanner.o
 	-ar rvs ./$(BLD)/libscanner.a ./$(BLD)/scanner.o
 	-chmod 755 ./$(BLD)/libscanner.a
 
-# $(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.hpp $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.hpp $(SRC)/Lexer.hpp
+$(BLD)/rpcalc: $(SRC)/rpcalc.y
+	$(YACC) $^ -o $@
+
+$(BLD)/calc: $(BLD)/scanner.h $(BLD)/calc.tab.c $(OBJ)/scanner.o
+	$(CXX) $(OBJ)/scanner.o $(BLD)/calc.tab.c -o $(BLD)/calc
+
+$(OBJ)/scanner.o: $(BLD)/calc.tab.h $(SRC)/scanner.h $(SRC)/scanner.c
+	$(CXX) -I./build -c $(SRC)/scanner.c -o $@
+
+$(BLD)/calc.tab.c $(BLD)/calc.tab.h: $(SRC)/calc.y
+	$(YACC) --header -o $(BLD)/calc.tab.c -d $(SRC)/calc.y
+
+$(SRC)/lexer.o:
+	$(CXX)  -c $(SRC)/lexer.h $(SRC)/lexer.cpp -o $@
+
+
+# copy header files
+$(BLD)/scanner.h: $(SRC)/scanner.h
+	cp $^ $@
+
+
+# $(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.h $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.h $(SRC)/Lexer.hpp
 # 	cp $(SRC)/*.hpp $(BLD)/
 
 $(BLD)/%.hpp: $(SRC)/%.hpp

@@ -176,7 +176,7 @@ int Lexer::get_token( /*out*/ unsigned int& token )
         {
             token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
-            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            ss << "{\n\ttoken__: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
             color_print( ss.str( ), fg( fmt::color::antique_white ) );
             ss.clear( );
             // create token ...

@@ -11,16 +11,41 @@
 #include <string>
 #include <getopt.h>
 #include <set>
-#include "scanner.hpp"
-#include "Lexer.hpp"
+#include "scanner.h"
+#include "Lexer.h"
 //#include "constants.hpp"
 #include "config.hpp"
 #include "parser.tab.h"
+#include "bash_color.h"
 
 using namespace std;
 
 const int SRC_IDX_OFFSET = 0;
 const int CONFIG_IDX_OFFSET = 1;
+
+#define lex yylex
+
+static string g_config_file;
+static string g_scan_file;
+static bool initialized = false;
+static Lexer lexer;
+
+/**
+ * @brief
+ * @param
+ * @return
+ */
+int lex(void)
+{
+    if(!initialized)
+    {
+        lexer.init(g_scan_file, g_config_file);
+        initialized = true;
+    }
+    unsigned int token;
+    lexer.get_token(token);
+    return 0;
+}
 
 /**
  * @brief parse command line options
@@ -60,6 +85,10 @@ int parse_options(int argc, char* argv[])
     cout << "load configuartion ..." << endl;
     string file = argv[optind + SRC_IDX_OFFSET];
     string config_file = ".config/default.txt";
+
+    g_config_file = config_file;
+    g_scan_file = file;
+
     if( argc > (optind + CONFIG_IDX_OFFSET) )
         config_file = argv[optind + CONFIG_IDX_OFFSET];
     cout << "configuartion loaded." << endl;
@@ -83,6 +112,11 @@ int parse_options(int argc, char* argv[])
     cout << "print expression ..." << endl;
     lexer.print_expr();
     cout << "printed." << endl;
+
+    string s("testing std:string ....");
+
+    string CUSTOM_FMT(FMT_FG_GREEN + FMT_ITALIC);
+    cout << CUSTOM_FMT << s << FMT_FG_CYAN << "more text" << FMT_RESET <<  endl;
     return 0;
 }
 

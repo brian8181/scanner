@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using std::string;
+using std::stringstream;
 
 // shell color constants
 const string FMT_RESET             = "\033[0m";
@@ -16,6 +18,7 @@ const string FMT_RESET_REVERSE     = "\033[27m";
 const string FMT_RESET_HIDDEN      = "\033[28m";
 const string FMT_BOLD              = "\033[1m";
 const string FMT_DIM               = "\033[2m";
+const string FMT_ITALIC            = "\033[3m";
 const string FMT_UNDERLINE         = "\033[4m";
 const string FMT_BLINK             = "\033[5m";
 const string FMT_REVERSE           = "\033[7m";
@@ -77,6 +80,18 @@ string& COLOR_YELLOW(string& s)
 string& COLOR_GREEN(string& s)
 {
     return FMT_STRING(s, FMT_FG_GREEN);
+}
+
+string& COLOR_ITALIC(string& s)
+{
+    return FMT_STRING(s, FMT_ITALIC);
+}
+
+string FMT(string& s, const string& format)
+{
+    stringstream ss;
+    ss << format << s << FMT_RESET;
+    return ss.str();
 }
 
 #endif
