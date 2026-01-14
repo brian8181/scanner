@@ -52,7 +52,7 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/parser.tab.c #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
+all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/parser.tab.c $(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
 $(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.h $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
@@ -73,6 +73,14 @@ $(BLD)/libscanner.so: ./$(OBJ)/scanner.o
 $(BLD)/libscanner.a: ./$(OBJ)/scanner.o
 	-ar rvs ./$(BLD)/libscanner.a ./$(BLD)/scanner.o
 	-chmod 755 ./$(BLD)/libscanner.a
+
+$(BLD)/mylibtest: $(BLD)/mylibrary.a $(SRC)/mylibrary.h $(SRC)/main_test.c
+	$(CC) $(CCFLAGS) -L$(BLD)/ -lmylibrary.a $(SRC)/main_test.c -o $@
+
+$(BLD)/mylibrary.a: $(SRC)/mylibrary_impl.o
+	-ar rvs $@ $^
+	-chmod 755 $@
+
 
 $(BLD)/rpcalc: $(SRC)/rpcalc.y
 	$(YACC) $^ -o $@
