@@ -16,7 +16,7 @@
 #include <fmt/format.h>
 #include <fmt/color.h>
 #include "fileio.hpp"
-#include "Lexer.hpp"
+#include "Lexer.h"
 #include "utility.hpp"
 #include "constants.hpp"
 

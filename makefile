@@ -52,9 +52,9 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/parser.tab.c $(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
+all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/parser.tab.c #$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
-$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.h $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o
+$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.h $(BLD)/Lexer.o $(BLD)/Lexer.h $(BLD)/utility.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
 
 # parser # USING C COMPLIER ON CPP! BUT IT BUILDS?
@@ -75,12 +75,11 @@ $(BLD)/libscanner.a: ./$(OBJ)/scanner.o
 	-chmod 755 ./$(BLD)/libscanner.a
 
 $(BLD)/mylibtest: $(BLD)/mylibrary.a $(SRC)/mylibrary.h $(SRC)/main_test.c
-	$(CC) $(CCFLAGS) -L$(BLD)/ -lmylibrary.a $(SRC)/main_test.c -o $@
+	$(CC) $(CCFLAGS) -L$(BLD)/ $(BLD)/mylibrary.a $(SRC)/main_test.c -o $@
 
 $(BLD)/mylibrary.a: $(SRC)/mylibrary_impl.o
 	-ar rvs $@ $^
 	-chmod 755 $@
-
 
 $(BLD)/rpcalc: $(SRC)/rpcalc.y
 	$(YACC) $^ -o $@
@@ -97,14 +96,9 @@ $(BLD)/calc.tab.c $(BLD)/calc.tab.h: $(SRC)/calc.y
 $(SRC)/lexer.o:
 	$(CXX)  -c $(SRC)/lexer.h $(SRC)/lexer.cpp -o $@
 
-
 # copy header files
-$(BLD)/scanner.h: $(SRC)/scanner.h
+$(BLD)/%.h : $(SRC)/%.h
 	cp $^ $@
-
-
-# $(BLD)/config.hpp $(BLD)/constants.hpp $(BLD)/utility.hpp $(BLD)/fileio.hpp $(BLD)/scanner.h $(BLD)/Lexer.hpp: $(SRC)/config.hpp $(SRC)/constants.hpp $(SRC)/utility.hpp $(SRC)/fileio.hpp $(SRC)/scanner.h $(SRC)/Lexer.hpp
-# 	cp $(SRC)/*.hpp $(BLD)/
 
 $(BLD)/%.hpp: $(SRC)/%.hpp
 	cp $< $@
