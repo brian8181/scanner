@@ -7,8 +7,8 @@ SRC=src/parser
 
 all: $(BLD)/parsercxx
 
-$(BLD)/parsercxx: $(BLD)/parsercxx.cc
-	$(CXX) -g -std=c++14 -I$(BLD) -o $@ $<
+	$(BLD)/parsercxx: $(BLD)/parsercxx.cc
+		$(CXX) -g -std=c++14 -I$(BLD) -o $@ $<
 
-$(BLD)/parsercxx.cc $(BLD)/parsercxx.hh: $(SRC)/parsercxx.yy
-	$(YACC) $(SRC)/parsercxx.yy --header -o $(BLD)/parsercxx.cc
+	$(BLD)/parsercxx.cc $(BLD)/parsercxx.hh: $(SRC)/parsercxx.yy
+		$(YACC) $(SRC)/parsercxx.yy --header -o $(BLD)/parsercxx.cc

@@ -94,7 +94,13 @@ $(BLD)/calc.tab.c $(BLD)/calc.tab.h: $(SRC)/calc.y
 	$(YACC) --header -o $(BLD)/calc.tab.c -d $(SRC)/calc.y
 
 $(SRC)/lexer.o:
-	$(CXX)  -c $(SRC)/lexer.h $(SRC)/lexer.cpp -o $@
+	$(CXX) -c $(SRC)/lexer.h $(SRC)/lexer.cpp -o $@
+
+$(BLD)/pcxx.cc $(BLD)/pcxx.hh: $(SRC)/pcxx.yy
+	$(YACC) $^ -o $@
+
+$(BLD)/pcxx: $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pcxx.cc
+	$(CXX) -g -std=c++14 -I$(ROOT)/src $^ -o $@
 
 # copy header files
 $(BLD)/%.h : $(SRC)/%.h
