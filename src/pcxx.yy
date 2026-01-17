@@ -55,12 +55,11 @@
             return 0;
         }
     }
-}
-
-%code
-{
-    int yylex(void);
-    int yyerror(char * s);
+//}
+//%code
+//{
+    //int yylex(void);
+    //int yyerror(char * s);
     char* STRDUP(char* s);
     /* string literal buffer */
     char buf[100];
@@ -94,6 +93,9 @@
 %token<std::string> VAR_ATTRIB VALUE_ATTRIB FILE_ATTRIB FILE_NAME
 %type<std::string> symbol sub_proc array qualafied_id
 %start complier
+
+%token INTEGER SEMI_COLON NEWLINE PLUS
+
 
 %%
 
@@ -310,13 +312,41 @@ void free_all_nvalues()
         next = cur->next;
     }
 }
+
 /*
+%define api.token.constructor
+%code
+{
+    namespace yy
+    {
+        // return the next token
+        auto yylex() -> parser::symbol_type
+        {
+            static int i = 0;
+            static int count = 0;
+            switch(int stage = count++)
+            {
+            case 0:
+                return parser::make_NUMBER(666);
+            case 1:
+                return parser::make_END();
+            }
+            return 0;
+        }
+    }
+}
+*/
+
+/*
+ifdef YYERROR_FUNC
 int yyerror(char * s)
 {
     fprintf(stderr, "%s\n", s);
     return 0;
 };
+#endif
 
+ifdef MAIN_FUNC
 int main(int argc, char** argv)
 {
     extern FILE *yyin;
@@ -341,10 +371,52 @@ int main(int argc, char** argv)
         yyin = 0;
 
     }
-s    exit(0);
+    exit(0);
 }
+#endif
 */
 
+/*
+#ifdef YYLEX_FUNC
+char* TOKS[] = { "3", "+", "2", ";", "\n", "\0" };
+int yylex (void)
+{
+    static int i = 0;
+    switch(i)
+    {
+    case 666:
+        return yy::parser::token::token_kind_type::INTEGER;
+    case 0:
+        //yylval.str = atoi(TOKS[i++]);
+        //return INTEGER;
+        //return yy::parser::token::token_kind_type::INTEGER;
+    case 1:
+        //yylval.str = TOKS[i++];
+       // return PLUS;
+       yy::parser::token::token_kind_type::PLUS;
+    case 2:
+        //yylval.num = atoi(TOKS[i++]);
+        //return INTEGER;
+        yy::parser::token::token_kind_type::INTEGER;
+    case 3:
+        //yylval.str = TOKS[i++];
+        //return SEMI_COLON;
+        yy::parser::token::token_kind_type::SEMI_COLON;
+     case 4:
+        //yylval.str = TOKS[i++];
+        //return NEWLINE;
+        yy::parser::token::token_kind_type::NEWLINE;
+     case 5:
+        //yylval.str = TOKS[i++];
+        return 0;
+    }
+    return 0;
+}
+#endif
+*/
+
+#define CPP_MAIN TRUE
+#ifdef CPP_MAIN
 namespace yy
 {
     // report an error to the user
@@ -359,3 +431,4 @@ int main()
     yy::parser parse;
     return parse();
 }
+#endif

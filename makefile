@@ -52,7 +52,7 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/parser.tab.c #$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
+all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx #$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
 $(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.h $(BLD)/Lexer.o $(BLD)/Lexer.h $(BLD)/utility.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
@@ -93,14 +93,18 @@ $(OBJ)/scanner.o: $(BLD)/calc.tab.h $(SRC)/scanner.h $(SRC)/scanner.c
 $(BLD)/calc.tab.c $(BLD)/calc.tab.h: $(SRC)/calc.y
 	$(YACC) --header -o $(BLD)/calc.tab.c -d $(SRC)/calc.y
 
-$(SRC)/lexer.o:
-	$(CXX) -c $(SRC)/lexer.h $(SRC)/lexer.cpp -o $@
+$(OBJ)/lex.o:
+	$(CC) -c $(SRC)/lex.c -o $@
 
+$(OBJ)/lexer.o:
+	$(CXX) -c $(SRC)/lexer.cpp -o $@
+
+ROOT="/home/brian/scanner"
 $(BLD)/pcxx.cc $(BLD)/pcxx.hh: $(SRC)/pcxx.yy
-	$(YACC) $^ -o $@
+	$(YACC) $(SRC)/pcxx.yy --header -o $(BLD)/pcxx.cc
 
 $(BLD)/pcxx: $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pcxx.cc
-	$(CXX) -g -std=c++14 -I$(ROOT)/src $^ -o $@
+	$(CXX) -g -std=c++14 -I$(ROOT)/src $(BLD)/pcxx.cc -o $@
 
 # copy header files
 $(BLD)/%.h : $(SRC)/%.h
