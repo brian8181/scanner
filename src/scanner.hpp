@@ -53,5 +53,7 @@ int yylex (void);
  */
 void yyerror (char const *);
 
+#define lex yylex
+
 
 #endif // _SCANNER_HPP_

@@ -54,7 +54,7 @@ endif
 .PHONY all: help
 all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx #$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
-$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.h $(BLD)/Lexer.o $(BLD)/Lexer.h $(BLD)/utility.o
+$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.h $(BLD)/utility.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
 
 # parser # USING C COMPLIER ON CPP! BUT IT BUILDS?
@@ -84,17 +84,17 @@ $(BLD)/mylibrary.a: $(SRC)/mylibrary_impl.o
 $(BLD)/rpcalc: $(SRC)/rpcalc.y
 	$(YACC) $^ -o $@
 
-$(BLD)/calc: $(BLD)/scanner.h $(BLD)/calc.tab.c $(OBJ)/scanner.o
+$(BLD)/calc: $(BLD)/scanner.hpp $(BLD)/calc.tab.c $(OBJ)/scanner.o
 	$(CXX) $(OBJ)/scanner.o $(BLD)/calc.tab.c -o $(BLD)/calc
 
-$(OBJ)/scanner.o: $(BLD)/calc.tab.h $(SRC)/scanner.h $(SRC)/scanner.c
-	$(CXX) -I./build -c $(SRC)/scanner.c -o $@
+$(OBJ)/scanner.o: $(BLD)/calc.tab.h $(SRC)/scanner.hpp $(SRC)/scanner.cpp
+	$(CXX) -I./build -c $(SRC)/scanner.cpp -o $@
 
 $(BLD)/calc.tab.c $(BLD)/calc.tab.h: $(SRC)/calc.y
 	$(YACC) --header -o $(BLD)/calc.tab.c -d $(SRC)/calc.y
 
-$(OBJ)/lex.o:
-	$(CC) -c $(SRC)/lex.c -o $@
+$(OBJ)/lex.o: $(SRC)/lex.cpp
+	$(CC) -c -I./$(BLD) $^ -o $@
 
 $(OBJ)/lexer.o:
 	$(CXX) -c $(SRC)/lexer.cpp -o $@
@@ -103,8 +103,8 @@ ROOT="/home/brian/scanner"
 $(BLD)/pcxx.cc $(BLD)/pcxx.hh: $(SRC)/pcxx.yy
 	$(YACC) $(SRC)/pcxx.yy --header -o $(BLD)/pcxx.cc
 
-$(BLD)/pcxx: $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pcxx.cc
-	$(CXX) -g -std=c++14 -I$(ROOT)/src $(BLD)/pcxx.cc -o $@
+$(BLD)/pcxx: $(BLD)/lex.o $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pcxx.cc
+	$(CXX) -g -std=c++14 -I$(ROOT)/build -I$(ROOT)/src $(BLD)/lex.o $(BLD)/pcxx.cc -o $@
 
 # copy header files
 $(BLD)/%.h : $(SRC)/%.h

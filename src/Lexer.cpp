@@ -117,7 +117,9 @@ void Lexer::load_config( const string &path )
         regex rgx = regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
         smatch match;
         regex_match( line, match, rgx );
-
+        // todo...
+        // NUMBER              = {0x200, [0-9]+}
+        // PLUS                = {0x201, \+}
         if(match[ID_NAME_VALUE_PAIR].matched)
         {
             string symbol_name = match[ID_NAME].str( ); // get name

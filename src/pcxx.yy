@@ -13,6 +13,7 @@
     #include <string.h>
     #include "bash_color.h"
     #include "symtab.h"
+    #include "lex.hpp"
 
     using std::string;
     using std::cout;
@@ -38,23 +39,16 @@
 %define api.token.constructor
 %code
 {
+    yy::parser::symbol_type llex();
     namespace yy
     {
         // return the next token
-        auto yylex() -> parser::symbol_type
+        parser::symbol_type yylex()
         {
-            static int i = 0;
-            static int count = 0;
-            switch(int stage = count++)
-            {
-            case 0:
-                return parser::make_NUMBER(666);
-            case 1:
-                return parser::make_END();
-            }
-            return 0;
+            return llex();
         }
     }
+
 //}
 //%code
 //{
@@ -151,7 +145,7 @@ block:
                                                                 }
     | NUMBER                                                    {
                                                                     cout << FMT_FG_RED
-                                                                            << "block: NUMBER"
+                                                                            << "block: NUMBER = " << $1
                                                                         << FMT_RESET << endl;   }
                                                                 ;
 
@@ -186,8 +180,8 @@ array:
 
 params:
     /*empty*/
-    | symbol                                                    { cout << FMT_FG_YELLOW << "PARSER params: | symbol" << FMT_RESET << endl; }
-    | params COMMA symbol                                       { cout << FMT_FG_YELLOW << "PARSER qualafied_id: | params COMMA symbol" << FMT_RESET << endl; }
+    | symbol COMMA                                              { cout << FMT_FG_YELLOW << "PARSER params: | symbol" << FMT_RESET << endl; }
+    | params symbol                                             { cout << FMT_FG_YELLOW << "PARSER qualafied_id: | params COMMA symbol" << FMT_RESET << endl; }
                                                                 ;
 
 symbol:
@@ -415,8 +409,24 @@ int yylex (void)
 
 #define CPP_MAIN TRUE
 #ifdef CPP_MAIN
+//#include "lex.hpp"
 namespace yy
 {
+    // return the next token
+    /* auto parser::yylex() -> parser::symbol_type
+    {
+        static int i = 0;
+        static int count = 0;
+        switch(int stage = count++)
+        {
+        case 0:
+            return parser::make_NUMBER(666);
+        case 1:
+            return parser::make_END();
+        }
+        return 0;
+    } */
+
     // report an error to the user
     auto parser::error(const std::string& msg) -> void
     {

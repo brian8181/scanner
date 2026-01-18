@@ -129,6 +129,9 @@ protected:
 	std::sregex_iterator _end;
 	std::sregex_iterator* _p_iter;
 	map<string, pair<string, pair<int, string>>> _tokens;
+	// BKP ??
+	//     id        name   match
+	//map<int, pair<string, string>> _tokens;
 };
 
 #endif

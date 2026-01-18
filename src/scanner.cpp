@@ -23,8 +23,6 @@ using namespace std;
 const int SRC_IDX_OFFSET = 0;
 const int CONFIG_IDX_OFFSET = 1;
 
-#define lex yylex
-
 static string g_config_file;
 static string g_scan_file;
 static bool initialized = false;
