@@ -11,7 +11,7 @@
 #include <string>
 #include <getopt.h>
 #include <set>
-#include "scanner.h"
+#include "scanner.hpp"
 #include "Lexer.h"
 //#include "constants.hpp"
 #include "config.hpp"

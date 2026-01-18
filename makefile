@@ -101,9 +101,9 @@ $(OBJ)/lexer.o:
 
 ROOT="/home/brian/scanner"
 $(BLD)/pcxx.cc $(BLD)/pcxx.hh: $(SRC)/pcxx.yy
-	$(YACC) $(SRC)/pcxx.yy --header -o $(BLD)/pcxx.cc
+	$(YACC) $(SRC)/pcxx.yy --header="$(BLD)/pcxx.hh" -o $(BLD)/pcxx.cc
 
-$(BLD)/pcxx: $(BLD)/lex.o $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pcxx.cc
+$(BLD)/pcxx: $(BLD)/lex.hpp $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pcxx.hh $(BLD)/pcxx.cc $(BLD)/lex.o
 	$(CXX) -g -std=c++14 -I$(ROOT)/build -I$(ROOT)/src $(BLD)/lex.o $(BLD)/pcxx.cc -o $@
 
 # copy header files
@@ -114,7 +114,7 @@ $(BLD)/%.hpp: $(SRC)/%.hpp
 	cp $< $@
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXXFLAGS) -I./$(BLD) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -I$(ROOT)/build -c -o $@ $<
 
 .PHONY: all rebuild dist install uninstall clean help
 
