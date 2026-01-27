@@ -15,7 +15,7 @@ symbol_tab* get_stable()
         return tab;
 
     symbol* streamy_init_object = (symbol*)malloc(sizeof(symbol));
-    // todo allocate strings ...
+    // bkp todo! allocate strings ...
     streamy_init_object->id = "$streamy";
     streamy_init_object->type = "object";
     streamy_init_object->type_modifiers = "static";
@@ -52,7 +52,7 @@ void init_sub_table(symbol_tab* parent)
 {
     symbol_tab* symtab = (symbol_tab*)malloc( sizeof(symbol_tab) );
     symtab->head = 0;
-    // todo!
+    // bkp todo!
     //symtab->parent = parent->head;
 }
 
