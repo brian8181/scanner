@@ -7,6 +7,7 @@
 //char* TOKS[] = { "3", "+", "2", ";", "\n", "\0" };
 //symbol_type (int token, const value_type& value)
 //int yylex (value_type* yylval, type1 arg1, . . .)
+typedef yy::parser::symbol_type sym_t;
 
 yy::parser::symbol_type llex()
 {

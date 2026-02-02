@@ -6,6 +6,7 @@
 // NUMBER              = {0x200, [0-9]+}
 // PLUS                = {0x201, \+}
 
+#[global]
 
 # punctuations
 ASTERIK                = *
@@ -33,3 +34,7 @@ EXCLAMATION            = !
 # operators
 PLUS                   = +
 MINUS                  = -
+ID                     = [A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*
+SYM                    = ${ID}
+COMMENT                =\{[ \t]*\*[^*}]*\*[ \t]*\}
+FILE_NAME              =[A-Za-z0-9_.-~+#@]
