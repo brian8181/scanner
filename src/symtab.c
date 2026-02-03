@@ -39,7 +39,6 @@ void free_node(symbol_tab* stab, node* n)
 void init_symbol(symbol** s, const char* id, const char* type_modifiers, const char* type)
 {
     *s =  (symbol*)malloc( sizeof(symbol) );
-
     (*s)->id = (char*)malloc( strlen(id)+1 );
     strcpy((*s)->id, id);
     (*s)->type = (char*)malloc (strlen(type)+1 );

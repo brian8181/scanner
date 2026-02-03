@@ -76,7 +76,11 @@ bool Lexer::init( const string& file, const string &config_file )
     stringstream sstrm;
     int r = read_sstream( file, sstrm );
     _search_text = sstrm.str( );
-    _rexp = regex( EVERYTHING, regex::ECMAScript );
+    // build expression ...
+    string exp;
+    build_expr(exp);
+    _rexp = regex( exp, regex::ECMAScript );
+    //_rexp = regex( EVERYTHING, regex::ECMAScript );
     _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
     return r;
@@ -241,7 +245,7 @@ void Lexer::tokenize( const string &exp, const string &text )
 /**
  * @brief print regex expression to stdout
  */
-void Lexer::print_expr( )
+void Lexer::build_expr( /*out*/ string& s )
 {
     stringstream ss;
     string section_name = "global";
@@ -251,8 +255,17 @@ void Lexer::print_expr( )
         string value = (*iter).second;
         ss << "(" + value + ")|";
     }
-    string s = ss.str( );
+    s = ss.str( );
     s.pop_back( );
+}
+
+/**
+ * @brief print regex expression to stdout
+ */
+void Lexer::print_expr( )
+{
+    string s;
+    build_expr(s);
     cout << s << endl;
 }
 

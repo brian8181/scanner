@@ -101,6 +101,11 @@ public:
 	void tokenize( const string &exp, const string &text );
 
 	/**
+ 	* @brief build experssion
+ 	*/
+	void build_expr( /*out*/ string& s );
+
+	/**
      * @brief print regex expression to stdout
  	 */
 	void print_expr();

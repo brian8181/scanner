@@ -106,23 +106,10 @@ void itoa(int& n, char* s);
  */
 int atoi(const char* s);
 
-
-
 typedef string line_t;
 typedef vector<line_t> lines_t;
 typedef string field_t;
 typedef vector<field_t> record_t;
 typedef vector<record_t> table_t;
-
-std::vector<std::string> split(const std::string& s, char c);
-vector<long>& psieve(const int& end, vector<long>& ret);
-
-template <typename T> bool equal(const T& a, const T& b);
-
-void redim(int from, int to);
-string rebase(const unsigned int n, const unsigned int base);
-
-template <typename ...Args>
-void print(const Args& ...args);
 
 #endif

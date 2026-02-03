@@ -24,6 +24,8 @@ const int SRC_IDX_OFFSET = 0;
 const int CONFIG_IDX_OFFSET = 1;
 
 static string g_config_file;
+static bool file_flag = false;
+static bool dump_flag = false;
 static string g_scan_file;
 static bool initialized = false;
 static Lexer lexer;
@@ -54,10 +56,12 @@ int lex(void)
 int parse_options(int argc, char* argv[])
 {
     int opt;
-    const char* optstring = "hV";
+    const char* optstring = "hVdf:";
     const struct option longopts[] = {
         {"help",        no_argument,        NULL,   'h'},
         {"version",     no_argument,        NULL,   'V'},
+        {"file",        0,                  NULL,     'f'},
+        {"dump",        0,                  NULL,   'd'},
         {NULL,          0,                  NULL,    0 }
     };
 
@@ -71,8 +75,15 @@ int parse_options(int argc, char* argv[])
             case 'V':
                 cout << "Version 0.0.1" << endl;
                 return 0;
+             case 'f':
+                file_flag = true;
+                g_config_file = optarg;
+                break;
+            case 'd':
+                dump_flag = true;
+                break;
             default:
-                cerr << "Unknown option" << endl;
+                cerr << "Unknown option: " << opt << endl;
                 return 1;
         }
     }
@@ -80,7 +91,7 @@ int parse_options(int argc, char* argv[])
     // configure scannner ...
     cout << "configure scannner ..." << endl;
     string file = argv[optind + SRC_IDX_OFFSET];
-    string config_file = ".config/default.txt";
+    string config_file = file_flag ? g_config_file : ".config/default.txt";
     cout << FMT_FG_BLUE << "load configuartion file=\"" << FMT_RESET
          << FMT_FG_GREEN << FMT_ITALIC <<  config_file << "\"" << FMT_RESET << endl;
     cout << FMT_FG_BLUE << "input file=\"" << FMT_RESET
@@ -105,11 +116,14 @@ int parse_options(int argc, char* argv[])
     }
 
     cout << "finished scanning. " << endl;
-    //cout << "dumping configuration ... " << endl;
-    //lexer.dump_config();
-    //cout << "configuration dumped." << endl;
-    //cout << "print expression ..." << endl;
-    //lexer.print_expr();
+    if(dump_flag)
+    {
+        cout << "dumping configuration ... " << endl;
+        lexer.dump_config();
+        cout << "configuration dumped." << endl;
+    }
+    cout << "print expression ..." << endl;
+    lexer.print_expr();
     return 0;
 }
 
