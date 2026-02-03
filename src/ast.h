@@ -57,10 +57,9 @@ namespace ast
 		  template< typename T >
 		  T* eval();
 
-
-	 protected:
+	protected:
 		 void* _val;
-	 };
+	};
 
 	/**
 	 * @class urnary_expr
@@ -88,11 +87,9 @@ namespace ast
 			return _val_t;
 		}
 
-	 protected:
+	protected:
 		T* _val_t;
-	 };
-
-
+	};
 
 	/**
 	 * @class expr
@@ -115,7 +112,7 @@ namespace ast
 		{
 			delete urnary_expr<T>::_val_t;
 		}
-	 };
+	};
 
 
 	 /**
@@ -161,11 +158,11 @@ namespace ast
 		 */
 		~binary_expr() { /* let consumer free/release/delete*/ }
 
-	 public:
+	public:
 		 void* _val;
 		 T* _lhs;
 		 T* _rhs;
-	 };
+	};
 
 	template< class T >
 	class add_expr : binary_expr<T>
@@ -260,7 +257,6 @@ namespace ast
     class LList
     {
     public:
-
         struct Node
         {
             T data;
@@ -271,6 +267,7 @@ namespace ast
         LList() {};
         LList(const Node* _head) {};
         ~LList() {};
+
     private:
         Node* mHead;
     };
