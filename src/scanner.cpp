@@ -60,8 +60,8 @@ int parse_options(int argc, char* argv[])
     const struct option longopts[] = {
         {"help",        no_argument,        NULL,   'h'},
         {"version",     no_argument,        NULL,   'V'},
-        {"file",        0,                  NULL,     'f'},
-        {"dump",        0,                  NULL,   'd'},
+        {"file",        0,                  NULL,   'f'},
+        {"dump",        no_argument,        NULL,   'd'},
         {NULL,          0,                  NULL,    0 }
     };
 
