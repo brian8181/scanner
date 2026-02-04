@@ -83,8 +83,8 @@ bool Lexer::init( const string& file, const string &config_file )
     cout << "exp=" << exp << endl;
     //_rexp = regex( exp, regex::ECMAScript );
     // testing
-    _rexp = regex( EVERYTHING, regex::ECMAScript );
-    _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
+    _rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
+    _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
     return r;
 }
@@ -111,16 +111,16 @@ void Lexer::load_config( const string &path )
     {
         cerr << "error: read_lines ..." << endl;
     }
-    
+
     int len = lines.size( );
     _name_vals.resize(len);
     int j = 0;
     for(int i = 0; i < len; ++i)
     {
         string line = lines[i];
-        regex rgx = regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
-        smatch match;
-        regex_match( line, match, rgx );
+        boost::regex rgx = boost::regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
+        boost::smatch match;
+        boost::regex_match( line, match, rgx );
         // bkp todo...
         // NUMBER              = {0x200, [0-9]+}
         // PLUS                = {0x201, \+}
@@ -179,16 +179,16 @@ int Lexer::get_token( /*out*/ unsigned int& token )
     if(*_p_iter != _end)
     {
         boost::smatch what = *(*_p_iter);
-        for(i = 0; i < what.size(); ++i)
+        for(int i = 0; i < what.size(); ++i)
         {
             //std::string str(what[i].first, what[i].second);
         }
-        
-        if( _token_map.contains( m.str( ) ) )
+
+        if( _token_map.contains( what.str( ) ) )
         {
-            token = _token_map[m.str( )].first;
-            string name = _token_map[m.str( )].second;
-            // ss << "{\n\ttoken__: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            token = _token_map[what.str( )].first;
+            string name = _token_map[what.str( )].second;
+            // ss << "{\n\ttoken__: " << token << "\n\tname: " << name << "\n\ttoken: '" << what.str( ) << "'\n\tpos: " << what.position( 0 ) << "\n}" << endl;
             // color_print( ss.str( ), fg( fmt::color::antique_white ) );
             // ss.clear( );
             // create token ...
@@ -208,7 +208,7 @@ int Lexer::get_token( /*out*/ unsigned int& token )
  * @brief override virtual, on_token, for each token ...
  * @param token
  */
-void Lexer::on_token( const unsigned int& token_, const std::smatch& m )
+void Lexer::on_token( const unsigned int& token_, const boost::smatch& m )
 {
     //stringstream ss;
     //unsigned int token = ID_UNDEFINED;
@@ -224,24 +224,24 @@ void Lexer::on_token( const unsigned int& token_, const std::smatch& m )
 void Lexer::tokenize( const string &exp, const string &text )
 {
     stringstream ss;
-    regex rexp = regex( exp, regex::ECMAScript );
-    sregex_iterator begin = sregex_iterator( text.begin( ), text.end( ), rexp );
+    boost::regex rexp = boost::regex( exp, boost::regex::ECMAScript );
+    boost::sregex_iterator begin = boost::sregex_iterator( text.begin( ), text.end( ), rexp );
     //sregex_iterator end = sregex_iterator();
-    sregex_iterator end;
-    for (std::sregex_iterator iter = begin; iter != end; ++iter)
+    boost::sregex_iterator end;
+    for (boost::sregex_iterator iter = begin; iter != end; ++iter)
     {
-        std::smatch m = *iter;
+        boost::smatch m = *iter;
         if( _token_map.contains( m.str( ) ) )
         {
             int token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
-            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n}" << endl;
             color_print( ss.str( ), fg( fmt::color::antique_white ) );
             ss.clear( );
         }
         else
         {
-            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
+            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n};" << endl;
             color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
             ss.clear( );
         }
@@ -254,7 +254,7 @@ void Lexer::tokenize( const string &exp, const string &text )
 void Lexer::build_expr( /*out*/ string& s )
 {
     stringstream ss;
-  
+
     int len = _name_vals.size();
     for(int i = 0; i < len; ++i)
     {
@@ -283,18 +283,18 @@ void Lexer::print_token( )
     if(*_p_iter != _end)
     {
         stringstream ss;
-        std::smatch m = *(*_p_iter);
+        boost::smatch m = *(*_p_iter);
         if( _token_map.contains( m.str( ) ) )
         {
             unsigned int token = _token_map[m.str( )].first;
             string name = _token_map[m.str( )].second;
-            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n}" << endl;
+            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n}" << endl;
             color_print( ss.str( ), fg( fmt::color::antique_white ) );
             ss.clear( );
         }
         else
         {
-            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( 0 ) << "\n};" << endl;
+            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n};" << endl;
             color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
             ss.clear( );
         }

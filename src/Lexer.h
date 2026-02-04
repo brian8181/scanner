@@ -100,7 +100,7 @@ public:
 	 * @param const unsigned int& token_
 	 * @param const std::smatch& m
 	 */
-	virtual void on_token( const unsigned int& token_, const std::smatch& m );
+	virtual void on_token( const unsigned int& token_, const boost::smatch& m );
 
 
 	/**
@@ -143,16 +143,16 @@ protected:
 	// current position & state : i.e. --> get_token
 	std::string _scan_file;
 	std::string _search_text;
-	std::regex _rexp;
-	std::sregex_iterator _begin;
-	std::sregex_iterator _end;
-	std::sregex_iterator* _p_iter;
+	// std::regex _rexp;
+	// std::sregex_iterator _begin;
+	// std::sregex_iterator _end;
+	// std::sregex_iterator* _p_iter;
 	map<string, pair<string, pair<int, string>>> _tokens;
 
-	boost::regex           _rexp2;
-	boost::sregex_iterator _begin2;
-	boost::sregex_iterator _end2;
-	boost::sregex_iterator _p_iter2;
+	boost::regex           _rexp;
+	boost::sregex_iterator _begin;
+	boost::sregex_iterator _end;
+	boost::sregex_iterator* _p_iter;
 
 	// BKP ??
 	//     id        name   match
