@@ -8,7 +8,7 @@
             "type": "shell",
             "command": "make",
             "args": [
-                "--file=~/src/scanner/makefile CYGWIN=1"
+                "--file=~/src/scanner/makefile"
             ],
             "problemMatcher": [
                 "$gcc"

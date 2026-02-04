@@ -111,12 +111,7 @@ void Lexer::load_config( const string &path )
     {
         cerr << "error: read_lines ..." << endl;
     }
-    // create one only section (global)
-    string section_name = "global";
-    map<string, string> section_map;
-    pair<string, map<string, string>> sp( section_name, section_map );
-    _map_sections_config.insert( sp );
-
+    
     int len = lines.size( );
     _name_vals.resize(len);
     int j = 0;
@@ -133,9 +128,6 @@ void Lexer::load_config( const string &path )
         {
             string symbol_name = match[ID_NAME].str( ); // get name
             string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
-            // create pair
-            pair<string, string> p( symbol_name, value );
-            _map_sections_config[section_name].insert( p );
             // vector
             NameValue nv;
             _name_vals[j] = nv;
@@ -166,13 +158,11 @@ void Lexer::dump_config( const string& file )
 void Lexer::dump_config( )
 {
     stringstream ss;
-    string section_name = "global";
-    auto end = _map_sections_config[section_name].end( );
-    for(auto iter = _map_sections_config[section_name].begin( ); iter != end; ++iter)
+    int len = _name_vals.size();
+    for(int i = 0; i < len; ++i)
     {
-        string key = (*iter).first;
-        string value = (*iter).second;
-        ss << "Section: " << left << setw(15) << section_name << left << " Key: " << left << setw(25) << key << "Value: " << "\"" << value << "\"" << endl;
+        NameValue nv = _name_vals[i];
+        ss << "Id: " << left << setw(15) << nv.id << left << " Key: " << left << setw(25) << nv.name << "Value: " << "\"" << nv.value << "\"" << endl;
     }
     cout << ss.str();
 }
@@ -188,7 +178,12 @@ int Lexer::get_token( /*out*/ unsigned int& token )
     token = ID_UNDEFINED;
     if(*_p_iter != _end)
     {
-        std::smatch m = *(*_p_iter);
+        boost::smatch what = *(*_p_iter);
+        for(i = 0; i < what.size(); ++i)
+        {
+            //std::string str(what[i].first, what[i].second);
+        }
+        
         if( _token_map.contains( m.str( ) ) )
         {
             token = _token_map[m.str( )].first;
@@ -197,13 +192,13 @@ int Lexer::get_token( /*out*/ unsigned int& token )
             // color_print( ss.str( ), fg( fmt::color::antique_white ) );
             // ss.clear( );
             // create token ...
-            string match = m.str( );
+            string match = what.str( );
             std::pair<int, std::string> id( token, name );
             std::pair<std::string, std::pair<int, std::string>> tok( match, id );
             _tokens[match] = tok;
         }
         ++(*_p_iter);
-        on_token( token, m );
+        on_token( token, what );
         return token;
     }
     return 0;
@@ -259,15 +254,7 @@ void Lexer::tokenize( const string &exp, const string &text )
 void Lexer::build_expr( /*out*/ string& s )
 {
     stringstream ss;
-
-    //string section_name = "global";
-    //auto end = _map_sections_config[section_name].end( );
-    // for(auto iter = _map_sections_config[section_name].begin( ); iter != end; ++iter)
-    // {
-    //     string value = (*iter).second;
-    //     ss << "(" + value + ")|";
-    // }
-
+  
     int len = _name_vals.size();
     for(int i = 0; i < len; ++i)
     {
