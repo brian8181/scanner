@@ -13,7 +13,6 @@ using std::endl;
 
 namespace ast
 {
-
 	/**
 	 * @class expr
 	 */
@@ -44,18 +43,12 @@ namespace ast
 		 */
 		virtual ~expr() = default;
 
-		/**
-		 * @brief evaluate
-		 * @return variant&
-		 */
-		 //virtual variant* evaluate( );
-
 		 /**
-		  * @brief  T* eval
-		  * @return T*
-		  */
-		  template< typename T >
-		  T* eval();
+		 * @brief  T* eval
+		 * @return T*
+		 */
+		template< typename T >
+		T* eval();
 
 	protected:
 		 void* _val;
@@ -159,7 +152,7 @@ namespace ast
 		~binary_expr() { /* let consumer free/release/delete*/ }
 
 	public:
-		 void* _val;
+		 T* _val;
 		 T* _lhs;
 		 T* _rhs;
 	};
@@ -170,6 +163,13 @@ namespace ast
 	public:
 		add_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		add_expr(const add_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs + *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
 	template< class T >
@@ -178,6 +178,13 @@ namespace ast
 	public:
 		subtract_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		subtract_expr(const subtract_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs - *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
 	template< class T >
@@ -186,6 +193,13 @@ namespace ast
 	public:
 		multiply_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		multiply_expr(const multiply_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs * *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
 	template< class T >
@@ -194,6 +208,13 @@ namespace ast
 	public:
 		divide_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		divide_expr(const divide_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs / *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
     };
 
 	template< class T >
@@ -202,6 +223,13 @@ namespace ast
 	public:
 		modlus_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		modlus_expr(const modlus_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs % *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
 	template< class T >
@@ -210,6 +238,13 @@ namespace ast
 	public:
 		assign_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		assign_expr(const assign_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs = *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
     template< class T >
@@ -218,6 +253,13 @@ namespace ast
     public:
         equal_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
         equal_expr(const equal_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs == *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
     };
 
 	template< class T >
@@ -226,8 +268,14 @@ namespace ast
 	public:
 		less_than_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		less_than_expr(const less_than_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
-	};
 
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs < *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
+	};
 
 	template< class T >
 	class less_than_equal_expr : binary_expr<T>
@@ -235,6 +283,13 @@ namespace ast
 	public:
 		less_than_equal_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 		less_than_equal_expr(const less_than_equal_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs <= *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
     template< class T >
@@ -243,6 +298,13 @@ namespace ast
 	public:
         greater_than_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
         greater_than_expr(const greater_than_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs > *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
 	template< class T >
@@ -251,6 +313,13 @@ namespace ast
 	public:
         greater_than_equal_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
         greater_than_equal_expr(const greater_than_equal_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+
+		T* eval()
+		{
+			binary_expr<T>::_val = new int;
+			*binary_expr<T>::_val =  *binary_expr<T>::_lhs >= *binary_expr<T>::_rhs;
+			return binary_expr<T>::_val;
+		}
 	};
 
     template <typename T>

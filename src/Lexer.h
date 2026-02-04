@@ -13,10 +13,12 @@
 #include <iterator>
 #include <vector>
 #include <map>
+#include <list>
 #include <regex>
 
 using std::string;
 using std::vector;
+using std::list;
 using std::map;
 using std::pair;
 using std::regex;
@@ -119,7 +121,9 @@ public:
 protected:
 	string _config_file;
 	map<string, string> _map_config;
-	// todo : revert to no configuration sections!
+	// ordered list
+	list<pair<string, string>> _list_config;
+	// bkp todo : revert to no configuration sections!
 	map<string, map<string, string>> _map_sections_config;
 	map<string, string> _map_vars;
 	map<string, string> _map_const;

@@ -52,10 +52,13 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx #$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
+all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx $(BLD)/ast_test 	#$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
 $(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.h $(BLD)/utility.o $(BLD)/ast.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
+
+$(BLD)/ast_test: $(BLD)/ast.o
+	$(CXX) $(CXXFLAGS) -DAST_MAIN -fPIC -I./$(BLD) $^ $(LDFLAGS) -o $@
 
 # parser # USING C COMPLIER ON CPP! BUT IT BUILDS?
 $(BLD)/parser: $(BLD)/parser.tab.h $(BLD)/parser.tab.c

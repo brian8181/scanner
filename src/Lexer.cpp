@@ -79,8 +79,10 @@ bool Lexer::init( const string& file, const string &config_file )
     // build expression ...
     string exp;
     build_expr(exp);
-    _rexp = regex( exp, regex::ECMAScript );
-    //_rexp = regex( EVERYTHING, regex::ECMAScript );
+    cout << "exp=" << exp << endl;
+    //_rexp = regex( exp, regex::ECMAScript );
+    // testing
+    _rexp = regex( EVERYTHING, regex::ECMAScript );
     _begin = sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
     return r;
@@ -133,6 +135,8 @@ void Lexer::load_config( const string &path )
             // create pair
             pair<string, string> p( symbol_name, value );
             _map_sections_config[section_name].insert( p );
+            // ordered list
+            _list_config.push_back(p);
         }
     }
 }
@@ -248,9 +252,17 @@ void Lexer::tokenize( const string &exp, const string &text )
 void Lexer::build_expr( /*out*/ string& s )
 {
     stringstream ss;
-    string section_name = "global";
-    auto end = _map_sections_config[section_name].end( );
-    for(auto iter = _map_sections_config[section_name].begin( ); iter != end; ++iter)
+
+    //string section_name = "global";
+    //auto end = _map_sections_config[section_name].end( );
+    // for(auto iter = _map_sections_config[section_name].begin( ); iter != end; ++iter)
+    // {
+    //     string value = (*iter).second;
+    //     ss << "(" + value + ")|";
+    // }
+
+    auto end = _list_config.end();
+    for(auto iter = _list_config.begin(); iter != end; ++iter)
     {
         string value = (*iter).second;
         ss << "(" + value + ")|";

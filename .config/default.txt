@@ -2,39 +2,33 @@
 # @file .config/default.txt
 # @date Tue, Oct 14, 2025  2:28:02 AM
 
-// todo...
-// NUMBER              = {0x200, [0-9]+}
-// PLUS                = {0x201, \+}
+# bkp todo...
+# NUMBER              = {0x200, [0-9]+}
+# PLUS                = {0x201, \+}
 
 #[global]
 
 # punctuations
-ASTERIK                = *
-AMPERSAND              = &
-SEMI_COLON             = :
-COMMA                  = ,
-DOT                    = .
-OPEN_PAREN             = (
-CLOSE_PAREN            = )
-OPEN_BRACKET           = [
-CLOSE_BRACKET          = ]
-OPEN_BRACE             = {
-CLOSE_BRACE            = }
-DOUBLE_QUOTE           = \
+ASTERIK                = \*
+AMPERSAND              = \&
+SEMI_COLON             = \:
+COMMA                  = \,
+DOT                    = \.
+OPEN_BRACKET           = \[
+CLOSE_BRACKET          = \]
+OPEN_BRACE             = \{
+CLOSE_BRACE            = \}
+DOUBLE_QUOTE           = "
 SINGLE_QUOTE           = '
 TICK_MARK              = `
 FORWARD_SLASH          = /
-BACKWARD_SLASH         = \
+BACKWARD_SLASH         = \\
 EQUAL                  = =
 TILDE                  = ~
-VBAR                   = |
+VBAR                   = \|
 CARROT                 = ^
 PERCENT                = %
-EXCLAMATION            = !
+EXCLAMATION            = \!
 # operators
-PLUS                   = +
-MINUS                  = -
-ID                     = [A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*
-SYM                    = ${ID}
-COMMENT                =\{[ \t]*\*[^*}]*\*[ \t]*\}
-FILE_NAME              =[A-Za-z0-9_.-~+#@]
+PLUS                   = \+
+MINUS                  = \-
