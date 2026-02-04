@@ -15,6 +15,7 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 #include <fmt/color.h>
+#include <boost/regex.hpp>
 #include "fileio.hpp"
 #include "Lexer.h"
 #include "utility.hpp"
@@ -264,8 +265,9 @@ void Lexer::build_expr( /*out*/ string& s )
     auto end = _list_config.end();
     for(auto iter = _list_config.begin(); iter != end; ++iter)
     {
+        string name = (*iter).first;
         string value = (*iter).second;
-        ss << "(" + value + ")|";
+        ss << "(?<" << name << ">" + value + ")|";
     }
     s = ss.str( );
     s.pop_back( );

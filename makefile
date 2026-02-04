@@ -55,7 +55,7 @@ endif
 all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx $(BLD)/ast_test 	#$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
 $(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.h $(BLD)/utility.o $(BLD)/ast.o
-	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
+	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) -I"/home/brian/src/boost_1_89_0" $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
 
 $(BLD)/ast_test: $(BLD)/ast.o
 	$(CXX) $(CXXFLAGS) -DAST_MAIN -fPIC -I./$(BLD) $^ $(LDFLAGS) -o $@
@@ -91,7 +91,7 @@ $(BLD)/calc: $(BLD)/scanner.hpp $(BLD)/calc.tab.c $(OBJ)/scanner.o
 	$(CXX) $(OBJ)/scanner.o $(BLD)/calc.tab.c -o $(BLD)/calc
 
 $(OBJ)/scanner.o: $(BLD)/calc.tab.h $(SRC)/scanner.hpp $(SRC)/scanner.cpp
-	$(CXX) -I./build -c $(SRC)/scanner.cpp -o $@
+	$(CXX) -I./build -I"/home/brian/src/boost_1_89_0" -c $(SRC)/scanner.cpp -o $@
 
 $(BLD)/calc.tab.c $(BLD)/calc.tab.h: $(SRC)/calc.y
 	$(YACC) --header -o $(BLD)/calc.tab.c -d $(SRC)/calc.y
@@ -117,7 +117,7 @@ $(BLD)/%.hpp: $(SRC)/%.hpp
 	cp $< $@
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXXFLAGS) -I$(ROOT)/build -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -I$(ROOT)/build -I"/home/brian/src/boost_1_89_0" -c $< -o $@
 
 .PHONY: all rebuild dist install uninstall clean help
 

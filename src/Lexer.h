@@ -15,6 +15,7 @@
 #include <map>
 #include <list>
 #include <regex>
+#include <boost/regex.hpp>
 
 using std::string;
 using std::vector;
@@ -138,6 +139,12 @@ protected:
 	std::sregex_iterator _end;
 	std::sregex_iterator* _p_iter;
 	map<string, pair<string, pair<int, string>>> _tokens;
+
+	boost::regex           _rexp2;
+	boost::sregex_iterator _begin2;
+	boost::sregex_iterator _end2;
+	boost::sregex_iterator _p_iter2;
+
 	// BKP ??
 	//     id        name   match
 	//map<int, pair<string, string>> _tokens;
