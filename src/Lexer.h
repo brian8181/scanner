@@ -24,6 +24,13 @@ using std::map;
 using std::pair;
 using std::regex;
 
+typedef struct NameValue
+{
+	int id;
+	string name;
+	string value;
+} NameValue;
+
 /**
   * @brief class Lexer
   */
@@ -124,6 +131,8 @@ protected:
 	map<string, string> _map_config;
 	// ordered list
 	list<pair<string, string>> _list_config;
+	// vector testing
+	vector<NameValue> _name_vals;
 	// bkp todo : revert to no configuration sections!
 	map<string, map<string, string>> _map_sections_config;
 	map<string, string> _map_vars;

@@ -118,6 +118,8 @@ void Lexer::load_config( const string &path )
     _map_sections_config.insert( sp );
 
     int len = lines.size( );
+    _name_vals.resize(len);
+    int j = 0;
     for(int i = 0; i < len; ++i)
     {
         string line = lines[i];
@@ -131,15 +133,19 @@ void Lexer::load_config( const string &path )
         {
             string symbol_name = match[ID_NAME].str( ); // get name
             string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
-            // unnecessary
-            //trim(value); // just in case, the rexp may do this
             // create pair
             pair<string, string> p( symbol_name, value );
             _map_sections_config[section_name].insert( p );
-            // ordered list
-            _list_config.push_back(p);
+            // vector
+            NameValue nv;
+            _name_vals[j] = nv;
+            _name_vals[j].id = 0x200 | (1 << j);
+            _name_vals[j].name = symbol_name;
+            _name_vals[j].value = value;
+            j++;
         }
     }
+    _name_vals.resize(j);
 }
 
 /**
@@ -262,12 +268,11 @@ void Lexer::build_expr( /*out*/ string& s )
     //     ss << "(" + value + ")|";
     // }
 
-    auto end = _list_config.end();
-    for(auto iter = _list_config.begin(); iter != end; ++iter)
+    int len = _name_vals.size();
+    for(int i = 0; i < len; ++i)
     {
-        string name = (*iter).first;
-        string value = (*iter).second;
-        ss << "(?<" << name << ">" + value + ")|";
+        NameValue nv = _name_vals[i];
+        ss << "(?<" << nv.name << ">" + nv.value + ")|";
     }
     s = ss.str( );
     s.pop_back( );
