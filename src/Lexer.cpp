@@ -97,13 +97,13 @@ bool Lexer::init( const string& file, const string &config_file )
 void Lexer::load_config( const string &path )
 {
     _config_file = path;
-    const unsigned int ID_NAME_VALUE_PAIR = 1;
-    const unsigned int ID_NAME = 2;
-    const unsigned int ID_VALUE = 5;
-    const unsigned int ID_CONFIG_COMMENT = 6;
-    const unsigned int ID_NUMERIC_LITERAL = 2;
-    const unsigned int ID_STRING_LITERAL = 3;
-    _map_sections_config.clear();
+    const unsigned int ID_SECTION = 2;
+    const unsigned int ID_NAME_VALUE_PAIR = 4;
+    const unsigned int ID_NAME = 3;
+    const unsigned int ID_VALUE = 6;
+    const unsigned int ID_CONFIG_COMMENT = 7;
+    const unsigned int ID_NUMERIC_LITERAL = 3;
+    const unsigned int ID_STRING_LITERAL = 4;
 
     // get configuration file by lines
     vector<string> lines;
@@ -113,31 +113,39 @@ void Lexer::load_config( const string &path )
     }
 
     int len = lines.size( );
-    _name_vals.resize(len);
+    _terminals.resize(len);
     int j = 0;
+    string section = "none";
     for(int i = 0; i < len; ++i)
     {
         string line = lines[i];
-        boost::regex rgx = boost::regex( "(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
+        boost::regex rgx = boost::regex( "(" + CONFIG_SECTION + ")|(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
         boost::smatch match;
         boost::regex_match( line, match, rgx );
-        // bkp todo...
-        // NUMBER              = {0x200, [0-9]+}
-        // PLUS                = {0x201, \+}
-        if(match[ID_NAME_VALUE_PAIR].matched)
+
+        if(match[1].matched)
+        {
+            cout << "section: " << match[1].str() << endl;
+            section = match[ID_SECTION].str();
+            //continue;
+        }
+        if(section == "tokens" && match[ID_NAME_VALUE_PAIR].matched)
         {
             string symbol_name = match[ID_NAME].str( ); // get name
             string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
             // vector
-            NameValue nv;
-            _name_vals[j] = nv;
-            _name_vals[j].id = 0x200 | (1 << j);
-            _name_vals[j].name = symbol_name;
-            _name_vals[j].value = value;
+            terminal term;
+            _terminals[j] = term;
+            _terminals[j].id = 0x200 | (1 << j);
+            _terminals[j].name = symbol_name;
+            _terminals[j].rexp = value;
             j++;
+
+            _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
+            cout << "Id: " << left << setw(15) << term.id << left << " Key: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
         }
     }
-    _name_vals.resize(j);
+    _terminals.resize(j);
 }
 
 /**
@@ -158,11 +166,11 @@ void Lexer::dump_config( const string& file )
 void Lexer::dump_config( )
 {
     stringstream ss;
-    int len = _name_vals.size();
+    int len = _terminals.size();
     for(int i = 0; i < len; ++i)
     {
-        NameValue nv = _name_vals[i];
-        ss << "Id: " << left << setw(15) << nv.id << left << " Key: " << left << setw(25) << nv.name << "Value: " << "\"" << nv.value << "\"" << endl;
+        terminal term = _terminals[i];
+        ss << "Id: " << left << setw(15) << term.id << left << " Key: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
     }
     cout << ss.str();
 }
@@ -178,27 +186,31 @@ int Lexer::get_token( /*out*/ unsigned int& token )
     token = ID_UNDEFINED;
     if(*_p_iter != _end)
     {
+        // need to look up by sub_match id
         boost::smatch what = *(*_p_iter);
         for(int i = 0; i < what.size(); ++i)
         {
             //std::string str(what[i].first, what[i].second);
+            //what[//token_id]
         }
+
 
         if( _token_map.contains( what.str( ) ) )
         {
-            token = _token_map[what.str( )].first;
-            string name = _token_map[what.str( )].second;
-            // ss << "{\n\ttoken__: " << token << "\n\tname: " << name << "\n\ttoken: '" << what.str( ) << "'\n\tpos: " << what.position( 0 ) << "\n}" << endl;
-            // color_print( ss.str( ), fg( fmt::color::antique_white ) );
-            // ss.clear( );
-            // create token ...
-            string match = what.str( );
-            std::pair<int, std::string> id( token, name );
-            std::pair<std::string, std::pair<int, std::string>> tok( match, id );
-            _tokens[match] = tok;
+            // tok = _token_map[what.str()].first;
+            // string name = _token_map[what.str( )].second;
+            // // ss << "{\n\ttoken__: " << token << "\n\tname: " << name << "\n\ttoken: '" << what.str( ) << "'\n\tpos: " << what.position( 0 ) << "\n}" << endl;
+            // // color_print( ss.str( ), fg( fmt::color::antique_white ) );
+            // // ss.clear( );
+            // // create token ...
+            // string match = what.str( );
+            // std::pair<int, std::string> id( token, name );
+            // std::pair<std::string, std::pair<int, std::string>> tok( match, id );
+            // token t;
+            // _tokens.push_back(t);
         }
         ++(*_p_iter);
-        on_token( token, what );
+        //on_token( token, what );
         return token;
     }
     return 0;
@@ -216,7 +228,7 @@ void Lexer::on_token( const unsigned int& token_, const boost::smatch& m )
 }
 
 /**
- * @brief  tokenize
+ * @brief  tokenize (depracated)
  * @param  const string &exp, regular expression to match
  * @param  const string &text, text to tokenize
  * @return void
@@ -226,10 +238,10 @@ void Lexer::tokenize( const string &exp, const string &text )
     stringstream ss;
     boost::regex rexp = boost::regex( exp, boost::regex::ECMAScript );
     boost::sregex_iterator begin = boost::sregex_iterator( text.begin( ), text.end( ), rexp );
-    //sregex_iterator end = sregex_iterator();
     boost::sregex_iterator end;
     for (boost::sregex_iterator iter = begin; iter != end; ++iter)
     {
+        // need to look up by sub_match id
         boost::smatch m = *iter;
         if( _token_map.contains( m.str( ) ) )
         {
@@ -254,12 +266,11 @@ void Lexer::tokenize( const string &exp, const string &text )
 void Lexer::build_expr( /*out*/ string& s )
 {
     stringstream ss;
-
-    int len = _name_vals.size();
+    int len = _terminals.size();
     for(int i = 0; i < len; ++i)
     {
-        NameValue nv = _name_vals[i];
-        ss << "(?<" << nv.name << ">" + nv.value + ")|";
+        terminal term = _terminals[i];
+        ss << "(?<" << term.name << ">" + term.rexp + ")|";
     }
     s = ss.str( );
     s.pop_back( );
@@ -282,6 +293,7 @@ void Lexer::print_token( )
 {
     if(*_p_iter != _end)
     {
+        // need to look up by sub_match id
         stringstream ss;
         boost::smatch m = *(*_p_iter);
         if( _token_map.contains( m.str( ) ) )

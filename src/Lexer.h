@@ -24,12 +24,34 @@ using std::map;
 using std::pair;
 using std::regex;
 
-typedef struct NameValue
+/* LEX TYPES */
+#define right_assoc 0x8
+#define left_assoc  0x20
+#define non_assoc   0x40
+#define start       0x1;
+
+typedef struct terminal
+{
+	int id;
+	string stype;
+	int itype;
+	int lex_t;
+	string name;
+	string rexp;
+} terminal;
+
+typedef struct token
+{
+	int id;
+	string value;
+} token;
+
+typedef struct state
 {
 	int id;
 	string name;
-	string value;
-} NameValue;
+} state;
+
 
 /**
   * @brief class Lexer
@@ -128,35 +150,24 @@ public:
 
 protected:
 	string _config_file;
-	map<string, string> _map_config;
-	// ordered list
-	list<pair<string, string>> _list_config;
 	// vector testing
-	vector<NameValue> _name_vals;
-	// bkp todo : revert to no configuration sections!
-	map<string, map<string, string>> _map_sections_config;
-	map<string, string> _map_vars;
-	map<string, string> _map_const;
-	map<string, vector<string>> _map_arrays;
-	map<string, pair<string, vector<string>>> map_objects;
+	vector<terminal> _terminals;
+	map<string, pair<int, string>> _token_map;
+	map<string, pair<state, vector<terminal>>> _terminal_map;
+	vector<token> _tokens;
+	// BKP ??
+	//     id        name   match
+	//map<int, pair<string, string>> _tokens;
+	//map<string, pair<string, pair<int, string>>> _tokens;
 
 	// current position & state : i.e. --> get_token
 	std::string _scan_file;
 	std::string _search_text;
-	// std::regex _rexp;
-	// std::sregex_iterator _begin;
-	// std::sregex_iterator _end;
-	// std::sregex_iterator* _p_iter;
-	map<string, pair<string, pair<int, string>>> _tokens;
 
 	boost::regex           _rexp;
 	boost::sregex_iterator _begin;
 	boost::sregex_iterator _end;
 	boost::sregex_iterator* _p_iter;
-
-	// BKP ??
-	//     id        name   match
-	//map<int, pair<string, string>> _tokens;
 };
 
 #endif

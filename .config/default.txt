@@ -2,33 +2,41 @@
 # @file .config/default.txt
 # @date Tue, Oct 14, 2025  2:28:02 AM
 
-# bkp todo...
-# NUMBER              = {0x200, [0-9]+}
-# PLUS                = {0x201, \+}
-
-#[global]
-
+[tokens]
 # punctuations
-ASTERIK                = \*
-AMPERSAND              = \&
-SEMI_COLON             = \:
-COMMA                  = \,
-DOT                    = \.
-OPEN_BRACKET           = \[
-CLOSE_BRACKET          = \]
-OPEN_BRACE             = \{
-CLOSE_BRACE            = \}
-DOUBLE_QUOTE           = "
-SINGLE_QUOTE           = '
-TICK_MARK              = `
-FORWARD_SLASH          = /
-BACKWARD_SLASH         = \\
-EQUAL                  = =
-TILDE                  = ~
-VBAR                   = \|
-CARROT                 = ^
-PERCENT                = %
-EXCLAMATION            = \!
+std::string  ASTERIK                = \*
+std::string  AMPERSAND              = \&
+std::string  SEMI_COLON             = \:
+std::string  COMMA                  = \,
+std::string  DOT                    = \.
+std::string  OPEN_BRACKET           = \[
+std::string  CLOSE_BRACKET          = \]
+std::string  OPEN_BRACE             = \{
+std::string  CLOSE_BRACE            = \}
+std::string  DOUBLE_QUOTE           = "
+std::string  SINGLE_QUOTE           = '
+std::string  TICK_MARK              = `
+std::string  FORWARD_SLASH          = /
+std::string  BACKWARD_SLASH         = \\
+std::string  EQUAL                  = =
+std::string  TILDE                  = ~
+std::string  VBAR                   = \|
+std::string  CARROT                 = ^
+std::string  PERCENT                = %
+std::string  EXCLAMATION            = \!
 # operators
-PLUS                   = \+
-MINUS                  = \-
+std::string  PLUS                   = \+
+std::string  MINUS                  = \-
+long         INT                    = [1-9][0-9]*
+double       DOUBLE                 = [0-9]*.[0.9]+
+std::string  SYMBOL                 = $[._a-zA-Z][._-+*a-zA-Z0-9]*
+char         EOF                    ='\0'
+
+[groups]
+all
+punctuation = {COMMA, DOT, OPEN_PAREN, CLOSE_PAREN, OPEN_BRACKET, CLOSE_BRACKET}
+valid_file_symbol = {}
+
+[states]
+INITIAL = {COMMA, DOT, OPEN_PAREN, CLOSE_PAREN, OPEN_BRACKET, CLOSE_BRACKET}
+ESACAPED = {}
