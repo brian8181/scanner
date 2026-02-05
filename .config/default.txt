@@ -4,32 +4,32 @@
 
 [tokens]
 # punctuations
-std::string  ASTERIK                = \*
-std::string  AMPERSAND              = \&
-std::string  SEMI_COLON             = \:
-std::string  COMMA                  = \,
-std::string  DOT                    = \.
-std::string  OPEN_BRACKET           = \[
-std::string  CLOSE_BRACKET          = \]
-std::string  OPEN_BRACE             = \{
-std::string  CLOSE_BRACE            = \}
-std::string  DOUBLE_QUOTE           = "
-std::string  SINGLE_QUOTE           = '
-std::string  TICK_MARK              = `
-std::string  FORWARD_SLASH          = /
-std::string  BACKWARD_SLASH         = \\
-std::string  EQUAL                  = =
-std::string  TILDE                  = ~
-std::string  VBAR                   = \|
-std::string  CARROT                 = ^
-std::string  PERCENT                = %
-std::string  EXCLAMATION            = \!
+string  ASTERIK                = \*
+string  AMPERSAND              = \&
+string  SEMI_COLON             = \:
+string  COMMA                  = \,
+string  DOT                    = \.
+string  OPEN_BRACKET           = \[
+string  CLOSE_BRACKET          = \]
+string  OPEN_BRACE             = \{
+string  CLOSE_BRACE            = \}
+string  DOUBLE_QUOTE           = "
+string  SINGLE_QUOTE           = '
+string  TICK_MARK              = `
+string  FORWARD_SLASH          = /
+string  BACKWARD_SLASH         = \\
+string  EQUAL                  = =
+string  TILDE                  = ~
+string  VBAR                   = \|
+string  CARROT                 = ^
+string  PERCENT                = %
+string  EXCLAMATION            = \!
 # operators
-std::string  PLUS                   = \+
-std::string  MINUS                  = \-
+string  PLUS                   = \+
+string  MINUS                  = \-
 long         INT                    = [1-9][0-9]*
 double       DOUBLE                 = [0-9]*.[0.9]+
-std::string  SYMBOL                 = $[._a-zA-Z][._-+*a-zA-Z0-9]*
+string  SYMBOL                 = $[._a-zA-Z][._-+*a-zA-Z0-9]*
 char         EOF                    ='\0'
 
 [groups]

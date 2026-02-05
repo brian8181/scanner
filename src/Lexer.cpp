@@ -98,8 +98,9 @@ void Lexer::load_config( const string &path )
 {
     _config_file = path;
     const unsigned int ID_SECTION = 2;
-    const unsigned int ID_NAME_VALUE_PAIR = 4;
-    const unsigned int ID_NAME = 3;
+    const unsigned int ID_NAME_VALUE_PAIR = 3;
+    const unsigned int ID_TYPE = 4;
+    const unsigned int ID_NAME = 5;
     const unsigned int ID_VALUE = 6;
     const unsigned int ID_CONFIG_COMMENT = 7;
     const unsigned int ID_NUMERIC_LITERAL = 3;
@@ -122,27 +123,38 @@ void Lexer::load_config( const string &path )
         boost::regex rgx = boost::regex( "(" + CONFIG_SECTION + ")|(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
         boost::smatch match;
         boost::regex_match( line, match, rgx );
+        // bkp testing
+        // for(int i = 0; i < match.size(); ++i)
+        // {
+        //     cout << "line#="  << i << endl;
+        //     cout << "smatch[" << i << "] = \"" << match[i] << "\" : matched=" << match[i].matched <<  endl;
+        //     //cout << "smatch[" << i << "].second" << match[i].second << endl;
+        // }
 
-        if(match[1].matched)
+        if(match[ID_SECTION].matched)
         {
             cout << "section: " << match[1].str() << endl;
             section = match[ID_SECTION].str();
-            //continue;
+            continue;
         }
         if(section == "tokens" && match[ID_NAME_VALUE_PAIR].matched)
         {
             string symbol_name = match[ID_NAME].str( ); // get name
-            string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
+            //string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
+            string value = match[ID_VALUE];
+            string stype = match[ID_TYPE].str();
             // vector
             terminal term;
+            term = term;
+            term.id = 0x200 | (1 << j);
+            term.stype = stype;
+            term.name = symbol_name;
+            term.rexp = value;
             _terminals[j] = term;
-            _terminals[j].id = 0x200 | (1 << j);
-            _terminals[j].name = symbol_name;
-            _terminals[j].rexp = value;
             j++;
 
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
-            cout << "Id: " << left << setw(15) << term.id << left << " Key: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
+            cout << "Type: " << term.stype << " Id: " << left << setw(15) << term.id << left << " Name: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
         }
     }
     _terminals.resize(j);
@@ -188,11 +200,11 @@ int Lexer::get_token( /*out*/ unsigned int& token )
     {
         // need to look up by sub_match id
         boost::smatch what = *(*_p_iter);
-        for(int i = 0; i < what.size(); ++i)
-        {
-            //std::string str(what[i].first, what[i].second);
-            //what[//token_id]
-        }
+        // for(int i = 0; i < what.size(); ++i)
+        // {
+        //     cout << "smatch[" << i << "].first" << what[i].first << endl;
+        //     cout << "smatch[" << i << "].second" << what[i].second << endl;
+        // }
 
 
         if( _token_map.contains( what.str( ) ) )
