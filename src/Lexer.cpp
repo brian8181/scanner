@@ -107,8 +107,6 @@ void Lexer::load_config( const string &path )
     // const unsigned int ID_TYPE = 6;
     // const unsigned int ID_NAME = 7;
     // const unsigned int ID_VALUE = 8;
-
-
     // const unsigned int ID_CONFIG_COMMENT = 7;
     // const unsigned int ID_NUMERIC_LITERAL = 3;
     // const unsigned int ID_STRING_LITERAL = 4;
@@ -148,10 +146,10 @@ void Lexer::load_config( const string &path )
         }
         if(section == "tokens" && match[ID_NAME_VALUE_PAIR].matched)
         {
-            string symbol_name = match[ID_NAME].str(); // get name
+            string symbol_name = match["name"].str(); // get name
             //string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
-            string value = match[ID_VALUE].str();
-            string stype = match[ID_TYPE].str();
+            string value = match["rexp"].str();
+            string stype = match["type"].str();
             // vector
             terminal term;
             term.id = 0x200 | (1 << j);
