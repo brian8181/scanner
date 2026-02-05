@@ -102,9 +102,16 @@ void Lexer::load_config( const string &path )
     const unsigned int ID_TYPE = 4;
     const unsigned int ID_NAME = 5;
     const unsigned int ID_VALUE = 6;
-    const unsigned int ID_CONFIG_COMMENT = 7;
-    const unsigned int ID_NUMERIC_LITERAL = 3;
-    const unsigned int ID_STRING_LITERAL = 4;
+
+    // const unsigned int ID_NAME_VALUE_PAIR = 5;
+    // const unsigned int ID_TYPE = 6;
+    // const unsigned int ID_NAME = 7;
+    // const unsigned int ID_VALUE = 8;
+
+
+    // const unsigned int ID_CONFIG_COMMENT = 7;
+    // const unsigned int ID_NUMERIC_LITERAL = 3;
+    // const unsigned int ID_STRING_LITERAL = 4;
 
     // get configuration file by lines
     vector<string> lines;
@@ -123,29 +130,30 @@ void Lexer::load_config( const string &path )
         boost::regex rgx = boost::regex( "(" + CONFIG_SECTION + ")|(" + CONFIG_PAIR + ")|(" + CONFIG_COMMENT + ")"  );
         boost::smatch match;
         boost::regex_match( line, match, rgx );
-        // bkp testing
-        // for(int i = 0; i < match.size(); ++i)
-        // {
-        //     cout << "line#="  << i << endl;
-        //     cout << "smatch[" << i << "] = \"" << match[i] << "\" : matched=" << match[i].matched <<  endl;
-        //     //cout << "smatch[" << i << "].second" << match[i].second << endl;
-        // }
+
+        #define DEBUG_TEST
+        #ifdef DEBUG_TEST
+        for(int i = 0; i < match.size(); ++i)
+        {
+            cout << "line#="  << i << endl;
+            cout << "smatch[" << i << "] = \"" << match[i] << "\" : matched=" << match[i].matched <<  endl;
+        }
+        #endif
 
         if(match[ID_SECTION].matched)
         {
-            cout << "section: " << match[1].str() << endl;
+            cout << "section: " << match[ID_SECTION].str() << endl;
             section = match[ID_SECTION].str();
             continue;
         }
         if(section == "tokens" && match[ID_NAME_VALUE_PAIR].matched)
         {
-            string symbol_name = match[ID_NAME].str( ); // get name
+            string symbol_name = match[ID_NAME].str(); // get name
             //string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
-            string value = match[ID_VALUE];
+            string value = match[ID_VALUE].str();
             string stype = match[ID_TYPE].str();
             // vector
             terminal term;
-            term = term;
             term.id = 0x200 | (1 << j);
             term.stype = stype;
             term.name = symbol_name;

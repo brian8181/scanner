@@ -11,3 +11,4 @@ git push
 PrintGreen "\nChanges pushed to remote repository.\n"
 git log --oneline -5
 PrintGreen "\nLast 5 commits displayed.\n"
+q
