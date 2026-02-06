@@ -97,11 +97,10 @@ bool Lexer::init( const string& file, const string &config_file )
 void Lexer::load_config( const string &path )
 {
     _config_file = path;
-    const unsigned int ID_SECTION = 1;
-    const unsigned int ID_NAME_VALUE_PAIR = 3;
-    const unsigned int ID_TYPE = 4;
-    const unsigned int ID_NAME = 5;
-    const unsigned int ID_VALUE = 6;
+    const unsigned int ID_NAME_VALUE_PAIR = 1;
+    const unsigned int ID_TYPE = 2;
+    const unsigned int ID_NAME = 3;
+    const unsigned int ID_VALUE = 4;
     // const unsigned int ID_CONFIG_COMMENT = 7;
     // const unsigned int ID_NUMERIC_LITERAL = 3;
     // const unsigned int ID_STRING_LITERAL = 4;
@@ -142,7 +141,7 @@ void Lexer::load_config( const string &path )
         boost::smatch terminal_match;
         boost::regex_match( line, terminal_match, config_rgx );
 
-        if(terminal_match[ID_NAME_VALUE_PAIR].matched && section == "tokens")
+        if(terminal_match[ID_NAME_VALUE_PAIR].matched)
         {
             string name = terminal_match["name"].str(); // get name
             //string value = (terminal_match[ID_VALUE].matched) ? terminal_match[ID_NUMERIC_LITERAL].str( ) : terminal_match[ID_STRING_LITERAL].str( ); // get value
@@ -168,6 +167,43 @@ void Lexer::load_config( const string &path )
 
      string groups_section = states_match.prefix();
      string states_section = states_match.suffix();
+
+    // stream it line by line to parse tokens section
+    std::istringstream input2;
+    input2.str(states_section);
+    for (std::string line; std::getline(input2, line);)
+    {
+        cout << "DEBUG : line=" << line << endl;
+        boost::regex config_states_rgx = boost::regex( CONFIG_STATES );
+        boost::smatch states_match;
+        boost::regex_match( line, states_match, config_states_rgx );
+
+        if(states_match[1].matched)
+        {
+            string state = states_match["state"].str(); // get name
+            //string value = (states_match[ID_VALUE].matched) ? states_match[ID_NUMERIC_LITERAL].str( ) : states_match[ID_STRING_LITERAL].str( ); // get value
+            string tokens = states_match["tokens"].str();
+            // copy to term to vector
+            vector<string> terminals;
+            std::stringstream ss(tokens);
+            std::string token;
+
+            // Use getline to extract characters from the stream (ss) until a comma (',') is found
+            while (std::getline(ss, token, ','))
+            {
+                terminals.push_back(trim(token));
+            }
+
+            std::pair<string, vector<string>> state_map(state, terminals);
+            cout << "state: " << state << " tokens: " << left << setw(15) << tokens << endl;
+
+            // debug Print the tokens
+            for (const std::string& tok : terminals)
+            {
+                std::cout << tok << std::endl;
+            }
+        }
+    }
 }
 
 /**
