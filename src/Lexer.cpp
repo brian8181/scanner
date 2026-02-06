@@ -111,27 +111,28 @@ void Lexer::load_config( const string &path )
     string s;
     int n = read_str( _config_file, s);
     boost::regex rgx = boost::regex( CONFIG_SECTIONS );
-    boost::smatch section_match1;
-    // begins section
-    boost::regex_search( s, section_match1, rgx, boost::match_not_bol | boost::match_not_eol );
+    boost::smatch terminal_match;
+    // begins terminal section
+    boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
     cout << _config_file << "=" << endl << s;
     /*debug / testing*/
-    for(int i = 0; i < section_match1.size(); ++i)
+    for(int i = 0; i < terminal_match.size(); ++i)
     {
-        cout << "smatch[" << i << "] = \"" << section_match1[i] << "\" : matched=" << section_match1[i].matched <<  endl;
+        cout << "smatch[" << i << "] = \"" << terminal_match[i] << "\" : matched=" << terminal_match[i].matched <<  endl;
     }
 
-    boost::smatch section_match2;
-    // ends section match
-    string suffix = section_match1.suffix();
-    boost::regex_search(suffix, section_match2, rgx, boost::match_not_bol | boost::match_not_eol);
+    boost::smatch groups_match;
+    // ends terminal section, begin group section
+    string terminal_suffix = terminal_match.suffix();
+    boost::regex_search(terminal_suffix, groups_match, rgx, boost::match_not_bol | boost::match_not_eol);
     /*debug / testing*/
-    for(int i = 0; i < section_match2.size(); ++i)
+    for(int i = 0; i < groups_match.size(); ++i)
     {
-        cout << "smatch[" << i << "] = \"" << section_match2[i] << "\" : matched=" << section_match2[i].matched <<  endl;
+        cout << "smatch[" << i << "] = \"" << groups_match[i] << "\" : matched=" << groups_match[i].matched <<  endl;
     }
+
     // now get section
-    string token_section = section_match2.prefix();
+    string token_section = groups_match.prefix();
     // stream it line by line to parse tokens section
     std::istringstream input;
     input.str(token_section);
@@ -150,84 +151,23 @@ void Lexer::load_config( const string &path )
             // copy to term to vector
             terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(stype), string(value) };
             _terminals.push_back(term);
-
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
             cout << "Type: " << term.stype << " Id: " << left << setw(15) << term.id << left << " Name: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
         }
-
     }
 
+    boost::smatch states_match;
+    // ends group section, begin states section
+    string groups_suffix = groups_match.suffix();
+    boost::regex_search(groups_suffix, states_match, rgx, boost::match_not_bol | boost::match_not_eol);
+    /*debug / testing*/
+    for(int i = 0; i < states_match.size(); ++i)
+    {
+        cout << "smatch[" << i << "] = \"" << states_match[i] << "\" : matched=" << states_match[i].matched <<  endl;
+    }
 
-
-    /* tesing */
-    // CONFIG = string("(?<section>\\s*\\[(?<name>[a-zA-Z][a-zA-Z0-9]*)\\]\\s*)");
-    // cout << "CONFIG = \"" << CONFIG << "\"" << endl;
-
-    // get configuration file by lines
-    // vector<string> lines;
-
-    // if(! read_lines( _config_file, lines ) )
-    // {
-    //     cerr << "error: read_lines ..." << endl;
-    // }
-    //CONFIG_SECTIONS
-    //string line = lines[i];
-
-    // int len = lines.size( );
-    // _terminals.resize(len);
-    // int j = 0;
-    // string section = "none";
-    // for(int i = 0; i < len; ++i)
-    // {
-    //     string line = lines[i];
-    //     boost::regex rgx = boost::regex( CONFIG  );
-    //     boost::smatch match;
-    //     boost::regex_match( line, match, rgx );
-
-    //     for(int i = 0; i < match.size(); ++i)
-    //     {
-    //         cout << "line#="  << i << endl;
-    //         cout << "smatch[" << i << "] = \"" << match[i] << "\" : matched=" << match[i].matched <<  endl;
-    //     }
-
-    //     //string bs = string(match["section"]);
-    //     // if(match["section"].second != match["section"].end())
-    //     // {
-    //     //     int m = match["section"].matched;
-    //     //     cout << "m=" << m << endl;
-    //     // }
-
-    //     cout << "empty=" << match.empty() << endl;
-
-    //     if(match[ID_SECTION].matched)
-    //     {
-    //         cout << "m=" << match << endl;
-    //         section = match["section"].str();
-    //         cout << "section: " << section << endl;
-    //         /* testing */
-    //         //return;
-    //         continue;
-    //     }
-
-    //     if(match[ID_NAME_VALUE_PAIR].matched && section == "tokens")
-    //     {
-    //         string symbol_name = match["name"].str(); // get name
-    //         //string value = (match[ID_VALUE].matched) ? match[ID_NUMERIC_LITERAL].str( ) : match[ID_STRING_LITERAL].str( ); // get value
-    //         string value = match["rexp"].str();
-    //         string stype = match["type"].str();
-    //         // vector
-    //         terminal term;
-    //         term.id = 0xFF + (j*0x06);
-    //         term.stype = stype;
-    //         term.name = symbol_name;
-    //         term.rexp = value;
-    //         _terminals[j] = term;
-    //         j++;
-    //         _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
-    //         cout << "Type: " << term.stype << " Id: " << left << setw(15) << term.id << left << " Name: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
-    //     }
-    // }
-    // _terminals.resize(j);
+     string groups_section = states_match.prefix();
+     string states_section = states_match.suffix();
 }
 
 /**
