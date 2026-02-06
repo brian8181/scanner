@@ -191,7 +191,6 @@ void Lexer::load_config( const string &path )
             }
             std::pair<string, vector<string>> state_map(state, terminals);
 
-
             // // debug Print the tokens
             // for (const std::string& tok : terminals)
             // {
