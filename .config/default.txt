@@ -5,9 +5,9 @@
 [tokens]
 # punctuations
 string  ASTERIK                = \*
-string  AMPERSAND              = \&
-string  SEMI_COLON             = \:
-string  COMMA                  = \,
+string  AMPERSAND              = &
+string  SEMI_COLON             = :
+string  COMMA                  = ,
 string  DOT                    = \.
 string  OPEN_BRACKET           = \[
 string  CLOSE_BRACKET          = \]
@@ -21,15 +21,15 @@ string  BACKWARD_SLASH         = \\
 string  EQUAL                  = =
 string  TILDE                  = ~
 string  VBAR                   = \|
-string  CARROT                 = ^
+string  CARROT                 = \^
 string  PERCENT                = %
-string  EXCLAMATION            = \!
+string  EXCLAMATION            = !
 # operators
-string  PLUS                   = \+
-string  MINUS                  = \-
-long         INT                    = [1-9][0-9]*
-double       DOUBLE                 = [0-9]*.[0.9]+
-string  SYMBOL                 = $[._a-zA-Z][._-+*a-zA-Z0-9]*
+string  PLUS                    = \+
+string  MINUS                   = \-
+long         INT               = [1-9][0-9]*
+double       DOUBLE            = [0-9]*.[0.9]+
+string  SYMBOL                 = \$[a-zA-Z][a-zA-Z0-9]*
 char         EOF                    ='\0'
 
 [groups]

@@ -79,11 +79,12 @@ bool Lexer::init( const string& file, const string &config_file )
     _search_text = sstrm.str( );
     // build expression ...
     string exp;
-    build_expr(exp);
-    //cout << "exp=" << exp << endl;
+    get_expr(exp);
+    cout << "exp: \"" << exp << "\"" << endl;
     //_rexp = regex( exp, regex::ECMAScript );
     // testing
-    _rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
+    //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
+    _rexp = boost::regex( exp, boost::regex::ECMAScript );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
     return r;
@@ -122,14 +123,12 @@ void Lexer::load_config( const string &path )
     const unsigned int ID_NAME = 3;
     const unsigned int ID_VALUE = 4;
 
-    int j = 0;
     string section = "none";
     string s;
     int n = read_str( _config_file, s);
 
     boost::regex rgx = boost::regex( CONFIG_SECTIONS );
     boost::smatch terminal_match;
-
     // begins terminal section
     boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
     boost::smatch groups_match;
@@ -142,6 +141,7 @@ void Lexer::load_config( const string &path )
     // stream it line by line to parse tokens section
     std::istringstream input1;
     input1.str(token_section);
+    int j = 0;
     for (std::string line; std::getline(input1, line); j++)
     {
         boost::regex config_rgx = boost::regex( CONFIG );
@@ -154,15 +154,15 @@ void Lexer::load_config( const string &path )
             string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
             // copy to term to vector
-            terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(stype), string(expr) };
+            terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(name), string(expr) };
             _terminals.push_back(term);
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
         }
     }
 
-    boost::smatch states_match;
     // ends group section, begin states section
     string groups_suffix = groups_match.suffix();
+    boost::smatch states_match;
     boost::regex_search(groups_suffix, states_match, rgx, boost::match_not_bol | boost::match_not_eol);
     string groups_section = states_match.prefix();
     string states_section = states_match.suffix();
@@ -173,9 +173,7 @@ void Lexer::load_config( const string &path )
     for (std::string line; std::getline(input2, line);)
     {
         boost::regex config_states_rgx = boost::regex( CONFIG_STATES );
-        boost::smatch states_match;
         boost::regex_match( line, states_match, config_states_rgx );
-
         if(states_match[1].matched)
         {
             string state = states_match["state"].str();
@@ -222,7 +220,9 @@ void Lexer::dump_config( )
     for(int i = 0; i < len; ++i)
     {
         terminal term = _terminals[i];
-        ss << "Id: " << left << setw(15) << term.id << left << " Key: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
+        ss << "Id: " << left << setw(15) << term.id << left << " name: " << left << setw(25) << term.name <<
+            " type: " << left << setw(15) << term.stype << \
+            " rexp: " << left << "\"" << term.rexp << "\"" << endl;
     }
     cout << ss.str();
 
@@ -324,15 +324,17 @@ void Lexer::tokenize( const string &exp, const string &text )
 /**
  * @brief print regex expression to stdout
  */
-void Lexer::build_expr( /*out*/ string& s )
+void Lexer::get_expr( /*out*/ string& s )
 {
     stringstream ss;
     int len = _terminals.size();
     for(int i = 0; i < len; ++i)
     {
         terminal term = _terminals[i];
-        ss << "(?<" << term.name << ">" + term.rexp + ")|";
+        //ss << "(?<" << term.name << ">" + term.rexp + ")|";
+        ss << "(" << term.rexp << ")|";
     }
+
     s = ss.str( );
     s.pop_back( );
 }
@@ -343,7 +345,7 @@ void Lexer::build_expr( /*out*/ string& s )
 void Lexer::print_expr( )
 {
     string s;
-    build_expr(s);
+    get_expr(s);
     cout << s << endl;
 }
 

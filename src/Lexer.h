@@ -48,7 +48,7 @@ using std::regex;
 #define FLOAT 2
 
 
-vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
+//vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
 
 typedef struct terminal
 {
@@ -159,7 +159,7 @@ public:
 	/**
  	* @brief build experssion
  	*/
-	void build_expr( /*out*/ string& s );
+	void get_expr( /*out*/ string& s );
 
 	/**
      * @brief print regex expression to stdout
