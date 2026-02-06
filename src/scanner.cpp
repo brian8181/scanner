@@ -107,13 +107,13 @@ int parse_options(int argc, char* argv[])
     // begin lexer ...
     Lexer lexer(file, config_file);
     cout << "sannner configured." << endl;
-
-    cout << "test scanning ..." << endl;
     unsigned int token = 0;
+    cout << "lexing ...";
     while( lex() )
     {
-        //lexer.print_token();
+        cout << ".";
     }
+    cout << endl;
 
     cout << "finished scanning. " << endl;
     if(dump_flag)
@@ -122,8 +122,7 @@ int parse_options(int argc, char* argv[])
         lexer.dump_config();
         cout << "configuration dumped." << endl;
     }
-    cout << "print expression ..." << endl;
-    lexer.print_expr();
+
     return 0;
 }
 

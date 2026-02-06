@@ -80,7 +80,7 @@ bool Lexer::init( const string& file, const string &config_file )
     // build expression ...
     string exp;
     build_expr(exp);
-    cout << "exp=" << exp << endl;
+    //cout << "exp=" << exp << endl;
     //_rexp = regex( exp, regex::ECMAScript );
     // testing
     _rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
@@ -113,22 +113,22 @@ void Lexer::load_config( const string &path )
     boost::smatch terminal_match;
     // begins terminal section
     boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
-    cout << _config_file << "=" << endl << s;
-    /*debug / testing*/
-    for(int i = 0; i < terminal_match.size(); ++i)
-    {
-        cout << "smatch[" << i << "] = \"" << terminal_match[i] << "\" : matched=" << terminal_match[i].matched <<  endl;
-    }
+    //cout << _config_file << "=" << endl << s;
+    // /*debug / testing*/
+    // for(int i = 0; i < terminal_match.size(); ++i)
+    // {
+    //     cout << "smatch[" << i << "] = \"" << terminal_match[i] << "\" : matched=" << terminal_match[i].matched <<  endl;
+    // }
 
     boost::smatch groups_match;
     // ends terminal section, begin group section
     string terminal_suffix = terminal_match.suffix();
     boost::regex_search(terminal_suffix, groups_match, rgx, boost::match_not_bol | boost::match_not_eol);
-    /*debug / testing*/
-    for(int i = 0; i < groups_match.size(); ++i)
-    {
-        cout << "smatch[" << i << "] = \"" << groups_match[i] << "\" : matched=" << groups_match[i].matched <<  endl;
-    }
+    // /*debug / testing*/
+    // for(int i = 0; i < groups_match.size(); ++i)
+    // {
+    //     cout << "smatch[" << i << "] = \"" << groups_match[i] << "\" : matched=" << groups_match[i].matched <<  endl;
+    // }
 
     // now get section
     string token_section = groups_match.prefix();
@@ -138,20 +138,19 @@ void Lexer::load_config( const string &path )
     for (std::string line; std::getline(input, line); j++)
     {
         boost::regex config_rgx = boost::regex( CONFIG );
-        boost::smatch terminal_match;
-        boost::regex_match( line, terminal_match, config_rgx );
+        boost::smatch token_match;
+        boost::regex_match( line, token_match, config_rgx );
 
-        if(terminal_match[ID_NAME_VALUE_PAIR].matched)
+        if(token_match[ID_NAME_VALUE_PAIR].matched)
         {
-            string name = terminal_match["name"].str(); // get name
-            //string value = (terminal_match[ID_VALUE].matched) ? terminal_match[ID_NUMERIC_LITERAL].str( ) : terminal_match[ID_STRING_LITERAL].str( ); // get value
-            string value = terminal_match["rexp"].str();
-            string stype = terminal_match["type"].str();
+            string name = token_match["name"].str();
+            string value = token_match["rexp"].str();
+            string stype = token_match["type"].str();
             // copy to term to vector
             terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(stype), string(value) };
             _terminals.push_back(term);
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
-            cout << "Type: " << term.stype << " Id: " << left << setw(15) << term.id << left << " Name: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
+            //cout << "Type: " << term.stype << " Id: " << left << setw(15) << term.id << left << " Name: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
         }
     }
 
@@ -159,11 +158,11 @@ void Lexer::load_config( const string &path )
     // ends group section, begin states section
     string groups_suffix = groups_match.suffix();
     boost::regex_search(groups_suffix, states_match, rgx, boost::match_not_bol | boost::match_not_eol);
-    /*debug / testing*/
-    for(int i = 0; i < states_match.size(); ++i)
-    {
-        cout << "smatch[" << i << "] = \"" << states_match[i] << "\" : matched=" << states_match[i].matched <<  endl;
-    }
+    // /*debug / testing*/
+    // for(int i = 0; i < states_match.size(); ++i)
+    // {
+    //     cout << "smatch[" << i << "] = \"" << states_match[i] << "\" : matched=" << states_match[i].matched <<  endl;
+    // }
 
      string groups_section = states_match.prefix();
      string states_section = states_match.suffix();
@@ -173,35 +172,31 @@ void Lexer::load_config( const string &path )
     input2.str(states_section);
     for (std::string line; std::getline(input2, line);)
     {
-        cout << "DEBUG : line=" << line << endl;
         boost::regex config_states_rgx = boost::regex( CONFIG_STATES );
         boost::smatch states_match;
         boost::regex_match( line, states_match, config_states_rgx );
 
         if(states_match[1].matched)
         {
-            string state = states_match["state"].str(); // get name
-            //string value = (states_match[ID_VALUE].matched) ? states_match[ID_NUMERIC_LITERAL].str( ) : states_match[ID_STRING_LITERAL].str( ); // get value
+            string state = states_match["state"].str();
             string tokens = states_match["tokens"].str();
             // copy to term to vector
             vector<string> terminals;
             std::stringstream ss(tokens);
             std::string token;
-
-            // Use getline to extract characters from the stream (ss) until a comma (',') is found
+            // Use getline to split stream on comma
             while (std::getline(ss, token, ','))
             {
                 terminals.push_back(trim(token));
             }
-
             std::pair<string, vector<string>> state_map(state, terminals);
-            cout << "state: " << state << " tokens: " << left << setw(15) << tokens << endl;
 
-            // debug Print the tokens
-            for (const std::string& tok : terminals)
-            {
-                std::cout << tok << std::endl;
-            }
+
+            // // debug Print the tokens
+            // for (const std::string& tok : terminals)
+            // {
+            //     std::cout << tok << std::endl;
+            // }
         }
     }
 }
