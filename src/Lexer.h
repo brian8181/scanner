@@ -30,19 +30,25 @@ using std::regex;
 #define non_assoc   0x40
 #define start       0x1;
 
-// const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
-// const string VALID_CHARS          = "[ [:punct:][:alnum:]]"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`
-// const string VALID_FILE_CHARS     = "[A-Za-z0-9_. ]";
-// const string TOKEN_TYPE           = "[A-Za-z][A-Za-z_]*((::)[A-Za-z_]*)?";
-// const string TOKEN_TYPE_           = "[A-Za-z][A-Za-z_]*";
-// const string CONFIG_PAIR          = "\\s*(?<type>" + TOKEN_TYPE_ + ")\\s+(?<name>[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(?<rexp>" + VALID_CHARS + "*)\\s*";
-// const string CONFIG_STATES        = "(?<states>^\\s*(?<state>[A-Za-z][A-Za-z0-9_]*)\\s*=\\s*\\s*\\{(?<tokens>[A-Za-z][A-Za-z0-9_]*(, [A-Za-z][A-Za-z0-9_]*)*)\\}\\s*\\s*$)";
-// //const string CONFIG_PAIR          = "\\s*(" + TOKEN_TYPE_ + ")\\s+([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(" + VALID_CHARS + "*)\\s*";
-// const string CONFIG_PAIR_VAR      = "\\s*\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*($[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*";
-// const string CONFIG_SECTION       = "\\s*\\[(?<section>[a-zA-Z][a-zA-Z0-9]*)\\]\\s*";
-// const string CONFIG_SECTIONS      = "^\\s*\\[\\s*(?<tokens>tokens)|(?<groups>groups)|(?<states>states)\\s*\\]\\s*$";
-// const string CONFIG_COMMENT       = "^\\s*#.*$";
-// const string CONFIG               = "(?<pairs>" + CONFIG_PAIR + ")|(?<comments>" + CONFIG_COMMENT + ")";
+	// const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
+	// const string VALID_CHARS          = "[ [:punct:][:alnum:]]"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`
+	// const string VALID_FILE_CHARS     = "[A-Za-z0-9_. ]";
+	// const string TOKEN_TYPE           = "[A-Za-z][A-Za-z_]*((::)[A-Za-z_]*)?";
+	// const string TOKEN_TYPE_           = "[A-Za-z][A-Za-z_]*";
+	// const string CONFIG_PAIR          = "\\s*(?<type>" + TOKEN_TYPE_ + ")\\s+(?<name>[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(?<rexp>" + VALID_CHARS + "*)\\s*";
+	// const string CONFIG_STATES        = "(?<states>^\\s*(?<state>[A-Za-z][A-Za-z0-9_]*)\\s*=\\s*\\s*\\{(?<tokens>[A-Za-z][A-Za-z0-9_]*(, [A-Za-z][A-Za-z0-9_]*)*)\\}\\s*\\s*$)";
+	// //const string CONFIG_PAIR          = "\\s*(" + TOKEN_TYPE_ + ")\\s+([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(" + VALID_CHARS + "*)\\s*";
+	// const string CONFIG_PAIR_VAR      = "\\s*\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*($[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*";
+	// const string CONFIG_SECTION       = "\\s*\\[(?<section>[a-zA-Z][a-zA-Z0-9]*)\\]\\s*";
+	// const string CONFIG_SECTIONS      = "^\\s*\\[\\s*(?<tokens>tokens)|(?<groups>groups)|(?<states>states)\\s*\\]\\s*$";
+	// const string CONFIG_COMMENT       = "^\\s*#.*$";
+	// const string CONFIG               = "(?<pairs>" + CONFIG_PAIR + ")|(?<comments>" + CONFIG_COMMENT + ")";
+
+#define INT 1
+#define FLOAT 2
+
+
+vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
 
 typedef struct terminal
 {
@@ -58,13 +64,17 @@ typedef struct token
 {
 	int id;
 	string value;
+	string stype;
+	int itype;
+	int lex_t;
+	string name;
 } token;
 
-typedef struct state
+typedef struct lex_state
 {
 	int id;
 	string name;
-} state;
+} lex_state;
 
 
 /**
@@ -167,7 +177,8 @@ protected:
 	// vector testing
 	vector<terminal> _terminals;
 	map<string, pair<int, string>> _token_map;
-	map<string, pair<state, vector<terminal>>> _terminal_map;
+	map<string, pair<lex_state, vector<terminal>>> _terminal_map;
+
 	vector<token> _tokens;
 	// BKP ??
 	//     id        name   match

@@ -4,10 +4,13 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <regex>
 
 using std::string;
 using std::vector;
 using std::map;
+using std::regex;
+using std::smatch;
 
 /**
  * @name   get_config
@@ -16,6 +19,36 @@ using std::map;
  * @return map<string, string>&
  */
 std::map<string, string>& get_config(const string& path, /* out */ map<string, string>& config);
+
+/**
+ * @brief single match
+ * @param pattern
+ * @param text
+ * @param match
+ * @return true if only one match & match string size equals text size
+ */
+bool match_single(const string& pattern, const string& text, /* out */ smatch& match);
+
+/**
+ * @brief single match
+ * @param pattern
+ * @param text
+ * @return true if only one match & match string size equals text size
+ */
+bool match_single(const string& pattern, const string& text);
+
+/**
+ * @brief split string
+ * @param s : input string
+ * @param c : delimter
+ * @return std::vector<std::string> // ???
+ */
+std::vector<std::string> split(const std::string& s, char c);
+
+/**
+ *
+ */
+std::vector<std::string> split(const std::string &str, std::string regex);
 
 /**
  * @brief print color

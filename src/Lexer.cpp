@@ -89,6 +89,26 @@ bool Lexer::init( const string& file, const string &config_file )
     return r;
 }
 
+void LEX()
+{
+    //ex1
+    // std::stringstream ss(sText);
+    // std::string item;
+    // const regex re{"((?:[^\\\\,]|\\\\.)*?)(?:,|$)"};
+    // std::getline(ss, item)
+    // m_vecFields.insert(m_vecFields.end(), sregex_token_iterator(item.begin(), item.end(), re, 1), sregex_token_iterator());
+
+    //ex2
+    // const regex re{"((?:[^\\\\,]|\\\\.)*?)(?:,|$)"};
+    // vector<string> m_vecFields{sregex_token_iterator(item.begin(), item.end(), re, 1), sregex_token_iterator()};
+
+    string s = "This is a string of tokens";
+
+    boost::regex re("a|b|c|d|e|f");
+    boost::sregex_token_iterator i(s.begin(), s.end(), re, -1);
+    boost::sregex_token_iterator j;
+}
+
 /**
  * @brief  load_config: load confiuration from file
  * @param  const string &path
@@ -144,10 +164,10 @@ void Lexer::load_config( const string &path )
         if(token_match[ID_NAME_VALUE_PAIR].matched)
         {
             string name = token_match["name"].str();
-            string value = token_match["rexp"].str();
+            string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
             // copy to term to vector
-            terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(stype), string(value) };
+            terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(stype), string(expr) };
             _terminals.push_back(term);
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
             //cout << "Type: " << term.stype << " Id: " << left << setw(15) << term.id << left << " Name: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
@@ -189,7 +209,10 @@ void Lexer::load_config( const string &path )
             {
                 terminals.push_back(trim(token));
             }
-            std::pair<string, vector<string>> state_map(state, terminals);
+            lex_state lstate{ 1, state };
+            vector<terminal> terms;
+            _terminal_map[state] = std::pair< lex_state, vector<terminal> >(lstate, terms);
+            //std::pair<string, vector<string>> state_map(state, terminals);
 
             // // debug Print the tokens
             // for (const std::string& tok : terminals)
@@ -225,6 +248,15 @@ void Lexer::dump_config( )
         ss << "Id: " << left << setw(15) << term.id << left << " Key: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
     }
     cout << ss.str();
+
+    // debug Print the tokens
+    // for (const std::string& tok : _terminals)
+    // {
+    //     ss << tok << ", ";
+    // }
+    // string out = trim(ss.str());
+    // cout << out;
+
 }
 
 /**

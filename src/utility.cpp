@@ -135,6 +135,19 @@ std::vector<std::string> split(const std::string& s, char c)
 }
 
 /**
+ * @brief split string
+ * @param str: std::string
+ * @param regex : std::string
+ * @return std::vector<std::string>
+ * */
+std::vector<std::string> split(const std::string &str, std::string regex)
+{
+    std::regex r{ regex };
+    std::sregex_token_iterator start{ str.begin(), str.end(), r, -1 }, end;
+    return std::vector<std::string>(start, end);
+}
+
+/**
  * @name   digits10
  * @param  n, number to eval
  * @return number of base 10 digits
