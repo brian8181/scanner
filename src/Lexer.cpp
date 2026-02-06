@@ -121,41 +121,28 @@ void Lexer::load_config( const string &path )
     const unsigned int ID_TYPE = 2;
     const unsigned int ID_NAME = 3;
     const unsigned int ID_VALUE = 4;
-    // const unsigned int ID_CONFIG_COMMENT = 7;
-    // const unsigned int ID_NUMERIC_LITERAL = 3;
-    // const unsigned int ID_STRING_LITERAL = 4;
 
     int j = 0;
     string section = "none";
     string s;
     int n = read_str( _config_file, s);
+
     boost::regex rgx = boost::regex( CONFIG_SECTIONS );
     boost::smatch terminal_match;
+
     // begins terminal section
     boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
-    //cout << _config_file << "=" << endl << s;
-    // /*debug / testing*/
-    // for(int i = 0; i < terminal_match.size(); ++i)
-    // {
-    //     cout << "smatch[" << i << "] = \"" << terminal_match[i] << "\" : matched=" << terminal_match[i].matched <<  endl;
-    // }
-
     boost::smatch groups_match;
     // ends terminal section, begin group section
     string terminal_suffix = terminal_match.suffix();
     boost::regex_search(terminal_suffix, groups_match, rgx, boost::match_not_bol | boost::match_not_eol);
-    // /*debug / testing*/
-    // for(int i = 0; i < groups_match.size(); ++i)
-    // {
-    //     cout << "smatch[" << i << "] = \"" << groups_match[i] << "\" : matched=" << groups_match[i].matched <<  endl;
-    // }
-
     // now get section
     string token_section = groups_match.prefix();
+
     // stream it line by line to parse tokens section
-    std::istringstream input;
-    input.str(token_section);
-    for (std::string line; std::getline(input, line); j++)
+    std::istringstream input1;
+    input1.str(token_section);
+    for (std::string line; std::getline(input1, line); j++)
     {
         boost::regex config_rgx = boost::regex( CONFIG );
         boost::smatch token_match;
@@ -170,7 +157,6 @@ void Lexer::load_config( const string &path )
             terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(stype), string(expr) };
             _terminals.push_back(term);
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
-            //cout << "Type: " << term.stype << " Id: " << left << setw(15) << term.id << left << " Name: " << left << setw(25) << term.name << "Value: " << "\"" << term.rexp << "\"" << endl;
         }
     }
 
@@ -178,14 +164,8 @@ void Lexer::load_config( const string &path )
     // ends group section, begin states section
     string groups_suffix = groups_match.suffix();
     boost::regex_search(groups_suffix, states_match, rgx, boost::match_not_bol | boost::match_not_eol);
-    // /*debug / testing*/
-    // for(int i = 0; i < states_match.size(); ++i)
-    // {
-    //     cout << "smatch[" << i << "] = \"" << states_match[i] << "\" : matched=" << states_match[i].matched <<  endl;
-    // }
-
-     string groups_section = states_match.prefix();
-     string states_section = states_match.suffix();
+    string groups_section = states_match.prefix();
+    string states_section = states_match.suffix();
 
     // stream it line by line to parse tokens section
     std::istringstream input2;
@@ -204,21 +184,18 @@ void Lexer::load_config( const string &path )
             vector<string> terminals;
             std::stringstream ss(tokens);
             std::string token;
+            int i = 0xFF;
             // Use getline to split stream on comma
             while (std::getline(ss, token, ','))
             {
+                lex_state lstate{ 0xFF + ++i*6, state };
+                // need token/ terminal map : i.e. ( tm[PLUS] = id(01) | tm[id(01)] = "PLUS" )
                 terminals.push_back(trim(token));
             }
+            // build state objects from config
             lex_state lstate{ 1, state };
             vector<terminal> terms;
             _terminal_map[state] = std::pair< lex_state, vector<terminal> >(lstate, terms);
-            //std::pair<string, vector<string>> state_map(state, terminals);
-
-            // // debug Print the tokens
-            // for (const std::string& tok : terminals)
-            // {
-            //     std::cout << tok << std::endl;
-            // }
         }
     }
 }
