@@ -20,8 +20,8 @@
 
 using namespace std;
 
-const int SRC_IDX_OFFSET = 0;
-const int CONFIG_IDX_OFFSET = 1;
+constexpr int SRC_IDX_OFFSET = 0;
+constexpr int CONFIG_IDX_OFFSET = 1;
 
 static string g_config_file;
 static bool file_flag = false;
@@ -35,7 +35,7 @@ static Lexer lexer;
  * @param
  * @return
  */
-int lex(void)
+int lex()
 {
     if(!initialized)
     {
@@ -56,16 +56,16 @@ int lex(void)
 int parse_options(int argc, char* argv[])
 {
     int opt;
-    const char* optstring = "hVdf:";
+    auto optstring = "hVdf:";
     const struct option longopts[] = {
-        {"help",        no_argument,        NULL,   'h'},
-        {"version",     no_argument,        NULL,   'V'},
-        {"file",        0,                  NULL,   'f'},
-        {"dump",        no_argument,        NULL,   'd'},
-        {NULL,          0,                  NULL,    0 }
+        {"help",        no_argument, nullptr,   'h'},
+        {"version",     no_argument, nullptr,   'V'},
+        {"file",        0, nullptr,   'f'},
+        {"dump",        no_argument, nullptr,   'd'},
+        {nullptr,          0, nullptr,    0 }
     };
 
-    while ((opt = getopt_long(argc, argv, optstring, longopts, NULL)) != -1)
+    while ((opt = getopt_long(argc, argv, optstring, longopts, nullptr)) != -1)
     {
         switch (opt)
         {
@@ -88,11 +88,11 @@ int parse_options(int argc, char* argv[])
         }
     }
 
-    // configure scannner ...
-    cout << "configure scannner ..." << endl;
+    // configure scanner ...
+    cout << "configure scanner ..." << endl;
     string file = argv[optind + SRC_IDX_OFFSET];
     string config_file = file_flag ? g_config_file : ".config/default.txt";
-    cout << FMT_FG_BLUE << "load configuartion file=\"" << FMT_RESET
+    cout << FMT_FG_BLUE << "load configuration file=\"" << FMT_RESET
          << FMT_FG_GREEN << FMT_ITALIC <<  config_file << "\"" << FMT_RESET << endl;
     cout << FMT_FG_BLUE << "input file=\"" << FMT_RESET
          << FMT_FG_GREEN << FMT_ITALIC <<  file << "\"" << FMT_RESET << endl;
@@ -102,12 +102,11 @@ int parse_options(int argc, char* argv[])
 
     if( argc > (optind + CONFIG_IDX_OFFSET) )
         config_file = argv[optind + CONFIG_IDX_OFFSET];
-    cout << "configuartion loaded." << endl;
+    cout << "configuration loaded." << endl;
 
     // begin lexer ...
     Lexer lexer(file, config_file);
-    cout << "sannner configured." << endl;
-    unsigned int token = 0;
+    cout << "scanner configured." << endl;
     cout << "lexing ...";
     while( lex() )
     {
@@ -118,8 +117,11 @@ int parse_options(int argc, char* argv[])
     cout << "finished scanning. " << endl;
     if(dump_flag)
     {
+
         cout << "dumping configuration ... " << endl;
         lexer.dump_config();
+        string s;
+        lexer.get_expr(s);
         cout << "configuration dumped." << endl;
     }
 
@@ -128,6 +130,7 @@ int parse_options(int argc, char* argv[])
 
 /**
  * @brief  stdin_ready function
+ * @param filedes
  * @param  int filedes : the file handle
  * @return ready or error code
  */
@@ -138,7 +141,7 @@ int stdin_ready (int filedes)
 #ifndef CYGWIN
         struct timespec timeout = { .tv_sec = 0 };
 #else
-        struct timeval timeout = { .tv_sec = 0 };
+        timeval timeout = { .tv_sec = 0 };
 #endif
         // initialize the file descriptor set
         FD_ZERO(&set);
@@ -148,7 +151,7 @@ int stdin_ready (int filedes)
 #ifndef CYGWIN
         return pselect(filedes + 1, &set, NULL, NULL, &timeout, NULL);
 #else
-        return select(filedes + 1, &set, NULL, NULL, &timeout);
+        return select(filedes + 1, &set, nullptr, nullptr, &timeout);
 #endif
 }
 
@@ -162,7 +165,7 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		char* argv_cpy[ ( sizeof(char*) * argc ) + 1 ];
+		char* argv_cpy[ sizeof(char*) * argc + 1 ];
 		if(stdin_ready(STDIN_FILENO))
 		{
 			std::string buffer;

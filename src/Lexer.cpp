@@ -92,22 +92,17 @@ bool Lexer::init( const string& file, const string &config_file )
 
 /**
  * @brief  load_config: load confiuration from file
+ * @param path to config file
  * @param  const string &path
  * @return void
  */
 void Lexer::load_config( const string &path )
 {
     _config_file = path;
-    const unsigned int ID_PAIR = 1;
-    const unsigned int ID_TYPE = 2;
-    const unsigned int ID_NAME = 3;
-    const unsigned int ID_VALUE = 4;
-
     string section = "none";
     string s;
-    int n = read_str( _config_file, s);
-
-    boost::regex rgx = boost::regex( CONFIG_SECTIONS );
+    read_str( _config_file, s);
+    auto rgx = boost::regex( CONFIG_SECTIONS );
     boost::smatch terminal_match;
     // begins terminal section
     boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
@@ -125,22 +120,22 @@ void Lexer::load_config( const string &path )
     int j = 0;
     for (std::string line; std::getline(input1, line); j++)
     {
-        boost::regex config_rgx = boost::regex( CONFIG );
+        auto config_rgx = boost::regex( CONFIG );
         boost::smatch token_match;
         boost::regex_match( line, token_match, config_rgx );
         // error!
         // cout << "token_match[\"pairs\"].matched = " << (token_match["pairs"].matched ? "TRUE" : "FALSE") << endl;
-        if(token_match[ID_PAIR].matched)
+        if(constexpr unsigned int ID_PAIR = 1; token_match[ID_PAIR].matched)
         {
-            //cout << "token_match[\"name\"].matched = " << (token_match["name"].matched ? "TRUE" : "FALSE") << endl;
+            // cout << "token_match[\"name\"].matched = " << (token_match["name"].matched ? "TRUE" : "FALSE") << endl;
             string name = token_match["name"].str();
             string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
             string test_val = token_match["test"].str();
             // copy to term to vector
-            terminal term{ 0xFF + (j*0x06), string(name), stype, 0, 0, string(expr), string("value"), string(test_val) };
+            terminal term{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("value"), string(test_val), 0 };
             _terminals.push_back(term);
-            _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
+            _token_map[term.name] = std::pair(term.id, term.rexp);
         }
     }
 
@@ -156,7 +151,7 @@ void Lexer::load_config( const string &path )
     input2.str(states_section);
     for (std::string line; std::getline(input2, line);)
     {
-        boost::regex config_states_rgx = boost::regex( CONFIG_STATES );
+        auto config_states_rgx = boost::regex( CONFIG_STATES );
         boost::regex_match( line, states_match, config_states_rgx );
         if(states_match["states"].matched)
         {
@@ -169,17 +164,17 @@ void Lexer::load_config( const string &path )
             std::stringstream ss(tokens);
             std::string token;
             int i = 0xFF;
-            // Use getline to split stream on comma
+            // use get line to split on commas
             while (std::getline(ss, token, ','))
             {
                 lex_state lstate{ 0xFF + ++i*6, state };
                 // need token/ terminal map : i.e. ( tm[PLUS] = id(01) | tm[id(01)] = "PLUS" )
                 terminals.push_back(trim(token));
             }
-            // build state objects from config
+            // todo bkp: build state objects from config
             lex_state lstate{ 1, state };
             vector<terminal> terms;
-            _terminal_map[state] = std::pair< lex_state, vector<terminal> >(lstate, terms);
+            _terminal_map[state] = std::pair(lstate, terms);
         }
     }
 }
@@ -316,30 +311,32 @@ void Lexer::tokenize( const string &exp, const string &text )
  */
 void Lexer::get_expr( /*out*/ string& s )
 {
+    cout << "testing get_expr()" << endl;
     // build "string" expr for terminals
     stringstream ss;
-    int len = _terminals.size();
+    const size_t len = _terminals.size();
     for(int i = 0; i < len; ++i)
     {
         terminal term = _terminals[i];
         //ss << "(?<" << term.name << ">" + term.rexp + ")|";
         ss << "(" << term.rexp << ")|";
     }
-    s = ss.str( );
-    s.pop_back( );
+    s = ss.str();
+    s.pop_back();
 
     //auto index using test_value
-    boost::regex rgx = boost::regex( s );
+    const auto rgx = boost::regex( s );
     boost::smatch m;
-    int sz = _terminals.size();
-    for(int i = 0; i < sz; ++i)
+    for(int i = 0; i < len; ++i)
     {
         boost::regex_match( _terminals[i].test_value, m, rgx );
-        for(int j = 0; j < len; ++j)
+        const size_t sz = m.size();
+        for(int j = 0; j < sz; ++j)
         {
-            if(m[i].matched)
+            if(m[j].matched)
             {
-                _terminals[i].index = i;
+                cout << "Found match for " << _terminals[i].name << " syncing index. " << j << endl;
+                _terminals[i].index = j;
                 break;
             }
         }

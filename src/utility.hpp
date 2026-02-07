@@ -48,7 +48,7 @@ std::vector<std::string> split(const std::string& s, char c);
 /**
  *
  */
-std::vector<std::string> split(const std::string &str, std::string regex);
+std::vector<std::string> split(const std::string &str, const std::string &regex);
 
 /**
  * @brief print color
@@ -125,19 +125,29 @@ int digits10(int n);
 /**
  * @name itoa
  * @brief int to ascii
+ * @param n
  * @param number to eval
  * @param s, out parma
  * @return void
 */
-void itoa(int& n, char* s);
+void itoa(const int& n, char* s);
+
+
+/**
+ * @name itos
+ * @brief int to string
+ * @param i : number to eval
+ * @return string
+ */
+string itos(int i);
 
 /**
  * @name   atoi
  * @brief  ascii to int
- * @param  s, string to convert
+ * @param  ptr, string to convert
  * @return int : result
  */
-int atoi(const char* s);
+int atoi(const char* ptr);
 
 typedef string line_t;
 typedef vector<line_t> lines_t;

@@ -4,38 +4,51 @@
 
 [tokens]
 # punctuations
-string  ASTERIK                = \*                     "*"
-string  AMPERSAND              = &                      "&"
-string  SEMI_COLON             = :                      ":"
-string  COMMA                  = ,                      ","
-string  DOT                    = \.                     "."
-string  OPEN_BRACKET           = \[                     "["
-string  CLOSE_BRACKET          = \]                     "]"
-string  OPEN_BRACE             = \{                     "{"
-string  CLOSE_BRACE            = \}                     "}"
-string  DOUBLE_QUOTE           = "                      """
-string  SINGLE_QUOTE           = '                      "'"
-string  TICK_MARK              = `                      "`"
-string  FORWARD_SLASH          = /                      "/"
-string  BACKWARD_SLASH         = \\                     "\"
-string  EQUAL                  = =                      "="
-string  TILDE                  = ~                      "~"
-string  VBAR                   = \|                     "|"
-string  CARROT                 = \^                     "^"
-string  PERCENT                = %                      "%"
-string  EXCLAMATION            = !                      "!"
+
+string  ASTERIK                = \*                      "*"
+string  COMMA                  = \,                      ","
+string  DOT                    = \.                      "."
+string  OPEN_BRACKET           = \[                      "["
+string  CLOSE_BRACKET          = \]                      "]"
+string  OPEN_BRACKET           = \(                      "("
+string  CLOSE_BRACKET          = \)                      ")"
+string  OPEN_BRACE             = \{                      "{"
+string  CLOSE_BRACE            = \}                      "}"
+string  COLON                  = :                       ":"
+string  SEMI_COLON             = ;                       ";"
+string  AMPERSAND              = &                       "&"
+string  HASH                   = #                       "#"
+string  QUESTION               = \?                      "?"
+string  LESS_THAN              = <                       "<"
+string  GREATER_THAN           = >                       ">"
+string  LESS_THAN_EQUAL        = <=                       "<="
+string  GREATER_THAN _EQUAL    = >=                       ">="
+string  VBAR                   = \|                      "|"
+string  CARROT                 = \^                      "^"
+string  EXCLAMATION            = $                       "\$"
+string  BACKWARD_SLASH         = \\                      "\"
+string  UNDERSCORE              = _                      "_"
+string  DOUBLE_QUOTE           = "                       """
+string  TILDE                  = ~                       "~"
+string  SINGLE_QUOTE           = '                       "'"
+string  TICK_MARK              = `                       "`"
+string  FORWARD_SLASH          = /                       "/"
+string  EQUAL                  = =                       "="
+string  PERCENT                = %                       "%"
+string  EXCLAMATION            = !                       "!"
+string  EXCLAMATION            = @                       "@"
 # operators
-string  PLUS                    = \+                    "+"
-string  MINUS                   = \-                    "-"
-long         INT               = [1-9][0-9]*            "99"
-double       DOUBLE            = [0-9]*.[0.9]+          "0.1"
-string  SYMBOL                 = \$[a-zA-Z][a-zA-Z0-9]* "$abc"
-char         EOF                    ='\0'
+string  PLUS                    = \+                     "+"
+string  MINUS                   = \-                     "-"
+long         INT               = [1-9][0-9]*             "81 42 19"
+double       DOUBLE            = [0-9]*.[0.9]+           "0.1 9.99 3.3 3.1416 1.44 2.71"
+string       SYMBOL            = \$[A−Za−z][A−Za−z0−9]* "$abc $x $y $z $v0 $v1 $v2"
+char         EOF               ='\0'                     "'\0'"
 
 [groups]
 all
 punctuation = {COMMA, DOT, OPEN_PAREN, CLOSE_PAREN, OPEN_BRACKET, CLOSE_BRACKET}
-valid_file_symbol = {}
+
 
 [states]
 INITIAL = {COMMA, DOT, OPEN_PAREN, CLOSE_PAREN, OPEN_BRACKET}

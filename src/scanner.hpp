@@ -9,12 +9,6 @@
 #ifndef _SCANNER_HPP_
 #define _SCANNER_HPP_
 
-#include <iostream>
-#include <string>
-#include <utility>
-#include <vector>
-#include <regex>
-
 using namespace std;
 
 /**
@@ -45,7 +39,7 @@ int main(int argc, char* argv[]);
  * @param
  * @return
  */
-int yylex (void);
+int yylex ();
 
 /**
  * @brief

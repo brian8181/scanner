@@ -9,13 +9,11 @@
 #include <regex>
 #include <vector>
 #include <iostream>
-#include <fstream>
 #include <string.h>
 #include <fmt/color.h>
 #include <fmt/compile.h>
 #include <fmt/format.h>
 #include "math.h"
-#include "fileio.hpp"
 #include "utility.hpp"
 
 using std::regex;
@@ -29,7 +27,7 @@ using std::ifstream;
 using std::pair;
 using std::ios;
 
-const int ASCII_OFFSET = 48;
+constexpr int ASCII_OFFSET = 48;
 
 /**
  * @brief print color
@@ -63,12 +61,12 @@ map<string, string>& get_config(const string& path, /* out */ map<string, string
         string line;
         while(getline(file, line))
         {
-            size_t pos = line.find('=');
+            const size_t pos = line.find('=');
             string name = line.substr(0, pos-1);
             name = trim(name);
             string value = line.substr(pos+1);
             value = trim(value);
-            pair<string, string> p(name, value);
+            pair p(name, value);
             config.insert(p);
         }
         file.close(); //close the file
@@ -85,7 +83,7 @@ map<string, string>& get_config(const string& path, /* out */ map<string, string
  */
 bool match_single(const string& pattern, const string& text, /* out */ smatch& match)
 {
-    regex rgx = regex(pattern);
+    const auto rgx = regex(pattern);
     regex_match(text, match, rgx);
     if(match.size() == 1 && match.str().size() == text.size())
         return true;
@@ -101,13 +99,12 @@ bool match_single(const string& pattern, const string& text, /* out */ smatch& m
  */
 bool match_single(const string& pattern, const string& text)
 {
-    regex rgx = regex(pattern);
+    const auto rgx = regex(pattern);
     smatch match;
     regex_match(text, match, rgx);
 
-    if(match.size() == 1 && text.size(), match.str().size())
+    if(match.size() == 1 && text.size())
         return true;
-
     return false;
 }
 
@@ -117,13 +114,13 @@ bool match_single(const string& pattern, const string& text)
  * @param c : delimter
  * @return std::vector<std::string> // ???
  */
-std::vector<std::string> split(const std::string& s, char c)
+std::vector<std::string> split(const std::string& s, const char c)
 {
   std::vector<std::string> result;
   size_t begin = 0;
   while (true)
   {
-    size_t end = s.find_first_of(c, begin);
+    const size_t end = s.find_first_of(c, begin);
     result.push_back(s.substr(begin, end - begin));
     if (end == std::string::npos)
     {
@@ -140,10 +137,11 @@ std::vector<std::string> split(const std::string& s, char c)
  * @param regex : std::string
  * @return std::vector<std::string>
  * */
-std::vector<std::string> split(const std::string &str, std::string regex)
+std::vector<std::string> split(const std::string &str, const std::string &regex)
 {
-    std::regex r{ regex };
-    std::sregex_token_iterator start{ str.begin(), str.end(), r, -1 }, end;
+    const std::regex r{ regex };
+    std::sregex_token_iterator start{ str.begin(), str.end(), r, -1 };
+    const std::sregex_token_iterator end;
     return std::vector<std::string>(start, end);
 }
 
@@ -160,36 +158,49 @@ int digits10(int n)
 /**
  * @name itoa
  * @brief int to ascii
- * @param number to eval
+ * @param n, to eval
  * @param s, out parma
  * @return void
 */
-void itoa(int& n, char* s)
+void itoa(const int& n, char* s)
 {
-    int len = digits10(n);
+    const int len = digits10(n);
     for(int i = 0; i < len; ++i)
     {
         int c = n / pow(10, i);
         c = std::floor( c );
         c = c % 10;
-        s[(len-1)-i] = (char)(c + ASCII_OFFSET); // 0x30
+        s[len-1-i] = static_cast<char>(c + ASCII_OFFSET); // 0x30
     }
-    s[len] = (char)'\0';
+    s[len] = '\0';
+}
+
+/**
+ * @name itos
+ * @brief int to string
+ * @param i : number to eval
+ * @return string
+ */
+string itos(const int i)	// convert int to string
+{
+    stringstream s;
+    s << i;
+    return s.str();
 }
 
 /**
  * @name   atoi
  * @brief  ascii to int
- * @param  s, string to convert
+ * @param  ptr, string to convert
  * @return int : result
  */
-int atoi(const char* s)
+int atoi(const char* ptr)
 {
     int num = 0;
-    int len = strlen(s);
+    const int len = strlen(ptr);
     for(int i = 0; i < len; ++i)
     {
-        int digit = ASCII_OFFSET - i;
+        const int digit = ASCII_OFFSET - i;
         if(digit < 0 || digit > 10)
             return -1;
         num += digit * pow(10, i);
@@ -205,11 +216,11 @@ int atoi(const char* s)
  */
 string& to_lower(const string& s, /* out */ string& r)
 {
-    int len = s.length();
+    const int len = s.length();
     r.clear();
     for(int i = 0; i < len; ++i)
     {
-        int c = std::tolower(s[i]);
+        const int c = std::tolower(s[i]);
         r.push_back(c);
     }
     return r;
@@ -222,10 +233,10 @@ string& to_lower(const string& s, /* out */ string& r)
  */
 string& to_lower(string& s) // in place
 {
-    int len = s.length();
+    const int len = s.length();
     for(int i = 0; i < len; ++i)
     {
-        int c = std::tolower(s[i]);
+        const int c = std::tolower(s[i]);
         s[i] = c;
     }
     return s;
@@ -239,7 +250,7 @@ string& to_lower(string& s) // in place
  */
 string& to_upper(const string& s, /* out */ string& r)
 {
-    int len = s.length();
+    const int len = s.length();
     r.clear();
     for(int i = 0; i < len; ++i)
     {
@@ -256,7 +267,7 @@ string& to_upper(const string& s, /* out */ string& r)
  */
 string& to_upper(string& s) // in place
 {
-    int len = s.length();
+    const int len = s.length();
     for(int i = 0; i < len; ++i)
     {
         int c = std::toupper(s[i]);
@@ -272,14 +283,14 @@ string& to_upper(string& s) // in place
  */
 string& ltrim(std::string &s)
 {
-    int len = s.size();
+    const int len = s.size();
     int i;
     for(i = 0; i < len; ++i)
     {
         if(!std::isspace(s[i]))
             break;
     }
-    string::iterator beg = s.begin();
+    const auto beg = s.begin();
     s.erase(beg, beg+i);
     return s;
 }
@@ -291,14 +302,14 @@ string& ltrim(std::string &s)
  */
 string& rtrim(std::string &s)
 {
-    int len = s.size();
+    const int len = s.size();
     int i = len;
     for(;i > 0; --i)
     {
         if(!std::isspace(s[i-1]))
             break;
     }
-    string::iterator end = s.end();
+    const auto end = s.end();
     s.erase(end-(len-i), end);
     return s;
 }
@@ -340,7 +351,7 @@ int read_bits(const smatch& m)
     unsigned int bits = 0;
     for(int i = 0; i < len && i < 32; ++i)
     {
-        bits |= (int(m[i].matched) << i);
+        bits |= static_cast<int>(m[i].matched) << i;
     }
     return bits;
 }
