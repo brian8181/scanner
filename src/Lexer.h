@@ -76,7 +76,7 @@ typedef struct lex_state
 /**
   * @brief class Lexer
   */
-class Lexer
+class Lexer final
 {
 public:
 	/**
@@ -86,6 +86,8 @@ public:
 
 	/**
 	 * @brief ctor
+	 * @param file
+	 * @param config_file
 	 * @param const string& file, scan file
 	 * @param const string &config_file, config file
 	 */
@@ -93,6 +95,7 @@ public:
 
 	/**
 	 * @brief copy ctor
+	 * @param src
 	 * @param const Lexer& src
 	 */
 	Lexer( const Lexer& src );
@@ -104,6 +107,8 @@ public:
 
 	/**
 	 * @brief  initialize state
+	 * @param file
+	 * @param config_file
 	 * @param  const string& file, scan file
 	 * @param  const string &config_file, config file
 	 * @return bool
@@ -112,6 +117,7 @@ public:
 
 	/**
 	 * @brief  load_config: load confiuration from file
+	 * @param path
 	 * @param  const string &path
 	 * @return void
 	 */
@@ -125,6 +131,7 @@ public:
 
 	/**
 	 * @brief  dump config
+	 * @param file
 	 * @param  const string& file : config to dump
 	 * @return void
 	 */
@@ -132,6 +139,7 @@ public:
 
 	/**
 	 * @brief  get_token
+	 * @param token
 	 * @param  unsigned int& token, out param, a token
 	 * @return int
 	 */
@@ -139,6 +147,8 @@ public:
 
 	/**
 	 * @brief virtual, virtual for each token ...
+	 * @param token_
+	 * @param m
 	 * @param const unsigned int& token_
 	 * @param const std::smatch& m
 	 */
@@ -147,6 +157,8 @@ public:
 
 	/**
 	 * @brief tokenize
+	 * @param exp
+	 * @param text
 	 * @param const string &exp, regular expression
 	 * @param const string &text, search text
 	 */
