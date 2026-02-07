@@ -131,6 +131,7 @@ void Lexer::load_config( const string &path )
     boost::smatch terminal_match;
     // begins terminal section
     boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
+    cout << "terminal_match[\"tokens\"].matched = " << (terminal_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
     boost::smatch groups_match;
     // ends terminal section, begin group section
     string terminal_suffix = terminal_match.suffix();
@@ -147,9 +148,13 @@ void Lexer::load_config( const string &path )
         boost::regex config_rgx = boost::regex( CONFIG );
         boost::smatch token_match;
         boost::regex_match( line, token_match, config_rgx );
+        // error!
+        //cout << "token_match[\"pairs\"].matched = " << (token_match["pairs"].matched ? "TRUE" : "FALSE") << endl;
 
         if(token_match[ID_NAME_VALUE_PAIR].matched)
         {
+            cout << "token_match[\"name\"].matched = " << (token_match["name"].matched ? "TRUE" : "FALSE") << endl;
+
             string name = token_match["name"].str();
             string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
@@ -174,8 +179,11 @@ void Lexer::load_config( const string &path )
     {
         boost::regex config_states_rgx = boost::regex( CONFIG_STATES );
         boost::regex_match( line, states_match, config_states_rgx );
-        if(states_match[1].matched)
+        if(states_match["states"].matched)
         {
+            // cout << "states_match[\"state\"].matched = " << (states_match["state"].matched ? "TRUE" : "FALSE") << endl;
+            // cout << "states_match[\"tokens\"].matched = " << (states_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
+
             string state = states_match["state"].str();
             string tokens = states_match["tokens"].str();
             // copy to term to vector
