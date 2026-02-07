@@ -61,6 +61,7 @@ typedef struct terminal
 	string rexp;
 	string value;
 	string test_value;
+	int index;
 } terminal;
 
 typedef terminal token;

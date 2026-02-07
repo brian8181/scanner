@@ -231,6 +231,7 @@ void Lexer::dump_config( )
  */
 int Lexer::get_token( /*out*/ unsigned int& token )
 {
+
     stringstream ss;
     token = ID_UNDEFINED;
     if(*_p_iter != _end)
@@ -315,6 +316,7 @@ void Lexer::tokenize( const string &exp, const string &text )
  */
 void Lexer::get_expr( /*out*/ string& s )
 {
+    // build "string" expr for terminals
     stringstream ss;
     int len = _terminals.size();
     for(int i = 0; i < len; ++i)
@@ -323,9 +325,25 @@ void Lexer::get_expr( /*out*/ string& s )
         //ss << "(?<" << term.name << ">" + term.rexp + ")|";
         ss << "(" << term.rexp << ")|";
     }
-
     s = ss.str( );
     s.pop_back( );
+
+    //auto index using test_value
+    boost::regex rgx = boost::regex( s );
+    boost::smatch m;
+    int sz = _terminals.size();
+    for(int i = 0; i < sz; ++i)
+    {
+        boost::regex_match( _terminals[i].test_value, m, rgx );
+        for(int j = 0; j < len; ++j)
+        {
+            if(m[i].matched)
+            {
+                _terminals[i].index = i;
+                break;
+            }
+        }
+    }
 }
 
 /**
