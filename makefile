@@ -52,7 +52,7 @@ ifdef REFLEX
 endif
 
 .PHONY all: help
-all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx $(BLD)/ast_test 	#$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
+all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx $(BLD)/ast_test $(BLD)/base64 #$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
 $(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.h $(BLD)/utility.o $(BLD)/ast.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) -I"/home/brian/src/boost_1_89_0" $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
@@ -108,6 +108,12 @@ $(BLD)/pcxx.cc $(BLD)/pcxx.hh: $(SRC)/pcxx.yy
 
 $(BLD)/pcxx: $(BLD)/lex.hpp $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pcxx.hh $(BLD)/pcxx.cc $(BLD)/lex.o
 	$(CXX) -g -std=c++14 -I$(ROOT)/build -I$(ROOT)/src $(BLD)/lex.o $(BLD)/pcxx.cc -o $@
+
+$(BLD)/base64: $(SRC)/tools/base64.c $(SRC)/tools/base64.h
+	$(CC) $(CCFLAGS) -DTEST $< -o $@
+
+#$(BLD)/iobuf: $(SRC)/iobuf.c $(SRC)/iobuf.h
+#	$(CC) $(CCFLAGS) -DTEST $< -o $@
 
 # copy header files
 $(BLD)/%.h : $(SRC)/%.h

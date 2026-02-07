@@ -3,12 +3,12 @@
   * @version    0.0.2
 */
 
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <map>
 #include <regex>
 #include <vector>
-#include <iostream>
 #include <string.h>
 #include <fmt/color.h>
 #include <fmt/compile.h>
@@ -26,6 +26,7 @@ using std::ifstream;
 using std::ifstream;
 using std::pair;
 using std::ios;
+using std::stringstream;
 
 constexpr int ASCII_OFFSET = 48;
 
@@ -183,7 +184,7 @@ void itoa(const int& n, char* s)
  */
 string itos(const int i)	// convert int to string
 {
-    stringstream s;
+    std::stringstream s;
     s << i;
     return s.str();
 }
