@@ -90,26 +90,6 @@ bool Lexer::init( const string& file, const string &config_file )
     return r;
 }
 
-void LEX()
-{
-    //ex1
-    // std::stringstream ss(sText);
-    // std::string item;
-    // const regex re{"((?:[^\\\\,]|\\\\.)*?)(?:,|$)"};
-    // std::getline(ss, item)
-    // m_vecFields.insert(m_vecFields.end(), sregex_token_iterator(item.begin(), item.end(), re, 1), sregex_token_iterator());
-
-    //ex2
-    // const regex re{"((?:[^\\\\,]|\\\\.)*?)(?:,|$)"};
-    // vector<string> m_vecFields{sregex_token_iterator(item.begin(), item.end(), re, 1), sregex_token_iterator()};
-
-    string s = "This is a string of tokens";
-
-    boost::regex re("a|b|c|d|e|f");
-    boost::sregex_token_iterator i(s.begin(), s.end(), re, -1);
-    boost::sregex_token_iterator j;
-}
-
 /**
  * @brief  load_config: load confiuration from file
  * @param  const string &path
@@ -118,7 +98,7 @@ void LEX()
 void Lexer::load_config( const string &path )
 {
     _config_file = path;
-    const unsigned int ID_NAME_VALUE_PAIR = 1;
+    const unsigned int ID_PAIR = 1;
     const unsigned int ID_TYPE = 2;
     const unsigned int ID_NAME = 3;
     const unsigned int ID_VALUE = 4;
@@ -131,7 +111,7 @@ void Lexer::load_config( const string &path )
     boost::smatch terminal_match;
     // begins terminal section
     boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
-    cout << "terminal_match[\"tokens\"].matched = " << (terminal_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
+    // cout << "terminal_match[\"tokens\"].matched = " << (terminal_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
     boost::smatch groups_match;
     // ends terminal section, begin group section
     string terminal_suffix = terminal_match.suffix();
@@ -139,7 +119,7 @@ void Lexer::load_config( const string &path )
     // now get section
     string token_section = groups_match.prefix();
 
-    // stream it line by line to parse tokens section
+    // stream & parse tokens section
     std::istringstream input1;
     input1.str(token_section);
     int j = 0;
@@ -149,17 +129,15 @@ void Lexer::load_config( const string &path )
         boost::smatch token_match;
         boost::regex_match( line, token_match, config_rgx );
         // error!
-        //cout << "token_match[\"pairs\"].matched = " << (token_match["pairs"].matched ? "TRUE" : "FALSE") << endl;
-
-        if(token_match[ID_NAME_VALUE_PAIR].matched)
+        // cout << "token_match[\"pairs\"].matched = " << (token_match["pairs"].matched ? "TRUE" : "FALSE") << endl;
+        if(token_match[ID_PAIR].matched)
         {
-            cout << "token_match[\"name\"].matched = " << (token_match["name"].matched ? "TRUE" : "FALSE") << endl;
-
+            //cout << "token_match[\"name\"].matched = " << (token_match["name"].matched ? "TRUE" : "FALSE") << endl;
             string name = token_match["name"].str();
             string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
             // copy to term to vector
-            terminal term{ 0xFF + (j*0x06), stype, 0, 0, string(name), string(expr) };
+            terminal term{ 0xFF + (j*0x06), string(name), stype, 0, 0, string(expr), string("value") };
             _terminals.push_back(term);
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
         }
@@ -172,7 +150,7 @@ void Lexer::load_config( const string &path )
     string groups_section = states_match.prefix();
     string states_section = states_match.suffix();
 
-    // stream it line by line to parse tokens section
+    // stream & parse tokens section
     std::istringstream input2;
     input2.str(states_section);
     for (std::string line; std::getline(input2, line);)
@@ -183,7 +161,6 @@ void Lexer::load_config( const string &path )
         {
             // cout << "states_match[\"state\"].matched = " << (states_match["state"].matched ? "TRUE" : "FALSE") << endl;
             // cout << "states_match[\"tokens\"].matched = " << (states_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
-
             string state = states_match["state"].str();
             string tokens = states_match["tokens"].str();
             // copy to term to vector

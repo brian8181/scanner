@@ -53,22 +53,15 @@ using std::regex;
 typedef struct terminal
 {
 	int id;
+	string name;
 	string stype;
 	int itype;
 	int lex_t;
-	string name;
 	string rexp;
+	string value;
 } terminal;
 
-typedef struct token
-{
-	int id;
-	string value;
-	string stype;
-	int itype;
-	int lex_t;
-	string name;
-} token;
+typedef terminal token;
 
 typedef struct lex_state
 {
