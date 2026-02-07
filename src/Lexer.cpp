@@ -136,8 +136,9 @@ void Lexer::load_config( const string &path )
             string name = token_match["name"].str();
             string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
+            string test_val = token_match["test"].str();
             // copy to term to vector
-            terminal term{ 0xFF + (j*0x06), string(name), stype, 0, 0, string(expr), string("value") };
+            terminal term{ 0xFF + (j*0x06), string(name), stype, 0, 0, string(expr), string("value"), string(test_val) };
             _terminals.push_back(term);
             _token_map[term.name] = std::pair<int, string>(term.id, term.rexp);
         }
@@ -206,8 +207,10 @@ void Lexer::dump_config( )
     {
         terminal term = _terminals[i];
         ss << "Id: " << left << setw(15) << term.id << left << " name: " << left << setw(25) << term.name <<
-            " type: " << left << setw(15) << term.stype << \
-            " rexp: " << left << "\"" << term.rexp << "\"" << endl;
+            " type: " << left << setw(15) << term.stype <<
+            " value: " << left << term.value <<
+            " test_value: " << left << term.test_value <<
+            " rexp: " << left << term.rexp << endl;
     }
     cout << ss.str();
 
@@ -234,12 +237,13 @@ int Lexer::get_token( /*out*/ unsigned int& token )
     {
         // need to look up by sub_match id
         boost::smatch what = *(*_p_iter);
-        // for(int i = 0; i < what.size(); ++i)
-        // {
-        //     cout << "smatch[" << i << "].first" << what[i].first << endl;
-        //     cout << "smatch[" << i << "].second" << what[i].second << endl;
-        // }
-
+        int len = what.size();
+        for(int i = 0; i < len; ++i)
+        {
+            //if(what[i])
+            // cout << "smatch[" << i << "].first" << what[i].first << endl;
+            // cout << "smatch[" << i << "].second" << what[i].second << endl;
+        }
 
         if( _token_map.contains( what.str( ) ) )
         {
