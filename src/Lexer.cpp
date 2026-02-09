@@ -64,10 +64,8 @@ Lexer::~Lexer( )
 
 /**
  * @brief  initialize state
- * @param file
- * @param config_file
- * @param  const string& file, scan file
- * @param  const string &config_file, config file
+ * @param  file
+ * @param  config_file
  * @return bool
  */
 bool Lexer::init( const string& file, const string &config_file )
@@ -90,7 +88,7 @@ bool Lexer::init( const string& file, const string &config_file )
 
 /**
  * @brief  load_config: load configuration from file
- * @param path to config file
+ * @param  path to config file
  * @param  const string &path
  * @return void
  */
@@ -181,7 +179,6 @@ void Lexer::load_config( const string &path )
 /**
  * @brief  dump config
  * @param file
- * @param  const string& file : config to dump
  * @return void
  */
 void Lexer::dump_config( const string& file )
@@ -201,15 +198,14 @@ void Lexer::dump_config( ) const
     for(int i = 0; i < len; ++i)
     {
         token* ptok = _tokens[i];
-        ss << "Id: " << left << setw(10) << ptok->id <<
-            " name: " << left << setw(15) << ptok->name <<
-            " type: " << left << setw(15) << ptok->stype <<
-            " value: " << left << setw(15) << ptok->value <<
-            " rexp: " << left << setw(15) << ptok->rexp <<
+        ss << "Id: "        << left << setw(10) << ptok->id         <<
+            " name: "       << left << setw(15) << ptok->name       <<
+            " type: "       << left << setw(15) << ptok->stype      <<
+            " value: "      << left << setw(15) << ptok->value      <<
+            " rexp: "       << left << setw(15) << ptok->rexp       <<
             " test_value: " << left << setw(15) << ptok->test_value << endl;
     }
     cout << ss.str();
-
     // debug Print the tokens
     // for (const std::string& tok : _terminals)
     // {
@@ -217,7 +213,6 @@ void Lexer::dump_config( ) const
     // }
     // string out = trim(ss.str());
     // cout << out;
-
 }
 
 /**
