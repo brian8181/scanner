@@ -306,23 +306,23 @@ void Lexer::get_expr( /*out*/ string& s ) const
     s = ss.str();
     s.pop_back();
 
-    // bkp todo!
     // auto index using test_value
-    // const auto rgx = boost::regex( s );
-    // boost::smatch m;
-    // for(int i = 0; i < len; ++i)
-    // {
-    //     boost::regex_match( tok[i]->test_value, m, rgx );
-    //     const size_t sz = m.size();
-    //     for(int j = 0; j < sz; ++j)
-    //     {
-    //         if(m[j].matched)
-    //         {
-    //             tok[i]->index = j;
-    //             break;
-    //         }
-    //     }
-    // }
+    const auto rgx = boost::regex( s );
+    boost::smatch m;
+    for(int i = 0; i < len; ++i)
+    {
+        // bkp todo!
+        // boost::regex_search( tok[i]->test_value, m, rgx );
+        // const size_t sz = m.size();
+        // for(int j = 0; j < sz; ++j)
+        // {
+        //     if(m[j].matched)
+        //     {
+        //         tok[i]->index = j;
+        //         break;
+        //     }
+        // }
+    }
 }
 
 /**
