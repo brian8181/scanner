@@ -2,7 +2,6 @@
  * @file    Lexer.hpp
  * @version 0.0.1
  * @date    Fri, 26 Sep 2025 17:05:10 +0000
- * @info    ...
  */
 #ifndef _Lexer_HPP_
 #define _Lexer_HPP_
@@ -50,7 +49,6 @@ using std::regex;
 
 // namespace bkp
 // {
-
 //vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
 
 typedef struct terminal
@@ -154,7 +152,6 @@ public:
 	 */
 	virtual void on_token( const unsigned int& token_, const boost::smatch& m );
 
-
 	/**
 	 * @brief tokenize
 	 * @param exp
@@ -177,9 +174,8 @@ public:
  	 */
 	void print_token( );
 
-
 protected:
-	string                   _config_file;
+	string                    _config_file;
 	vector<token*>            _tokens;
 	map<int, token*>          _idx_tab;
 	map<int, token*>          _id_tab;
@@ -187,15 +183,14 @@ protected:
 	map<int, vector<token*>>  _state_tokens_tab;
 	map<int, state*>          _state_tab;
 	vector<token*>            _matches;
-
-	std::string             _scan_file;
-	std::string             _search_text;
-	boost::regex            _rexp;
-	boost::sregex_iterator  _begin;
-	boost::sregex_iterator  _end;
-	boost::sregex_iterator* _p_iter;
-	state* _state;
-	string _expr;
+	std::string               _scan_file;
+	std::string               _search_text;
+	boost::regex              _rexp;
+	boost::sregex_iterator    _begin;
+	boost::sregex_iterator    _end;
+	boost::sregex_iterator*   _p_iter;
+	state*                    _state;
+	string                    _expr;
 };
 
 //}

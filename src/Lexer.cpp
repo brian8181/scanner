@@ -103,7 +103,6 @@ void Lexer::load_config( const string &path )
     //need to delete each state before clearing!! _state_tab.clear();
     _state_tokens_tab.clear();
 
-
     _config_file = path;
     string section = "none";
     string s;
@@ -112,7 +111,6 @@ void Lexer::load_config( const string &path )
     boost::smatch terminal_match;
     // begins terminal section
     boost::regex_search( s, terminal_match, rgx, boost::match_not_bol | boost::match_not_eol );
-    // cout << "terminal_match[\"tokens\"].matched = " << (terminal_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
     boost::smatch groups_match;
     // ends terminal section, begin group section
     string terminal_suffix = terminal_match.suffix();
@@ -129,11 +127,8 @@ void Lexer::load_config( const string &path )
         auto config_rgx = boost::regex( CONFIG );
         boost::smatch token_match;
         boost::regex_match( line, token_match, config_rgx );
-        // error!
-        // cout << "token_match[\"pairs\"].matched = " << (token_match["pairs"].matched ? "TRUE" : "FALSE") << endl;
         if(constexpr unsigned int ID_PAIR = 1; token_match[ID_PAIR].matched)
         {
-            // cout << "token_match[\"name\"].matched = " << (token_match["name"].matched ? "TRUE" : "FALSE") << endl;
             string name = token_match["name"].str();
             string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
@@ -164,9 +159,6 @@ void Lexer::load_config( const string &path )
         boost::regex_match( line, states_match, config_states_rgx );
         if(states_match["states"].matched)
         {
-            // cout << "states_match[\"state\"].matched = " << (states_match["state"].matched ? "TRUE" : "FALSE") << endl;
-            // cout << "states_match[\"tokens\"].matched = " << (states_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
-
             string str_state = states_match["state"].str();  // new state to create
             string str_tokens = states_match["tokens"].str(); // csv tokens for that state
             int i = 0;
@@ -182,11 +174,9 @@ void Lexer::load_config( const string &path )
             // use get line to split on commas
             while (std::getline(ss, str_token, ','))
             {
-
                 token* ptok = _name_tab[str_token];
                 tokens.push_back(ptok);
                 _state_tokens_tab[pstate->id] = tokens;
-
             }
         }
     }
