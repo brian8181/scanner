@@ -165,17 +165,12 @@ public:
 	/**
  	* @brief get expression
  	*/
-	void get_expr( /*out*/ string& s ) const;
+	const string& get_expr() const;
 
 	/**
- 	* @brief set expression
- 	*/
-	void set_expr(const string& s);
-
-	/**
-     * @brief print regex expression to stdout
- 	 */
-	void print_expr() const;
+	 * @brief init_expr
+	 */
+	void init_epxr();
 
 	/**
      * @brief print token to stdout

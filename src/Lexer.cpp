@@ -78,13 +78,10 @@ bool Lexer::init( const string& file, const string &config_file )
     stringstream ss;
     const int r = read_sstream( file, ss );
     _search_text = ss.str( );
-    // build expression ...
-    string exp;
-    get_expr(exp);
-    _expr = exp;
-    // bkp todo!
+    // initialize expression ...
+    init_epxr();
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
-    _rexp = boost::regex( exp, boost::regex::ECMAScript );
+    _rexp = boost::regex( _expr, boost::regex::ECMAScript );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
     return r;
@@ -293,54 +290,44 @@ void Lexer::on_token( const unsigned int& token_, const boost::smatch& m )
 /**
  * @brief get regex expression
  */
-void Lexer::get_expr( /*out*/ string& s ) const
+const string& Lexer::get_expr() const
 {
+    return _expr;
+}
+
+/**
+ * @brief init_expr
+ */
+void Lexer::init_epxr()
+{
+    // generate expression from sub expressions (1?)|(2?)|(3?)|...|(n?)
     stringstream ss;
     const size_t len = _tokens.size();
     for(int i = 0; i < len; ++i)
     {
         token* ptok = _tokens[i];
         ss << "(?<" << ptok->name << ">" + ptok->rexp + ")|";
-        //ss << "(" << tok.rexp << ")|";
     }
-    s = ss.str();
-    s.pop_back();
+    _expr = ss.str();
+    _expr.pop_back();
 
     // auto index using test_value
-    const auto rgx = boost::regex( s );
+    const auto rgx = boost::regex( _expr );
     boost::smatch m;
     for(int i = 0; i < len; ++i)
     {
-        // bkp todo!
-        // boost::regex_search( tok[i]->test_value, m, rgx );
-        // const size_t sz = m.size();
-        // for(int j = 0; j < sz; ++j)
-        // {
-        //     if(m[j].matched)
-        //     {
-        //         tok[i]->index = j;
-        //         break;
-        //     }
-        // }
+        token* ptok = _tokens[i];
+        boost::regex_search( ptok->test_value, m, rgx );
+        const size_t sz = m.size();
+        for(int j = 0; j < sz; ++j)
+        {
+            if(m[j].matched)
+            {
+                ptok->index = j;
+                break;
+            }
+        }
     }
-}
-
-/**
- * @brief set_expr
- */
-void Lexer::set_expr(const string& s)
-{
-
-}
-
-/**
- * @brief print regex expression to stdout
- */
-void Lexer::print_expr( ) const
-{
-    string s;
-    get_expr(s);
-    cout << s << endl;
 }
 
 /**

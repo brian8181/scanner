@@ -119,9 +119,7 @@ int parse_options(int argc, char* argv[])
 
         cout << "dumping configuration ... " << endl;
         lexer.dump_config();
-        string s;
-        lexer.get_expr(s);
-        cout << s << endl;
+        cout << lexer.get_expr() << endl;
         cout << "configuration dumped." << endl;
     }
     return 0;
