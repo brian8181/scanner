@@ -140,7 +140,7 @@ public:
 	 * @param token
 	 * @return int
 	 */
-	int get_token( unsigned int& token );
+	int get_token();
 
 	/**
 	 *
@@ -186,12 +186,12 @@ public:
 protected:
 	string                   _config_file;
 	vector<token*>            _tokens;
-	map<unsigned int, token> _token_tab;
 	map<int, token*>          _idx_tab;
 	map<int, token*>          _id_tab;
 	map<string, token*>       _name_tab;
 	map<int, vector<token*>>  _state_tokens_tab;
-	map<int, state*>           _state_tab;
+	map<int, state*>          _state_tab;
+	vector<token*>            _matches;
 
 	std::string             _scan_file;
 	std::string             _search_text;

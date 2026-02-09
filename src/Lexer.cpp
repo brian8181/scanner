@@ -100,7 +100,6 @@ void Lexer::load_config( const string &path )
 {
     // bkp todo!
     //need to delete each token before clearing!! _tokens.clear();
-    _token_tab.clear();
     _id_tab.clear();
     _idx_tab.clear();
     _name_tab.clear();
@@ -233,44 +232,32 @@ void Lexer::dump_config( ) const
  * @param  unsigned int& token, out param, a token
  * @return int
  */
-int Lexer::get_token( /*out*/ unsigned int& token )
+int Lexer::get_token()
 {
     // bkp todo!
+    return 0;
+
     stringstream ss;
-    token = ID_UNDEFINED;
+    token* ptok = 0;
     if(*_p_iter != _end)
     {
-        // need to look up by sub_match id
-        boost::smatch what = *(*_p_iter);
-        size_t len = what.size();
+        // need to look up by sub_match index
+        boost::smatch sm = *(*_p_iter);
+        size_t len = sm.size();
+        // find matched
         for(int i = 0; i < len; ++i)
         {
-            // bkp todo!
-            //if(what[i])
-            // cout << "smatch[" << i << "].first" << what[i].first << endl;
-            // cout << "smatch[" << i << "].second" << what[i].second << endl;
+            if(sm[i].matched)
+            {
+                ptok = _idx_tab[i];        // look up by index
+                _matches.push_back(ptok);  // push matched token
+                break;                     // found
+            }
         }
-
-        if( _token_map.contains( what.str( ) ) )
-        {
-            // bkp todo!
-            // tok = _token_map[what.str()].first;
-            // string name = _token_map[what.str( )].second;
-            // // ss << "{\n\ttoken__: " << token << "\n\tname: " << name << "\n\ttoken: '" << what.str( ) << "'\n\tpos: " << what.position( 0 ) << "\n}" << endl;
-            // // color_print( ss.str( ), fg( fmt::color::antique_white ) );
-            // // ss.clear( );
-            // // create token ...
-            // string match = what.str( );
-            // std::pair<int, std::string> id( token, name );
-            // std::pair<std::string, std::pair<int, std::string>> tok( match, id );
-            // token t;
-            // _tokens.push_back(t);
-        }
-        ++(*_p_iter);
-        //on_token( token, what );
-        return token;
+        ++(*_p_iter);              // increment iterrator
+        return ptok->id;           // return token id
     }
-    return 0;
+    return -1; // error or eof
 }
 
 /**

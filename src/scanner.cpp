@@ -42,9 +42,8 @@ int lex()
         lexer.init(g_scan_file, g_config_file);
         initialized = true;
     }
-    unsigned int token;
-    lexer.get_token(token);
-    return token;
+    unsigned int token_id = lexer.get_token();
+    return token_id;
 }
 
 /**

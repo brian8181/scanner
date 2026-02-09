@@ -1,0 +1,46 @@
+configure scanner ...
+[34mload configuration file="[0m[32m[3m.config/default.txt"[0m
+[34minput file="[0m[32m[3mtest/tok.txt"[0m
+configuration loaded.
+scanner configured.
+lexing ...
+finished scanning. 
+dumping configuration ... 
+Id: 273        name: ASTERIK         type: string          value: null            rexp: \*              test_value: "*"            
+Id: 279        name: COMMA           type: string          value: null            rexp: \,              test_value: ","            
+Id: 285        name: DOT             type: string          value: null            rexp: \.              test_value: "."            
+Id: 291        name: OPEN_BRACKET    type: string          value: null            rexp: \[              test_value: "["            
+Id: 297        name: CLOSE_BRACKET   type: string          value: null            rexp: \]              test_value: "]"            
+Id: 303        name: OPEN_BRACKET    type: string          value: null            rexp: \(              test_value: "("            
+Id: 309        name: CLOSE_BRACKET   type: string          value: null            rexp: \)              test_value: ")"            
+Id: 315        name: OPEN_BRACE      type: string          value: null            rexp: \{              test_value: "{"            
+Id: 321        name: CLOSE_BRACE     type: string          value: null            rexp: \}              test_value: "}"            
+Id: 327        name: COLON           type: string          value: null            rexp: :               test_value: ":"            
+Id: 333        name: SEMI_COLON      type: string          value: null            rexp: ;               test_value: ";"            
+Id: 339        name: AMPERSAND       type: string          value: null            rexp: &               test_value: "&"            
+Id: 345        name: HASH            type: string          value: null            rexp: #               test_value: "#"            
+Id: 351        name: QUESTION        type: string          value: null            rexp: \?              test_value: "?"            
+Id: 357        name: LESS_THAN       type: string          value: null            rexp: <               test_value: "<"            
+Id: 363        name: GREATER_THAN    type: string          value: null            rexp: >               test_value: ">"            
+Id: 369        name: LESS_THAN_EQUAL type: string          value: null            rexp: <=              test_value: "<="           
+Id: 381        name: VBAR            type: string          value: null            rexp: \|              test_value: "|"            
+Id: 387        name: CARROT          type: string          value: null            rexp: \^              test_value: "^"            
+Id: 393        name: EXCLAMATION     type: string          value: null            rexp: $               test_value: "\$"           
+Id: 399        name: BACKWARD_SLASH  type: string          value: null            rexp: \\              test_value: "\"            
+Id: 405        name: UNDERSCORE      type: string          value: null            rexp: _               test_value: "_"            
+Id: 411        name: DOUBLE_QUOTE    type: string          value: null            rexp: "               test_value: """            
+Id: 417        name: TILDE           type: string          value: null            rexp: ~               test_value: "~"            
+Id: 423        name: SINGLE_QUOTE    type: string          value: null            rexp: '               test_value: "'"            
+Id: 429        name: TICK_MARK       type: string          value: null            rexp: `               test_value: "`"            
+Id: 435        name: FORWARD_SLASH   type: string          value: null            rexp: /               test_value: "/"            
+Id: 441        name: EQUAL           type: string          value: null            rexp: =               test_value: "="            
+Id: 447        name: PERCENT         type: string          value: null            rexp: %               test_value: "%"            
+Id: 453        name: EXCLAMATION     type: string          value: null            rexp: !               test_value: "!"            
+Id: 459        name: EXCLAMATION     type: string          value: null            rexp: @               test_value: "@"            
+Id: 471        name: PLUS            type: string          value: null            rexp: \+              test_value: "+"            
+Id: 477        name: MINUS           type: string          value: null            rexp: \-              test_value: "-"            
+Id: 483        name: INT             type: long            value: null            rexp: [1-9][0-9]*     test_value: "81 42 19"     
+Id: 489        name: DOUBLE          type: double          value: null            rexp: [0-9]*.[0.9]+   test_value: "0.1 9.99 3.3 3.1416 1.44 2.7183"
+Id: 501        name: EOF             type: char            value: null            rexp: '\0'            test_value: "'\0'"         
+(?<ASTERIK>\*)|(?<COMMA>\,)|(?<DOT>\.)|(?<OPEN_BRACKET>\[)|(?<CLOSE_BRACKET>\])|(?<OPEN_BRACKET>\()|(?<CLOSE_BRACKET>\))|(?<OPEN_BRACE>\{)|(?<CLOSE_BRACE>\})|(?<COLON>:)|(?<SEMI_COLON>;)|(?<AMPERSAND>&)|(?<HASH>#)|(?<QUESTION>\?)|(?<LESS_THAN><)|(?<GREATER_THAN>>)|(?<LESS_THAN_EQUAL><=)|(?<VBAR>\|)|(?<CARROT>\^)|(?<EXCLAMATION>$)|(?<BACKWARD_SLASH>\\)|(?<UNDERSCORE>_)|(?<DOUBLE_QUOTE>")|(?<TILDE>~)|(?<SINGLE_QUOTE>')|(?<TICK_MARK>`)|(?<FORWARD_SLASH>/)|(?<EQUAL>=)|(?<PERCENT>%)|(?<EXCLAMATION>!)|(?<EXCLAMATION>@)|(?<PLUS>\+)|(?<MINUS>\-)|(?<INT>[1-9][0-9]*)|(?<DOUBLE>[0-9]*.[0.9]+)|(?<EOF>'\0')
+configuration dumped.
