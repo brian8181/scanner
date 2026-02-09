@@ -30,12 +30,13 @@ using std::map;
 using std::pair;
 
 using namespace std;
-
+// bkp todo!
+//using namespace bkp;
 
 /**
  * @brief default ctor
  */
-Lexer::Lexer( ): _p_iter(nullptr) {}
+Lexer::Lexer(): _p_iter(nullptr) {}
 
 /**
  * @brief  ctor
@@ -58,8 +59,9 @@ Lexer::Lexer( const Lexer& src ): _p_iter(nullptr) {}
 /**
  * @brief virtual dtor
  */
-Lexer::~Lexer( )
+Lexer::~Lexer()
 {
+    // bkp todo!
 }
 
 /**
@@ -71,6 +73,7 @@ Lexer::~Lexer( )
 bool Lexer::init( const string& file, const string &config_file )
 {
     load_config( config_file );
+    _state = new state{ 1, "INITIAL" };
     _scan_file = file;
     stringstream ss;
     const int r = read_sstream( file, ss );
@@ -79,6 +82,7 @@ bool Lexer::init( const string& file, const string &config_file )
     string exp;
     get_expr(exp);
     _expr = exp;
+    // bkp todo!
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
     _rexp = boost::regex( exp, boost::regex::ECMAScript );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
@@ -94,6 +98,16 @@ bool Lexer::init( const string& file, const string &config_file )
  */
 void Lexer::load_config( const string &path )
 {
+    // bkp todo!
+    //need to delete each token before clearing!! _tokens.clear();
+    _token_tab.clear();
+    _id_tab.clear();
+    _idx_tab.clear();
+    _name_tab.clear();
+    //need to delete each state before clearing!! _state_tab.clear();
+    _state_tokens_tab.clear();
+
+
     _config_file = path;
     string section = "none";
     string s;
@@ -131,7 +145,6 @@ void Lexer::load_config( const string &path )
 
             token* ptok = new token{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("null"), string(test_val), 0 };
             // copy to term to vector
-            // token tok{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("null"), string(test_val), 0 };
             _tokens.push_back(ptok);
             _id_tab[ptok->id] = ptok;
             _idx_tab[ptok->index] = ptok;
@@ -157,20 +170,27 @@ void Lexer::load_config( const string &path )
         {
             // cout << "states_match[\"state\"].matched = " << (states_match["state"].matched ? "TRUE" : "FALSE") << endl;
             // cout << "states_match[\"tokens\"].matched = " << (states_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
-            string str_state = states_match["state"].str();
-            string str_tokens = states_match["tokens"].str();
+
+            string str_state = states_match["state"].str();  // new state to create
+            string str_tokens = states_match["tokens"].str(); // csv tokens for that state
+            int i = 0;
+            int state_id = 0xFF | (++i*6); // generate id for new state
+            auto* pstate = new state{ state_id , str_state }; // create new state
+            _state_tab[pstate->id] = pstate; // insert new state into table
+
             // copy to term to vector
-            vector<token*> tokens;
-            std::stringstream ss(str_tokens);
-            std::string str_token;
-            int i = 0xFF;
+            vector<token*> tokens; // token vector for this state
+            std::stringstream ss(str_tokens); // csv of states
+            std::string str_token; // item in csv states
+
             // use get line to split on commas
             while (std::getline(ss, str_token, ','))
             {
+
                 token* ptok = _name_tab[str_token];
                 tokens.push_back(ptok);
-                lex_state init_state{ 0xFF + ++i*6, str_state };
-                _state_tokens_tab[init_state.id] = tokens;
+                _state_tokens_tab[pstate->id] = tokens;
+
             }
         }
     }
@@ -194,7 +214,7 @@ void Lexer::dump_config( const string& file )
 void Lexer::dump_config( ) const
 {
     stringstream ss;
-    int len = _tokens.size();
+    const size_t len = _tokens.size();
     for(int i = 0; i < len; ++i)
     {
         token* ptok = _tokens[i];
@@ -206,13 +226,6 @@ void Lexer::dump_config( ) const
             " test_value: " << left << setw(15) << ptok->test_value << endl;
     }
     cout << ss.str();
-    // debug Print the tokens
-    // for (const std::string& tok : _terminals)
-    // {
-    //     ss << tok << ", ";
-    // }
-    // string out = trim(ss.str());
-    // cout << out;
 }
 
 /**
@@ -222,16 +235,17 @@ void Lexer::dump_config( ) const
  */
 int Lexer::get_token( /*out*/ unsigned int& token )
 {
-
+    // bkp todo!
     stringstream ss;
     token = ID_UNDEFINED;
     if(*_p_iter != _end)
     {
         // need to look up by sub_match id
         boost::smatch what = *(*_p_iter);
-        int len = what.size();
+        size_t len = what.size();
         for(int i = 0; i < len; ++i)
         {
+            // bkp todo!
             //if(what[i])
             // cout << "smatch[" << i << "].first" << what[i].first << endl;
             // cout << "smatch[" << i << "].second" << what[i].second << endl;
@@ -239,6 +253,7 @@ int Lexer::get_token( /*out*/ unsigned int& token )
 
         if( _token_map.contains( what.str( ) ) )
         {
+            // bkp todo!
             // tok = _token_map[what.str()].first;
             // string name = _token_map[what.str( )].second;
             // // ss << "{\n\ttoken__: " << token << "\n\tname: " << name << "\n\ttoken: '" << what.str( ) << "'\n\tpos: " << what.position( 0 ) << "\n}" << endl;
@@ -259,52 +274,39 @@ int Lexer::get_token( /*out*/ unsigned int& token )
 }
 
 /**
+ * @brief reset
+ */
+void Lexer::reset()
+{
+    // bkp todo!
+    _scan_file = "";
+    _search_text = "";
+    _rexp = "";
+    _begin;
+    _end;
+    _p_iter;
+    delete _state;
+    _state = new state{ 1, "INITIAL" };
+    _expr;
+}
+
+
+/**
  * @brief override virtual, on_token, for each token ...
  * @param token
  */
 void Lexer::on_token( const unsigned int& token_, const boost::smatch& m )
 {
+    // bkp todo!
     //stringstream ss;
     //unsigned int token = ID_UNDEFINED;
     cout << "on_token( " << token_ << ", \"" << m.str() << "\" );" << endl;
 }
 
 /**
- * @brief  tokenize (depracated)
- * @param  const string &exp, regular expression to match
- * @param  const string &text, text to tokenize
- * @return void
+ * @brief get regex expression
  */
-void Lexer::tokenize( const string &exp, const string &text )
-{
-    // stringstream ss;
-    // const auto rexp = boost::regex( exp, boost::regex::ECMAScript );
-    // const boost::sregex_iterator begin = boost::sregex_iterator( text.begin( ), text.end( ), rexp );
-    // boost::regex_iterator<__gnu_cxx::__normal_iterator<const char *, basic_string<char> > end;
-    // for (boost::sregex_iterator iter = begin; iter != end; ++iter)
-    // {
-    //     // need to look up by sub_match id
-    //     if(boost::smatch m = *iter; _token_map.contains( m.str( ) ) )
-    //     {
-    //         const int token = _token_map[m.str( )].first;
-    //         string name = _token_map[m.str( )].second;
-    //         ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n}" << endl;
-    //         color_print( ss.str( ), fg( fmt::color::antique_white ) );
-    //         ss.clear( );
-    //     }
-    //     else
-    //     {
-    //         ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n};" << endl;
-    //         color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
-    //         ss.clear( );
-    //     }
-    // }
-}
-
-/**
- * @brief print regex expression to stdout
- */
-void Lexer::get_expr( /*out*/ string& s )
+void Lexer::get_expr( /*out*/ string& s ) const
 {
     stringstream ss;
     const size_t len = _tokens.size();
@@ -317,7 +319,8 @@ void Lexer::get_expr( /*out*/ string& s )
     s = ss.str();
     s.pop_back();
 
-    //auto index using test_value
+    // bkp todo!
+    // auto index using test_value
     // const auto rgx = boost::regex( s );
     // boost::smatch m;
     // for(int i = 0; i < len; ++i)
@@ -336,9 +339,17 @@ void Lexer::get_expr( /*out*/ string& s )
 }
 
 /**
+ * @brief set_expr
+ */
+void Lexer::set_expr(const string& s)
+{
+
+}
+
+/**
  * @brief print regex expression to stdout
  */
-void Lexer::print_expr( )
+void Lexer::print_expr( ) const
 {
     string s;
     get_expr(s);

@@ -48,6 +48,8 @@ using std::regex;
 #define INT 1
 #define FLOAT 2
 
+// namespace bkp
+// {
 
 //vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
 
@@ -66,11 +68,11 @@ typedef struct terminal
 
 typedef terminal token;
 
-typedef struct lex_state
+typedef struct state
 {
 	int id;
 	string name;
-} lex_state;
+} state;
 
 
 /**
@@ -115,10 +117,10 @@ public:
 
 	/**
 	 * @brief  load_config: load configuration from file
-	 * @param  path
+	 * @param  file
 	 * @return void
 	 */
-	void load_config( const string &path );
+	void load_config( const string &file );
 
 	/**
 	 * @brief  dump current config
@@ -128,10 +130,10 @@ public:
 
 	/**
 	 * @brief  dump config
-	 * @param  path : config to dump
+	 * @param  file : config to dump
 	 * @return void
 	 */
-	void dump_config( const string &path );
+	void dump_config( const string &file );
 
 	/**
 	 * @brief  get_token
@@ -139,6 +141,11 @@ public:
 	 * @return int
 	 */
 	int get_token( unsigned int& token );
+
+	/**
+	 *
+	 */
+	void reset();
 
 	/**
 	 * @brief virtual, virtual for each token ...
@@ -158,17 +165,17 @@ public:
 	/**
  	* @brief get expression
  	*/
-	void get_expr( /*out*/ string& s );
+	void get_expr( /*out*/ string& s ) const;
 
 	/**
  	* @brief set expression
  	*/
-	void set_expr();
+	void set_expr(const string& s);
 
 	/**
      * @brief print regex expression to stdout
  	 */
-	void print_expr();
+	void print_expr() const;
 
 	/**
      * @brief print token to stdout
@@ -184,7 +191,7 @@ protected:
 	map<int, token*>          _id_tab;
 	map<string, token*>       _name_tab;
 	map<int, vector<token*>>  _state_tokens_tab;
-	map<int, lex_state>      _state_tab;
+	map<int, state*>           _state_tab;
 
 	std::string             _scan_file;
 	std::string             _search_text;
@@ -192,8 +199,10 @@ protected:
 	boost::sregex_iterator  _begin;
 	boost::sregex_iterator  _end;
 	boost::sregex_iterator* _p_iter;
-	string _state;
+	state* _state;
 	string _expr;
 };
+
+//}
 
 #endif

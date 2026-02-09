@@ -184,7 +184,7 @@ protected:
 	map<int, token> _id_tab;
 	map<string, token> _name_tab;
 	map<int, vector<token>> _state_tokens_tab;
-	map<int, lex_state> _state_tab;
+	map<int, state*> _state_tab;
 
 	std::string            _scan_file;
 	std::string            _search_text;

@@ -194,10 +194,14 @@ void Lexer::load_config( const string &path )
             // use get line to split on commas
             while (std::getline(ss, str_token, ','))
             {
+
+                state* pstate = new state{ 0xFF + ++i*6, str_state };
+                _state_tab[pstate->id] = pstate;
+
                 token tok = _name_tab[str_token];
                 tokens.push_back(tok);
-                lex_state init_state{ 0xFF + ++i*6, str_state };
-                _state_tokens_tab[init_state.id] = tokens;
+                _state_tokens_tab[pstate->id] = tokens;
+
             }
         }
     }
