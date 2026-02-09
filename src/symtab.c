@@ -58,7 +58,7 @@ void init_sub_table(symbol_tab* parent)
 void add_symbol(symbol_tab* stab, const char* id, const char* val)
 {
     // create symbol
-    symbol* sym = (symbol*)malloc( sizeof(symbol) );
+    auto* sym = (symbol*)malloc( sizeof(symbol) );
     sym->id = (char*)malloc( strlen(id) + 1 );
     sym->pval = (char*)malloc( strlen(val) + 1 );
     node* new_node = (node*)malloc( sizeof(node) );

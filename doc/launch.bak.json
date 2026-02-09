@@ -35,7 +35,7 @@
             "name": "GDB-MAKE",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "program": "",
             "args": [],
             "stopAtEntry": false,
             "cwd": "C:/cygwin64/bin",

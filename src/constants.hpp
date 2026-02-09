@@ -25,7 +25,7 @@ const string LETTER               = "[a-z]";
 const string DIGIT                = "[0-9]";
 const string HEX_DIGIT            = "[A-F0-9]";
 const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
-const string VALID_CHARS          = "[ [:punct:][:alnum:]]"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`
+const string VALID_CHARS          = "[[:punct:][:alnum:]]"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`
 const string VALID_FILE_CHARS     = "[A-Za-z0-9_. ]";
 const string TOKEN_TYPE           = "[A-Za-z][A-Za-z_]*((::)[A-Za-z_]*)?";
 const string TOKEN_TYPE_           = "[A-Za-z][A-Za-z_]*";

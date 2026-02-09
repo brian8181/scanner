@@ -119,6 +119,7 @@ namespace ast
 		 * @brief : default ctor
 		 */
 		binary_expr(const T& lhs, const T& rhs) //: _lhs(&lhs), _rhs(&rhs)
+			: _val(nullptr)
 		{
 			_lhs = new T(lhs);
 			_rhs = new T(rhs);
@@ -130,6 +131,7 @@ namespace ast
 		 * @param rhs : const T& rhs
 		 */
 		binary_expr(const expr& lhs, const T& rhs) //: _lhs(&lhs), _rhs(&rhs)
+			: _val(nullptr)
 		{
 			_lhs = new T(lhs);
 			_rhs = new T(rhs);
@@ -141,6 +143,7 @@ namespace ast
 		 * @param rhs : const expr& rhs
 		 */
 		binary_expr(const expr& lhs, const expr& rhs) //: _lhs(&lhs), _rhs(&rhs)
+			: _val(nullptr)
 		{
 			_lhs = new T(lhs);
 			_rhs = new T(rhs);

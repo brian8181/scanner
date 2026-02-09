@@ -192,7 +192,7 @@ string itos(const int i)	// convert int to string
 /**
  * @name   atoi
  * @brief  ascii to int
- * @param  ptr, string to convert
+ * @param  ptr
  * @return int : result
  */
 int atoi(const char* ptr)

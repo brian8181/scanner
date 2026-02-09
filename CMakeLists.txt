@@ -17,7 +17,7 @@ endif()
  
 
 add_library(lexer_a STATIC
-    src/Lexer.cpp
+        src/Lexer.cpp
     src/utility.cpp
     src/fileio.cpp
 )
@@ -26,7 +26,7 @@ add_library(lexer_a STATIC
 
 add_executable(scanner
     src/scanner.cpp
-    src/Lexer.cpp
+        src/Lexer.cpp
     src/utility.cpp
     src/fileio.cpp
 )

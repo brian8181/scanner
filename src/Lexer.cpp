@@ -17,7 +17,7 @@
 #include <fmt/color.h>
 #include <boost/regex.hpp>
 #include "fileio.hpp"
-#include "Lexer.h"
+#include "Lexer.hpp"
 #include "utility.hpp"
 #include "constants.hpp"
 
@@ -35,12 +35,12 @@ using namespace std;
 /**
  * @brief default ctor
  */
-Lexer::Lexer( )
-{
-}
+Lexer::Lexer( ): _p_iter(nullptr) {}
 
 /**
  * @brief  ctor
+ * @param file
+ * @param config_file
  * @param  const string& file, scan file
  * @param  const string &config_file, config file
  */
@@ -53,9 +53,7 @@ Lexer::Lexer( const string& file, const string &config_file ) : _scan_file(file)
  * @brief copy ctor
  * @param const Lexer& src
  */
-Lexer::Lexer( const Lexer& src )
-{
-}
+Lexer::Lexer( const Lexer& src ): _p_iter(nullptr) {}
 
 /**
  * @brief virtual dtor
@@ -66,6 +64,8 @@ Lexer::~Lexer( )
 
 /**
  * @brief  initialize state
+ * @param file
+ * @param config_file
  * @param  const string& file, scan file
  * @param  const string &config_file, config file
  * @return bool
@@ -74,15 +74,14 @@ bool Lexer::init( const string& file, const string &config_file )
 {
     load_config( config_file );
     _scan_file = file;
-    stringstream sstrm;
-    int r = read_sstream( file, sstrm );
-    _search_text = sstrm.str( );
+    stringstream ss;
+    const int r = read_sstream( file, ss );
+    _search_text = ss.str( );
     // build expression ...
     string exp;
     get_expr(exp);
     cout << "exp: \"" << exp << "\"" << endl;
-    //_rexp = regex( exp, regex::ECMAScript );
-    // testing
+    _expr = exp;
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
     _rexp = boost::regex( exp, boost::regex::ECMAScript );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
@@ -91,7 +90,7 @@ bool Lexer::init( const string& file, const string &config_file )
 }
 
 /**
- * @brief  load_config: load confiuration from file
+ * @brief  load_config: load configuration from file
  * @param path to config file
  * @param  const string &path
  * @return void
@@ -132,10 +131,14 @@ void Lexer::load_config( const string &path )
             string expr = token_match["rexp"].str();
             string stype = token_match["type"].str();
             string test_val = token_match["test"].str();
-            // copy to term to vector
-            terminal term{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("value"), string(test_val), 0 };
-            _terminals.push_back(term);
-            _token_map[term.name] = std::pair(term.id, term.rexp);
+
+            token* ptok = new token{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("null"), string(test_val), 0 };
+            // // copy to term to vector
+            // token tok{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("null"), string(test_val), 0 };
+            _tokens.push_back(ptok);
+            _id_tab[ptok->id] = ptok;
+            _idx_tab[ptok->index] = ptok;
+            _name_tab[ptok->name] = ptok;
         }
     }
 
@@ -157,30 +160,28 @@ void Lexer::load_config( const string &path )
         {
             // cout << "states_match[\"state\"].matched = " << (states_match["state"].matched ? "TRUE" : "FALSE") << endl;
             // cout << "states_match[\"tokens\"].matched = " << (states_match["tokens"].matched ? "TRUE" : "FALSE") << endl;
-            string state = states_match["state"].str();
-            string tokens = states_match["tokens"].str();
+            string str_state = states_match["state"].str();
+            string str_tokens = states_match["tokens"].str();
             // copy to term to vector
-            vector<string> terminals;
-            std::stringstream ss(tokens);
-            std::string token;
+            vector<token*> tokens;
+            std::stringstream ss(str_tokens);
+            std::string str_token;
             int i = 0xFF;
             // use get line to split on commas
-            while (std::getline(ss, token, ','))
+            while (std::getline(ss, str_token, ','))
             {
-                lex_state lstate{ 0xFF + ++i*6, state };
-                // need token/ terminal map : i.e. ( tm[PLUS] = id(01) | tm[id(01)] = "PLUS" )
-                terminals.push_back(trim(token));
+                token* ptok = _name_tab[str_token];
+                tokens.push_back(ptok);
+                lex_state init_state{ 0xFF + ++i*6, str_state };
+                _state_tokens_tab[init_state.id] = tokens;
             }
-            // todo bkp: build state objects from config
-            lex_state lstate{ 1, state };
-            vector<terminal> terms;
-            _terminal_map[state] = std::pair(lstate, terms);
         }
     }
 }
 
 /**
  * @brief  dump config
+ * @param file
  * @param  const string& file : config to dump
  * @return void
  */
@@ -194,18 +195,19 @@ void Lexer::dump_config( const string& file )
  * @brief  dump current config
  * @return void
  */
-void Lexer::dump_config( )
+void Lexer::dump_config( ) const
 {
     stringstream ss;
-    int len = _terminals.size();
+    int len = _tokens.size();
     for(int i = 0; i < len; ++i)
     {
-        terminal term = _terminals[i];
-        ss << "Id: " << left << setw(15) << term.id << left << " name: " << left << setw(25) << term.name <<
-            " type: " << left << setw(15) << term.stype <<
-            " value: " << left << term.value <<
-            " test_value: " << left << term.test_value <<
-            " rexp: " << left << term.rexp << endl;
+        token* ptok = _tokens[i];
+        ss << "Id: " << left << setw(10) << ptok->id <<
+            " name: " << left << setw(15) << ptok->name <<
+            " type: " << left << setw(15) << ptok->stype <<
+            " value: " << left << setw(15) << ptok->value <<
+            " rexp: " << left << setw(15) << ptok->rexp <<
+            " test_value: " << left << setw(15) << ptok->test_value << endl;
     }
     cout << ss.str();
 
@@ -281,29 +283,28 @@ void Lexer::on_token( const unsigned int& token_, const boost::smatch& m )
  */
 void Lexer::tokenize( const string &exp, const string &text )
 {
-    stringstream ss;
-    boost::regex rexp = boost::regex( exp, boost::regex::ECMAScript );
-    boost::sregex_iterator begin = boost::sregex_iterator( text.begin( ), text.end( ), rexp );
-    boost::sregex_iterator end;
-    for (boost::sregex_iterator iter = begin; iter != end; ++iter)
-    {
-        // need to look up by sub_match id
-        boost::smatch m = *iter;
-        if( _token_map.contains( m.str( ) ) )
-        {
-            int token = _token_map[m.str( )].first;
-            string name = _token_map[m.str( )].second;
-            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n}" << endl;
-            color_print( ss.str( ), fg( fmt::color::antique_white ) );
-            ss.clear( );
-        }
-        else
-        {
-            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n};" << endl;
-            color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
-            ss.clear( );
-        }
-    }
+    // stringstream ss;
+    // const auto rexp = boost::regex( exp, boost::regex::ECMAScript );
+    // const boost::sregex_iterator begin = boost::sregex_iterator( text.begin( ), text.end( ), rexp );
+    // boost::regex_iterator<__gnu_cxx::__normal_iterator<const char *, basic_string<char> > end;
+    // for (boost::sregex_iterator iter = begin; iter != end; ++iter)
+    // {
+    //     // need to look up by sub_match id
+    //     if(boost::smatch m = *iter; _token_map.contains( m.str( ) ) )
+    //     {
+    //         const int token = _token_map[m.str( )].first;
+    //         string name = _token_map[m.str( )].second;
+    //         ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n}" << endl;
+    //         color_print( ss.str( ), fg( fmt::color::antique_white ) );
+    //         ss.clear( );
+    //     }
+    //     else
+    //     {
+    //         ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n};" << endl;
+    //         color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
+    //         ss.clear( );
+    //     }
+    // }
 }
 
 /**
@@ -311,36 +312,33 @@ void Lexer::tokenize( const string &exp, const string &text )
  */
 void Lexer::get_expr( /*out*/ string& s )
 {
-    cout << "testing get_expr()" << endl;
-    // build "string" expr for terminals
     stringstream ss;
-    const size_t len = _terminals.size();
+    const size_t len = _tokens.size();
     for(int i = 0; i < len; ++i)
     {
-        terminal term = _terminals[i];
-        //ss << "(?<" << term.name << ">" + term.rexp + ")|";
-        ss << "(" << term.rexp << ")|";
+        token* ptok = _tokens[i];
+        ss << "(?<" << ptok->name << ">" + ptok->rexp + ")|";
+        //ss << "(" << tok.rexp << ")|";
     }
     s = ss.str();
     s.pop_back();
 
     //auto index using test_value
-    const auto rgx = boost::regex( s );
-    boost::smatch m;
-    for(int i = 0; i < len; ++i)
-    {
-        boost::regex_match( _terminals[i].test_value, m, rgx );
-        const size_t sz = m.size();
-        for(int j = 0; j < sz; ++j)
-        {
-            if(m[j].matched)
-            {
-                cout << "Found match for " << _terminals[i].name << " syncing index. " << j << endl;
-                _terminals[i].index = j;
-                break;
-            }
-        }
-    }
+    // const auto rgx = boost::regex( s );
+    // boost::smatch m;
+    // for(int i = 0; i < len; ++i)
+    // {
+    //     boost::regex_match( tok[i]->test_value, m, rgx );
+    //     const size_t sz = m.size();
+    //     for(int j = 0; j < sz; ++j)
+    //     {
+    //         if(m[j].matched)
+    //         {
+    //             tok[i]->index = j;
+    //             break;
+    //         }
+    //     }
+    // }
 }
 
 /**

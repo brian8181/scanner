@@ -109,16 +109,13 @@ public:
 	 * @brief  initialize state
 	 * @param file
 	 * @param config_file
-	 * @param  const string& file, scan file
-	 * @param  const string &config_file, config file
 	 * @return bool
 	 */
 	bool init( const string& file, const string &config_file );
 
 	/**
-	 * @brief  load_config: load confiuration from file
-	 * @param path
-	 * @param  const string &path
+	 * @brief  load_config: load configuration from file
+	 * @param  path
 	 * @return void
 	 */
 	void load_config( const string &path );
@@ -127,20 +124,18 @@ public:
 	 * @brief  dump current config
 	 * @return void
 	 */
-	void dump_config( );
+	void dump_config( ) const;
 
 	/**
 	 * @brief  dump config
-	 * @param file
-	 * @param  const string& file : config to dump
+	 * @param  path : config to dump
 	 * @return void
 	 */
-	void dump_config( const string& file );
+	void dump_config( const string &path );
 
 	/**
 	 * @brief  get_token
 	 * @param token
-	 * @param  unsigned int& token, out param, a token
 	 * @return int
 	 */
 	int get_token( unsigned int& token );
@@ -149,8 +144,6 @@ public:
 	 * @brief virtual, virtual for each token ...
 	 * @param token_
 	 * @param m
-	 * @param const unsigned int& token_
-	 * @param const std::smatch& m
 	 */
 	virtual void on_token( const unsigned int& token_, const boost::smatch& m );
 
@@ -159,15 +152,18 @@ public:
 	 * @brief tokenize
 	 * @param exp
 	 * @param text
-	 * @param const string &exp, regular expression
-	 * @param const string &text, search text
-	 */
+	*/
 	void tokenize( const string &exp, const string &text );
 
 	/**
- 	* @brief build experssion
+ 	* @brief get expression
  	*/
 	void get_expr( /*out*/ string& s );
+
+	/**
+ 	* @brief set expression
+ 	*/
+	void set_expr();
 
 	/**
      * @brief print regex expression to stdout
@@ -181,26 +177,23 @@ public:
 
 
 protected:
-	string _config_file;
-	// vector testing
-	vector<terminal> _terminals;
-	map<string, pair<int, string>> _token_map;
-	map<string, pair<lex_state, vector<terminal>>> _terminal_map;
+	string                   _config_file;
+	vector<token*>            _tokens;
+	map<unsigned int, token> _token_tab;
+	map<int, token*>          _idx_tab;
+	map<int, token*>          _id_tab;
+	map<string, token*>       _name_tab;
+	map<int, vector<token*>>  _state_tokens_tab;
+	map<int, lex_state>      _state_tab;
 
-	vector<token> _tokens;
-	// BKP ??
-	//     id        name   match
-	//map<int, pair<string, string>> _tokens;
-	//map<string, pair<string, pair<int, string>>> _tokens;
-
-	// current position & state : i.e. --> get_token
-	std::string _scan_file;
-	std::string _search_text;
-
-	boost::regex           _rexp;
-	boost::sregex_iterator _begin;
-	boost::sregex_iterator _end;
+	std::string             _scan_file;
+	std::string             _search_text;
+	boost::regex            _rexp;
+	boost::sregex_iterator  _begin;
+	boost::sregex_iterator  _end;
 	boost::sregex_iterator* _p_iter;
+	string _state;
+	string _expr;
 };
 
 #endif

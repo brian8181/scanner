@@ -12,7 +12,7 @@
 #include <getopt.h>
 #include <set>
 #include "scanner.hpp"
-#include "Lexer.h"
+#include "Lexer.hpp"
 //#include "constants.hpp"
 #include "config.hpp"
 #include "parser.tab.h"
@@ -124,7 +124,6 @@ int parse_options(int argc, char* argv[])
         lexer.get_expr(s);
         cout << "configuration dumped." << endl;
     }
-
     return 0;
 }
 
