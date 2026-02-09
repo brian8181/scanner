@@ -1,0 +1,251 @@
+/*
+ * @file Name:  ./scanner.cpp
+ * @date: Thu, Sep 11, 2025  4:06:25 PM
+ * @version:    0.0.1
+ */
+
+#include <iostream>
+#include <cstring>
+#include <unistd.h>         /* for STDIN_FILENO */
+#include <sys/select.h>     /* for pselect   */
+#include <string>
+#include <getopt.h>
+#include <set>
+#include "scanner.hpp"
+#include "Lexer.hpp"
+//#include "constants.hpp"
+#include "config.hpp"
+#include "parser.tab.h"
+#include "bash_color.h"
+
+using namespace std;
+
+constexpr int SRC_IDX_OFFSET = 0;
+constexpr int CONFIG_IDX_OFFSET = 1;
+
+static string g_config_file;
+static bool file_flag = false;
+static bool dump_flag = false;
+static string g_scan_file;
+static bool initialized = false;
+static Lexer lexer;
+
+/**
+ * @brief
+ * @param
+ * @return
+ */
+int lex()
+{
+    if(!initialized)
+    {
+        lexer.init(g_scan_file, g_config_file);
+        initialized = true;
+    }
+    unsigned int token;
+    lexer.get_token(token);
+    return token;
+}
+
+/**
+ * @brief parse command line options
+ * @param argc
+ * @param argv
+ * @return
+ */
+int parse_options(int argc, char* argv[])
+{
+    int opt;
+    auto optstring = "hVdf:";
+    const struct option longopts[] = {
+        {"help",        no_argument, nullptr,   'h'},
+        {"version",     no_argument, nullptr,   'V'},
+        {"file",        0, nullptr,   'f'},
+        {"dump",        no_argument, nullptr,   'd'},
+        {nullptr,          0, nullptr,    0 }
+    };
+
+    while ((opt = getopt_long(argc, argv, optstring, longopts, nullptr)) != -1)
+    {
+        switch (opt)
+        {
+            case 'h':
+                cout << "Help message" << endl;
+                return 0;
+            case 'V':
+                cout << "Version 0.0.1" << endl;
+                return 0;
+             case 'f':
+                file_flag = true;
+                g_config_file = optarg;
+                break;
+            case 'd':
+                dump_flag = true;
+                break;
+            default:
+                cerr << "Unknown option: " << opt << endl;
+                return 1;
+        }
+    }
+
+    // configure scanner ...
+    cout << "configure scanner ..." << endl;
+    string file = argv[optind + SRC_IDX_OFFSET];
+    string config_file = file_flag ? g_config_file : ".config/default.txt";
+    cout << FMT_FG_BLUE << "load configuration file=\"" << FMT_RESET
+         << FMT_FG_GREEN << FMT_ITALIC <<  config_file << "\"" << FMT_RESET << endl;
+    cout << FMT_FG_BLUE << "input file=\"" << FMT_RESET
+         << FMT_FG_GREEN << FMT_ITALIC <<  file << "\"" << FMT_RESET << endl;
+
+    g_config_file = config_file;
+    g_scan_file = file;
+
+    if( argc > (optind + CONFIG_IDX_OFFSET) )
+        config_file = argv[optind + CONFIG_IDX_OFFSET];
+    cout << "configuration loaded." << endl;
+
+    // begin lexer ...
+    Lexer lexer(file, config_file);
+    cout << "scanner configured." << endl;
+    cout << "lexing ...";
+    while( lex() )
+    {
+        cout << ".";
+    }
+    cout << endl;
+
+    cout << "finished scanning. " << endl;
+    if(dump_flag)
+    {
+
+        cout << "dumping configuration ... " << endl;
+        lexer.dump_config();
+        string s;
+        lexer.get_expr(s);
+        cout << "configuration dumped." << endl;
+    }
+    return 0;
+}
+
+/**
+ * @brief  stdin_ready function
+ * @param filedes
+ * @param  int filedes : the file handle
+ * @return ready or error code
+ */
+int stdin_ready (int filedes)
+{
+        fd_set set;
+        // declare/initialize zero timeout
+#ifndef CYGWIN
+        struct timespec timeout = { .tv_sec = 0 };
+#else
+        timeval timeout = { .tv_sec = 0 };
+#endif
+        // initialize the file descriptor set
+        FD_ZERO(&set);
+        FD_SET(filedes, &set);
+
+        // check stdin_ready is ready on filedes
+#ifndef CYGWIN
+        return pselect(filedes + 1, &set, NULL, NULL, &timeout, NULL);
+#else
+        return select(filedes + 1, &set, nullptr, nullptr, &timeout);
+#endif
+}
+
+/**
+ * @brief main function
+ * @param argc : param count in argv
+ * @param argv : command line parameters
+ * @return 0 success : or error
+ */
+int main(int argc, char* argv[])
+{
+	try
+	{
+		char* argv_cpy[ sizeof(char*) * argc + 1 ];
+		if(stdin_ready(STDIN_FILENO))
+		{
+			std::string buffer;
+			std::cin >> buffer;
+			memcpy(argv_cpy, argv, sizeof(char*) * argc);
+			argv_cpy[argc] = &buffer[0];
+			++argc;
+			return parse_options(argc, argv_cpy);
+		}
+		return parse_options(argc, argv);
+	}
+	catch(std::runtime_error& ex)
+	{
+	 	std::cout << ex.what() << std::endl;
+		std::exit(-1);
+	}
+	catch(std::logic_error& ex)
+	{
+		std::cout << ex.what() << std::endl;
+		std::exit(-1);
+	}
+}
+
+#ifdef BISON_BRIDGE
+#define BISON_BRIDGE
+
+#include <ctype.h>
+#include <stdlib.h>
+#define NUM 1
+#define YYEOF 0
+
+char* yylval;
+int yyparse();
+
+/**
+ * @brief
+ * @param
+ * @return
+ */
+int yylex (void)
+{
+    int c = getchar ();
+    /* skip white space */
+    while (c == ' ' || c == '\t')
+        c = getchar ();
+    /* Process numbers. */
+    if (c == '.' || isdigit (c))
+    {
+        ungetc (c, stdin);
+        if (scanf ("%lf", &yylval) != 1)
+            abort ();
+        return NUM;
+    }
+    /* return end-of-input */
+    else if (c == EOF)
+        return YYEOF;
+    /* return a single char */
+    else
+        return c;
+}
+
+/**
+ * @brief
+ * @param
+ */
+void yyerror (char const *s)
+{
+    printf("%s\n", s);
+}
+
+
+/**
+ * @brief main function
+ * @param argc : param count in argv
+ * @param argv : command line parameters
+ * @return 0 success : or error
+ */
+
+int __main(int argc, char* argv[])
+{
+    return yyparse();
+}
+
+#endif
