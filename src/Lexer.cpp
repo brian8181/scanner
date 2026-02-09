@@ -80,7 +80,6 @@ bool Lexer::init( const string& file, const string &config_file )
     // build expression ...
     string exp;
     get_expr(exp);
-    cout << "exp: \"" << exp << "\"" << endl;
     _expr = exp;
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
     _rexp = boost::regex( exp, boost::regex::ECMAScript );
@@ -133,7 +132,7 @@ void Lexer::load_config( const string &path )
             string test_val = token_match["test"].str();
 
             token* ptok = new token{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("null"), string(test_val), 0 };
-            // // copy to term to vector
+            // copy to term to vector
             // token tok{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("null"), string(test_val), 0 };
             _tokens.push_back(ptok);
             _id_tab[ptok->id] = ptok;
