@@ -101,13 +101,7 @@ bool Lexer::init( const string& file, const string &config_file )
 	_state_tab.clear();
 	_matches.clear();
 
-    //load_config( config_file );
 
-    int id = 3;
-    string name = "ASTERICK";
-    string stype = "string";
-    string expr = "\\\\*";
-    string test_val = "\\*";
 
     token* ptok[] =  {  new token{ 3, "ASTERICK", "string", 0, 0, "\\\\*",          "\\*",    1, string("null") },
                         new token{ 4, "COMMA",    "string", 0, 0, "\\\\,",          "\\,",    2, string("null") },
@@ -122,28 +116,22 @@ bool Lexer::init( const string& file, const string &config_file )
         _idx_tab[ptok[i]->index] = ptok[i];
     }
 
-    // _tokens.push_back(ptok[1]);
-    // _id_tab[ptok[1]->id] = ptok[1];
-    // _name_tab[ptok[1]->name] = ptok[1];
-    // _idx_tab[ptok[1]->index] = ptok[1];
-
-    // _tokens.push_back(ptok[2]);
-    // _id_tab[ptok[2]->id] = ptok[2];
-    // _name_tab[ptok[2]->name] = ptok[2];
-    // _idx_tab[ptok[2]->index] = ptok[2];
-
-    //  _tokens.push_back(ptok[2]);
-    // _id_tab[ptok[2]->id] = ptok[2];
-    // _name_tab[ptok[2]->name] = ptok[2];
-    // _idx_tab[ptok[2]->index] = ptok[2];
+    _expr = "(\\*)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
 
     // bkp todo 1-3 ...
 
     _state = new state{ 1, "INITIAL" };
+    _states.push_back(_state);
+    _state_tab[_state->id] = _state;
+    vector<token*> tokens; // bkp todo tokens for state
+    _state_tokens_tab[_state->id] = tokens;
+
+    //load_config( config_file );
     _scan_file = file;
     stringstream ss;
     const int r = read_sstream( file, ss );
     _search_text = ss.str( );
+
     // initialize expression ...
     //init_epxr();
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
@@ -281,9 +269,9 @@ void Lexer::tokenize()
     stringstream ss;
     const int r = read_sstream( _scan_file, ss );
     string search_text = ss.str( );
-    // initialize expression ...
 
-    // testing ...
+    // initialize expression ...
+    // testing ... todo ... use auto created expression
     string expr = "(\\*)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
     auto rexp = boost::regex( expr, boost::regex::ECMAScript );
     auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );

@@ -72,9 +72,9 @@ typedef struct token_match
 	int itype;
 	int lex_t;
 	string rexp;
-	string value;
 	string test_value;
 	int index;
+	string value;
 } token_match;
 
 
