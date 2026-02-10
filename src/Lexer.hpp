@@ -51,7 +51,20 @@ using std::regex;
 // {
 //vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
 
-typedef struct terminal
+typedef struct token
+{
+	int id;
+	string name;
+	string stype;
+	int itype;
+	int lex_t;
+	string rexp;
+	string test_value;
+	int index;
+	string value;
+} token;
+
+typedef struct token_match
 {
 	int id;
 	string name;
@@ -62,9 +75,8 @@ typedef struct terminal
 	string value;
 	string test_value;
 	int index;
-} terminal;
+} token_match;
 
-typedef terminal token;
 
 typedef struct state
 {

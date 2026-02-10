@@ -101,7 +101,44 @@ bool Lexer::init( const string& file, const string &config_file )
 	_state_tab.clear();
 	_matches.clear();
 
-    load_config( config_file );
+    //load_config( config_file );
+
+    int id = 3;
+    string name = "ASTERICK";
+    string stype = "string";
+    string expr = "\\\\*";
+    string test_val = "\\*";
+
+    token* ptok[] =  {  new token{ 3, "ASTERICK", "string", 0, 0, "\\\\*",          "\\*",    1, string("null") },
+                        new token{ 4, "COMMA",    "string", 0, 0, "\\\\,",          "\\,",    2, string("null") },
+                        new token{ 5, "DOT",      "string", 0, 0, "\\\\.",          "\\.",    3, string("null") },
+                        new token{ 6, "SYBMOL",   "string", 0, 0, "\\\\$[a-zA-Z]+", "\\$abc", 4, string("null") } };
+
+    for(int i = 0; i < 4; ++i)
+    {
+        _tokens.push_back(ptok[i]);
+        _id_tab[ptok[i]->id] = ptok[i];
+        _name_tab[ptok[i]->name] = ptok[i];
+        _idx_tab[ptok[i]->index] = ptok[i];
+    }
+
+    // _tokens.push_back(ptok[1]);
+    // _id_tab[ptok[1]->id] = ptok[1];
+    // _name_tab[ptok[1]->name] = ptok[1];
+    // _idx_tab[ptok[1]->index] = ptok[1];
+
+    // _tokens.push_back(ptok[2]);
+    // _id_tab[ptok[2]->id] = ptok[2];
+    // _name_tab[ptok[2]->name] = ptok[2];
+    // _idx_tab[ptok[2]->index] = ptok[2];
+
+    //  _tokens.push_back(ptok[2]);
+    // _id_tab[ptok[2]->id] = ptok[2];
+    // _name_tab[ptok[2]->name] = ptok[2];
+    // _idx_tab[ptok[2]->index] = ptok[2];
+
+    // bkp todo 1-3 ...
+
     _state = new state{ 1, "INITIAL" };
     _scan_file = file;
     stringstream ss;
@@ -156,11 +193,10 @@ void Lexer::load_config( const string &path )
             string stype = token_match["type"].str();
             string test_val = token_match["test"].str();
 
-            token* ptok = new token{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string("null"), string(test_val), 0 };
+            token* ptok = new token{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string(test_val), 0, string("null") };
             // copy to term to vector
             _tokens.push_back(ptok);
             _id_tab[ptok->id] = ptok;
-            _idx_tab[ptok->index] = ptok;
             _name_tab[ptok->name] = ptok;
         }
     }
@@ -239,8 +275,6 @@ void Lexer::dump_config( ) const
 
 /**
  * @brief tokenize
- * @param exp
- * @param text
 */
 void Lexer::tokenize()
 {
@@ -250,7 +284,7 @@ void Lexer::tokenize()
     // initialize expression ...
 
     // testing ...
-    string expr = "(\\*)|(\\,)|(\\.)";
+    string expr = "(\\*)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
     auto rexp = boost::regex( expr, boost::regex::ECMAScript );
     auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
     auto end = boost::sregex_iterator();
@@ -266,10 +300,10 @@ void Lexer::tokenize()
         {
             if(m[i].matched)
             {
-                // ptok = _idx_tab[i];        // look up by index
-                // ptok->value = m[i].str();
+                ptok = _idx_tab[i];        // look up by index
+                ptok->value = m[i].str();
                 cout << "matched index: " << i << endl;
-                //print_token(ptok->id);
+                print_token(ptok->id);
                 break;                    // found
             }
         }
@@ -394,32 +428,38 @@ void Lexer::init_epxr()
     for(int i = 0; i < len; ++i)
     {
         token* ptok = _tokens[i];
+
+        // only if there are no submatches
+        ptok->index = i;
+        _idx_tab[ptok->index] = ptok;
+
         ss << "(?<" << ptok->name << ">" + ptok->rexp + ")|";
     }
     _expr = ss.str();
     _expr.pop_back();
 
     // auto index using test_value
-    const auto rgx = boost::regex( _expr );
-    boost::smatch m;
-    for(int i = 0; i < len; ++i)
-    {
-        cout << "checking indexes ..." << endl;
-        token* ptok = _tokens[i];
-        boost::regex_search( ptok->test_value, m, rgx );
-        const size_t sz = m.size();
-        for(int j = 1; j < sz; ++j)
-        {
-            cout << j << ", ";
-            if(m[j].matched)
-            {
-                cout << endl;
-                cout << "found idx = " << j << endl;
-                ptok->index = j;
-                break;
-            }
-        }
-    }
+    // const auto rgx = boost::regex( _expr );
+    // boost::smatch m;
+    // for(int i = 0; i < len; ++i)
+    // {
+    //     cout << "checking indexes ..." << endl;
+    //     token* ptok = _tokens[i];
+    //     boost::regex_search( ptok->test_value, m, rgx );
+    //     const size_t sz = m.size();
+    //     for(int j = 1; j < sz; ++j)
+    //     {
+    //         cout << j << ", ";
+    //         if(m[j].matched)
+    //         {
+    //             cout << endl;
+    //             cout << "found idx = " << j << endl;
+    //             ptok->index = j;
+    //             _idx_tab[ptok->index] = ptok;
+    //             break;
+    //         }
+    //     }
+    // }
 }
 
 /**
@@ -428,5 +468,13 @@ void Lexer::init_epxr()
 void Lexer::print_token( int id )
 {
     token* ptok = _id_tab[id];
-    cout << "{\n\ttoken: " << ptok->id << "\n\tname: " << ptok->name << "\n\ttoken: '" << ptok->value << "\n}" << endl;
+    cout << "token:\n{"
+            << "\n\tid: "         << ptok->id
+            << "\n\tname: "       << ptok->name
+            << "\n\tstype: "      << ptok->stype
+            << "\n\tindex: "      << ptok->index
+            << "\n\tvalue: "      << ptok->value
+            << "\n\ttest_value: " << ptok->test_value
+        << "\n}"
+    << endl;
 }

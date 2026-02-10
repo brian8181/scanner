@@ -36,7 +36,7 @@ string  FORWARD_SLASH          = /                       "/"
 string  EQUAL                  = =                       "="
 string  PERCENT                = %                       "%"
 string  EXCLAMATION            = !                       "!"
-string  EXCLAMATION            = @                       "@"
+string  AT_SYMBOL              = @                       "@"
 # operators
 string  PLUS                    = \+                     "+"
 string  MINUS                   = \-                     "-"
