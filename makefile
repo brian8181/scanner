@@ -54,7 +54,7 @@ endif
 .PHONY all: help
 all: $(BLD)/scanner $(BLD)/libscanner.a $(BLD)/pcxx $(BLD)/ast_test $(BLD)/base64 #$(BLD)/mylibtest #$(BLD)/parser # $(BLD)/libscanner.so  # $(BLD)/$(APP)_test
 
-$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o $(BLD)/ast.o
+$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/scanner.hpp $(BLD)/tokens.hpp $(BLD)/Lexer.o $(BLD)/Lexer.hpp $(BLD)/utility.o $(BLD)/ast.o
 	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) -I"/home/brian/src/boost_1_89_0" $(BLD)/fileio.o $(OBJ)/scanner.o $(BLD)/Lexer.o $(BLD)/utility.o $(LDFLAGS) -o $@
 
 $(BLD)/ast_test: $(BLD)/ast.o

@@ -20,6 +20,7 @@
 #include "Lexer.hpp"
 #include "utility.hpp"
 #include "constants.hpp"
+#include "tokens.hpp"
 
 using std::cerr;
 using std::cout;
@@ -101,25 +102,18 @@ bool Lexer::init( const string& file, const string &config_file )
 	_state_tab.clear();
 	_matches.clear();
 
-
-
-    token* ptok[] =  {  new token{ 3, "ASTERICK", "string", 0, 0, "\\\\*",          "\\*",    1, string("null") },
-                        new token{ 4, "COMMA",    "string", 0, 0, "\\\\,",          "\\,",    2, string("null") },
-                        new token{ 5, "DOT",      "string", 0, 0, "\\\\.",          "\\.",    3, string("null") },
-                        new token{ 6, "SYBMOL",   "string", 0, 0, "\\\\$[a-zA-Z]+", "\\$abc", 4, string("null") } };
-
-    for(int i = 0; i < 4; ++i)
+    // init tables from tokens.hpp
+    for(int i = 0; i < TSIZE; ++i)
     {
-        _tokens.push_back(ptok[i]);
-        _id_tab[ptok[i]->id] = ptok[i];
-        _name_tab[ptok[i]->name] = ptok[i];
-        _idx_tab[ptok[i]->index] = ptok[i];
+        _tokens.push_back(tokens[i]);
+        _id_tab[tokens[i]->id] = tokens[i];
+        _name_tab[tokens[i]->name] = tokens[i];
+        _idx_tab[tokens[i]->index] = tokens[i];
     }
-
-    _expr = "(\\*)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
+    // testing ... todo ... use auto created expression
+    _expr = expression;
 
     // bkp todo 1-3 ...
-
     _state = new state{ 1, "INITIAL" };
     _states.push_back(_state);
     _state_tab[_state->id] = _state;
@@ -272,8 +266,7 @@ void Lexer::tokenize()
 
     // initialize expression ...
     // testing ... todo ... use auto created expression
-    string expr = "(\\*)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
-    auto rexp = boost::regex( expr, boost::regex::ECMAScript );
+    auto rexp = boost::regex( _expr, boost::regex::ECMAScript );
     auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
     auto end = boost::sregex_iterator();
 

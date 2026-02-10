@@ -121,6 +121,7 @@ int parse_options(int argc, char* argv[])
     //     lexer.print_token(token_id);
     //     cout << "found token: " << token_id << endl;
     // }
+    // testing
     lexer.tokenize();
     cout << endl;
 
