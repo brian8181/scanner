@@ -106,14 +106,6 @@ int parse_options(int argc, char* argv[])
     // begin lexer ...
     Lexer lexer(file, config_file);
     cout << "scanner configured." << endl;
-    cout << "lexing ...";
-    while( lex() )
-    {
-        cout << ".";
-    }
-    cout << endl;
-
-    cout << "finished scanning. " << endl;
     if(dump_flag)
     {
 
@@ -122,6 +114,17 @@ int parse_options(int argc, char* argv[])
         cout << lexer.get_expr() << endl;
         cout << "configuration dumped." << endl;
     }
+
+    cout << "lexing ..." << endl;
+    // while( int token_id = lex() )
+    // {
+    //     lexer.print_token(token_id);
+    //     cout << "found token: " << token_id << endl;
+    // }
+    lexer.tokenize();
+    cout << endl;
+
+    cout << "finished scanning. " << endl;
     return 0;
 }
 

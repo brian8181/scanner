@@ -61,7 +61,17 @@ Lexer::Lexer( const Lexer& src ): _p_iter(nullptr) {}
  */
 Lexer::~Lexer()
 {
-    // bkp todo!
+    int tlen = _tokens.size();
+    for(int i = 0; i < tlen; ++i)
+    {
+        delete _tokens[i];
+    }
+
+    int mlen = _matches.size();
+    for(int i = 0; i < mlen; ++i)
+    {
+        delete _matches[i];
+    }
 }
 
 /**
@@ -72,6 +82,25 @@ Lexer::~Lexer()
  */
 bool Lexer::init( const string& file, const string &config_file )
 {
+    // bkp todo!
+    // _scan_file = "";
+    // _search_text = "";
+    // _rexp = "";
+    // _begin;
+    // _end;
+    // _p_iter;
+    // delete _state;
+    // _state = new state{ 1, "INITIAL" };
+    // _expr;
+
+    _tokens.clear();
+	_idx_tab.clear();
+	_id_tab.clear();
+	_name_tab.clear();
+	_state_tokens_tab.clear();
+	_state_tab.clear();
+	_matches.clear();
+
     load_config( config_file );
     _state = new state{ 1, "INITIAL" };
     _scan_file = file;
@@ -79,11 +108,12 @@ bool Lexer::init( const string& file, const string &config_file )
     const int r = read_sstream( file, ss );
     _search_text = ss.str( );
     // initialize expression ...
-    init_epxr();
+    //init_epxr();
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
     _rexp = boost::regex( _expr, boost::regex::ECMAScript );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
+    _end = boost::sregex_iterator();
     return r;
 }
 
@@ -95,14 +125,6 @@ bool Lexer::init( const string& file, const string &config_file )
  */
 void Lexer::load_config( const string &path )
 {
-    // bkp todo!
-    //need to delete each token before clearing!! _tokens.clear();
-    _id_tab.clear();
-    _idx_tab.clear();
-    _name_tab.clear();
-    //need to delete each state before clearing!! _state_tab.clear();
-    _state_tokens_tab.clear();
-
     _config_file = path;
     string section = "none";
     string s;
@@ -164,6 +186,7 @@ void Lexer::load_config( const string &path )
             int i = 0;
             int state_id = 0xFF | (++i*6); // generate id for new state
             auto* pstate = new state{ state_id , str_state }; // create new state
+            _states.push_back(pstate);
             _state_tab[pstate->id] = pstate; // insert new state into table
 
             // copy to term to vector
@@ -189,7 +212,6 @@ void Lexer::load_config( const string &path )
  */
 void Lexer::dump_config( const string& file )
 {
-    load_config( file );
     dump_config( );
 }
 
@@ -204,47 +226,132 @@ void Lexer::dump_config( ) const
     for(int i = 0; i < len; ++i)
     {
         token* ptok = _tokens[i];
-        ss << "Id: "        << left << setw(10) << ptok->id         <<
-            " name: "       << left << setw(15) << ptok->name       <<
-            " type: "       << left << setw(15) << ptok->stype      <<
-            " value: "      << left << setw(15) << ptok->value      <<
-            " rexp: "       << left << setw(15) << ptok->rexp       <<
-            " test_value: " << left << setw(15) << ptok->test_value << endl;
+        ss <<  "id: "         << left << setw(10) << ptok->id         <<
+              " name: "       << left << setw(15) << ptok->name       <<
+              " type: "       << left << setw(15) << ptok->stype      <<
+              " value: "      << left << setw(15) << ptok->value      <<
+              " rexp: "       << left << setw(15) << ptok->rexp       <<
+              " index: "      << left << setw(15) << ptok->index      <<
+              " test_value: " << left << setw(15) << ptok->test_value << endl;
     }
     cout << ss.str();
 }
 
 /**
+ * @brief tokenize
+ * @param exp
+ * @param text
+*/
+void Lexer::tokenize()
+{
+    stringstream ss;
+    const int r = read_sstream( _scan_file, ss );
+    string search_text = ss.str( );
+    // initialize expression ...
+
+    // testing ...
+    string expr = "(\\*)|(\\,)|(\\.)";
+    auto rexp = boost::regex( expr, boost::regex::ECMAScript );
+    auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
+    auto end = boost::sregex_iterator();
+
+    for(auto iter = begin; iter != end; ++iter)
+    {
+        token* ptok = 0;
+        boost::smatch m = *(iter);
+        size_t len = m.size();
+        // find matched
+        cout << "find index " << endl;
+        for(int i = 1; i < len; ++i)
+        {
+            if(m[i].matched)
+            {
+                // ptok = _idx_tab[i];        // look up by index
+                // ptok->value = m[i].str();
+                cout << "matched index: " << i << endl;
+                //print_token(ptok->id);
+                break;                    // found
+            }
+        }
+        if(ptok == 0)
+            cout << "error: no submatch (" << m.str() << ") ..." << endl;
+    }
+}
+
+/**
  * @brief  get_token
- * @param  unsigned int& token, out param, a token
  * @return int
  */
 int Lexer::get_token()
 {
-    // bkp todo!
-    return 0;
-
-    stringstream ss;
-    token* ptok = 0;
-    if(*_p_iter != _end)
+    enum yytokentype
     {
-        // need to look up by sub_match index
-        boost::smatch sm = *(*_p_iter);
-        size_t len = sm.size();
-        // find matched
-        for(int i = 0; i < len; ++i)
-        {
-            if(sm[i].matched)
-            {
-                ptok = _idx_tab[i];        // look up by index
-                _matches.push_back(ptok);  // push matched token
-                break;                     // found
-            }
-        }
-        ++(*_p_iter);              // increment iterrator
-        return ptok->id;           // return token id
+        YYEMPTY = -2,
+        YYEOF = 0,                     /* "end of file"  */
+        YYerror = 256,                 /* error  */
+        YYUNDEF = 257,                 /* "invalid token"  */
+        INTEGER = 258,                 /* INTEGER  */
+        token_ = 259,                   /* token  */
+        SEMI_COLON = 260,              /* SEMI_COLON  */
+        NEWLINE = 261,                 /* NEWLINE  */
+        PLUS = 262,                    /* PLUS  */
+        MINUS = 263,                   /* MINUS  */
+        MULT = 264,                    /* MULT  */
+        DIV = 265                      /* DIV  */
+    };
+    typedef enum yytokentype yytoken_kind_t;
+
+    static int i = 0;
+    switch(++i)
+    {
+    case 1:
+        //yylval.num = atoi(TOKS[i++]);
+        return INTEGER;
+    case 2:
+        //yylval.str = TOKS[i++];
+        return PLUS;
+    case 3:
+        //yylval.num = atoi(TOKS[i++]);
+        return INTEGER;
+    case 4:
+        //yylval.str = TOKS[i++];
+        return SEMI_COLON;
+     case 5:
+        //yylval.str = TOKS[i++];
+        return NEWLINE;
+     case 6:
+        //yylval.str = TOKS[i++];
+        return 0;
     }
-    return -1; // error or eof
+    return 0;
+    // stringstream ss;
+    // token* ptok = 0;
+    // if(*_p_iter != _end)
+    // {
+    //     cout << "get_token " << endl;
+    //     // need to look up by sub_match index
+    //     boost::smatch m = *(*_p_iter);
+    //     size_t len = m.size();
+    //     cout << "max: " << m.max_size() << endl;
+    //     // find matched
+    //     cout << "find index ";
+    //     for(int i = 1; i < len; ++i)
+    //     {
+    //         cout << ".";
+    //         if(m[i].matched)
+    //         {
+    //             ptok = _idx_tab[i];        // look up by index
+    //             ptok->value = m[i].str();
+    //             _matches.push_back(ptok);  // push matched token
+    //             cout << "matched " << ptok->name << endl;
+    //             break;                    // found
+    //         }
+    //     }
+    //     ++(*_p_iter);              // increment iterrator
+    //     cout << "return -> " << ptok->id << endl;
+    //     return ptok->id;           // return token id
+    // }
+    // return 0; // error or eof
 }
 
 /**
@@ -252,16 +359,7 @@ int Lexer::get_token()
  */
 void Lexer::reset()
 {
-    // bkp todo!
-    _scan_file = "";
-    _search_text = "";
-    _rexp = "";
-    _begin;
-    _end;
-    _p_iter;
-    delete _state;
-    _state = new state{ 1, "INITIAL" };
-    _expr;
+
 }
 
 
@@ -306,13 +404,17 @@ void Lexer::init_epxr()
     boost::smatch m;
     for(int i = 0; i < len; ++i)
     {
+        cout << "checking indexes ..." << endl;
         token* ptok = _tokens[i];
         boost::regex_search( ptok->test_value, m, rgx );
         const size_t sz = m.size();
-        for(int j = 0; j < sz; ++j)
+        for(int j = 1; j < sz; ++j)
         {
+            cout << j << ", ";
             if(m[j].matched)
             {
+                cout << endl;
+                cout << "found idx = " << j << endl;
                 ptok->index = j;
                 break;
             }
@@ -323,26 +425,8 @@ void Lexer::init_epxr()
 /**
  * @brief print token to stdout
  */
-void Lexer::print_token( )
+void Lexer::print_token( int id )
 {
-    if(*_p_iter != _end)
-    {
-        // need to look up by sub_match id
-        stringstream ss;
-        boost::smatch m = *(*_p_iter);
-        if( _token_map.contains( m.str( ) ) )
-        {
-            unsigned int token = _token_map[m.str( )].first;
-            string name = _token_map[m.str( )].second;
-            ss << "{\n\ttoken: " << token << "\n\tname: " << name << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n}" << endl;
-            color_print( ss.str( ), fg( fmt::color::antique_white ) );
-            ss.clear( );
-        }
-        else
-        {
-            ss << "{\n\ttoken: null" << "\n\ttoken: '" << m.str( ) << "'\n\tpos: " << m.position( (int)0 ) << "\n};" << endl;
-            color_print( ss.str( ), fg( fmt::color::red ) | fmt::emphasis::bold );
-            ss.clear( );
-        }
-    }
+    token* ptok = _id_tab[id];
+    cout << "{\n\ttoken: " << ptok->id << "\n\tname: " << ptok->name << "\n\ttoken: '" << ptok->value << "\n}" << endl;
 }

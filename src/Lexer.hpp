@@ -157,7 +157,7 @@ public:
 	 * @param exp
 	 * @param text
 	*/
-	void tokenize( const string &exp, const string &text );
+	void tokenize();
 
 	/**
  	* @brief get expression
@@ -172,11 +172,12 @@ public:
 	/**
      * @brief print token to stdout
  	 */
-	void print_token( );
+	void print_token( int id );
 
 protected:
 	string                    _config_file;
 	vector<token*>            _tokens;
+	vector<state*>            _states;
 	map<int, token*>          _idx_tab;
 	map<int, token*>          _id_tab;
 	map<string, token*>       _name_tab;
