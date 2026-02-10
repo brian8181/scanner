@@ -1,0 +1,11 @@
+[tokens]
+
+string  ASTERIK                = \*                      "*"
+string  COMMA                  = \,                      ","
+string  DOT                    = \.                      "."
+
+[groups]
+all
+
+[states]
+INITIAL = {COMMA, DOT, OPEN_PAREN, CLOSE_PAREN, OPEN_BRACKET}
