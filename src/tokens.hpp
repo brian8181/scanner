@@ -1,7 +1,8 @@
-// File Name:  tokens.hpp
-// Build Date:
-// Version:    0.0.1
-
+/**
+ * @file    tokens.hpp
+ * @version 0.0.1
+ * @date    Wed Feb 11 17:23:05 CST 2026
+ */
 #ifndef TOKENS_HPP_
 #define TOKENS_HPP_
 
