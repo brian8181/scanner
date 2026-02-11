@@ -198,6 +198,8 @@ const string expression =   "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|
 #define FILE_NAME          820
 #define WHITESPACE         822
 #define NO_ACTION           -1
+#define ERROR               -2
+#define SCAN_EOF             0
 
 int on_token_action(token& tok)
 {
@@ -280,7 +282,11 @@ int on_token_action(token& tok)
         case WHITESPACE:
         case NO_ACTION:
             return NO_ACTION;
+        case SCAN_EOF:
+            return EOF;
+        default:
+            return ERROR;
     }
-    return 0;
+    return ERROR;
 }
 #endif

@@ -102,6 +102,8 @@ bool Lexer::init( const string& file, const string &config_file )
 	_state_tab.clear();
 	_matches.clear();
 
+    #define LEX_TEST
+    #ifdef LEX_TEST
     // init tables from tokens.hpp
     for(int i = 0; i < tokens.size(); ++i)
     {
@@ -114,6 +116,8 @@ bool Lexer::init( const string& file, const string &config_file )
     //_expr = expression;
     init_epxr();
     cout << _expr << endl;
+    #endif
+
     // bkp todo 1-3 ...
     _state = new state{ 1, "INITIAL" };
     _states.push_back(_state);
@@ -309,6 +313,8 @@ void Lexer::tokenize()
  */
 int Lexer::get_token()
 {
+    #define LEX_TEST
+    #ifdef LEX_TEST
     enum yytokentype
     {
         YYEMPTY = -2,
@@ -348,35 +354,45 @@ int Lexer::get_token()
         //yylval.str = TOKS[i++];
         return 0;
     }
-
-    // stringstream ss;
-    // token* ptok = 0;
-    // if(*_p_iter != _end)
-    // {
-    //     cout << "get_token " << endl;
-    //     // need to look up by sub_match index
-    //     boost::smatch m = *(*_p_iter);
-    //     size_t len = m.size();
-    //     cout << "max: " << m.max_size() << endl;
-    //     // find matched
-    //     cout << "find index ";
-    //     for(int i = 1; i < len; ++i)
-    //     {
-    //         cout << ".";
-    //         if(m[i].matched)
-    //         {
-    //             ptok = _idx_tab[i];        // look up by index
-    //             ptok->value = m[i].str();
-    //             _matches.push_back(ptok);  // push matched token
-    //             cout << "matched " << ptok->name << endl;
-    //             break;                    // found
-    //         }
-    //     }
-    //     ++(*_p_iter);              // increment iterrator
-    //     cout << "return -> " << ptok->id << endl;
-    //     return ptok->id;           // return token id
-    // }
+    #else
+    stringstream ss;
+    token* ptok = 0;
+    if(*_p_iter != _end)
+    {
+        cout << "get_token " << endl;
+        // need to look up by sub_match index
+        boost::smatch m = *(*_p_iter);
+        size_t len = m.size();
+        cout << "max: " << m.max_size() << endl;
+        // find matched
+        cout << "find index ";
+        for(int i = 1; i < len; ++i)
+        {
+            cout << ".";
+            if(m[i].matched)
+            {
+                cout << "prefix: \"" << m.prefix() << "\" match: \"" << m[i].str() << "\"" << endl;
+                string prefix = m.prefix();
+                if(prefix.size() != 0)
+                {
+                    cout << "error: invalid characters in sequence (" << prefix << ")" << endl;
+                }
+                ptok = _idx_tab[i]; // by index
+                ptok->value = m[i].str(); // set match value
+                _matches.push_back(ptok); // push matched
+                cout << "debug - id: " << ptok->id << "name: " << ptok->name  << endl;
+                print_token(ptok->id); // debug print
+                on_token( *ptok ); // do actions
+                break; // found
+            }
+        }
+        ++(*_p_iter); // increment iterrator
+        cout << "return -> " << ptok->id << endl;
+        return ptok->id; // return token id
+    }
+    #endif
     return 0; // error or eof
+
 }
 
 /**
@@ -438,28 +454,31 @@ void Lexer::init_epxr()
     _expr = ss.str();
     _expr.pop_back();
 
-    // auto index using test_value
-    // const auto rgx = boost::regex( _expr );
-    // boost::smatch m;
-    // for(int i = 0; i < len; ++i)
-    // {
-    //     cout << "checking indexes ..." << endl;
-    //     token* ptok = _tokens[i];
-    //     boost::regex_search( ptok->test_value, m, rgx );
-    //     const size_t sz = m.size();
-    //     for(int j = 1; j < sz; ++j)
-    //     {
-    //         cout << j << ", ";
-    //         if(m[j].matched)
-    //         {
-    //             cout << endl;
-    //             cout << "found idx = " << j << endl;
-    //             ptok->index = j;
-    //             _idx_tab[ptok->index] = ptok;
-    //             break;
-    //         }
-    //     }
-    // }
+    #define LEX_TEST
+    #ifndef LEX_TEST
+    auto index using test_value
+    const auto rgx = boost::regex( _expr );
+    boost::smatch m;
+    for(int i = 0; i < len; ++i)
+    {
+        cout << "checking indexes ..." << endl;
+        token* ptok = _tokens[i];
+        boost::regex_search( ptok->test_value, m, rgx );
+        const size_t sz = m.size();
+        for(int j = 1; j < sz; ++j)
+        {
+            cout << j << ", ";
+            if(m[j].matched)
+            {
+                cout << endl;
+                cout << "found idx = " << j << endl;
+                ptok->index = j;
+                _idx_tab[ptok->index] = ptok;
+                break;
+            }
+        }
+    }
+    #endif
 }
 
 /**
