@@ -66,6 +66,18 @@ typedef struct state
 	string name;
 } state;
 
+typedef struct context
+{
+	std::string&               scan_file;
+	std::string&               search_text;
+	boost::regex&              rexp;
+	boost::sregex_iterator&    begin;
+	boost::sregex_iterator&    end;
+	boost::sregex_iterator*    p_iter;
+	state*                     state;
+	string&                    expr;
+	vector<token*>*            matches;
+} context;
 
 /**
   * @brief class Lexer
@@ -138,6 +150,13 @@ public:
 	 * reset to intial state
 	 */
 	void reset();
+
+	/**
+	 * @brief override virtual, on_token, for each token ...
+	 * @param token
+	 */
+	int on_token( token& );
+
 
 	/**
 	 * @brief virtual, virtual for each token ...

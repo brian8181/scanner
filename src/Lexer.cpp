@@ -266,6 +266,8 @@ void Lexer::tokenize()
 
     // initialize expression ...
     // testing ... todo ... use auto created expression
+    _expr = "(!=)|(=)";
+    search_text = "! =!= =   !=";
     auto rexp = boost::regex( _expr, boost::regex::ECMAScript );
     auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
     auto end = boost::sregex_iterator();
@@ -274,17 +276,24 @@ void Lexer::tokenize()
     {
         token* ptok = 0;
         boost::smatch m = *(iter);
+
         size_t len = m.size();
         // find matched
         cout << "find index " << endl;
         for(int i = 1; i < len; ++i)
         {
             if(m[i].matched)
-            {
+            {   cout << "prefix {" << m.prefix() << "}{" << m[i].str() << "}{"  << m.suffix() << "}" << endl;
+                string prefix = m.prefix();
+                if(prefix.size() != 0)
+                {
+                    cout << "error: invalid characters in sequence (" << prefix << ")" << endl;
+                }
                 ptok = _idx_tab[i];        // look up by index
                 ptok->value = m[i].str();
                 cout << "matched index: " << i << endl;
                 print_token(ptok->id);
+                //on_token( *ptok );
                 break;                    // found
             }
         }
@@ -306,13 +315,13 @@ int Lexer::get_token()
         YYerror = 256,                 /* error  */
         YYUNDEF = 257,                 /* "invalid token"  */
         INTEGER = 258,                 /* INTEGER  */
-        token_ = 259,                   /* token  */
-        SEMI_COLON = 260,              /* SEMI_COLON  */
+        //token_ = 259,                   /* token  */
+        //SEMI_COLON = 260,              /* SEMI_COLON  */
         NEWLINE = 261,                 /* NEWLINE  */
-        PLUS = 262,                    /* PLUS  */
-        MINUS = 263,                   /* MINUS  */
-        MULT = 264,                    /* MULT  */
-        DIV = 265                      /* DIV  */
+        // PLUS = 262,                    /* PLUS  */
+        // MINUS = 263,                   /* MINUS  */
+        // MULT = 264,                    /* MULT  */
+        // DIV = 265                      /* DIV  */
     };
     typedef enum yytokentype yytoken_kind_t;
 
@@ -334,11 +343,10 @@ int Lexer::get_token()
      case 5:
         //yylval.str = TOKS[i++];
         return NEWLINE;
-     case 6:
+    case 6:
         //yylval.str = TOKS[i++];
         return 0;
     }
-    return 0;
     // stringstream ss;
     // token* ptok = 0;
     // if(*_p_iter != _end)
@@ -366,7 +374,7 @@ int Lexer::get_token()
     //     cout << "return -> " << ptok->id << endl;
     //     return ptok->id;           // return token id
     // }
-    // return 0; // error or eof
+    return 0; // error or eof
 }
 
 /**
@@ -377,6 +385,15 @@ void Lexer::reset()
 
 }
 
+
+/**
+ * @brief override virtual, on_token, for each token ...
+ * @param token
+ */
+int Lexer::on_token( token& tok )
+{
+   return on_token_action(tok);
+}
 
 /**
  * @brief override virtual, on_token, for each token ...
