@@ -155,7 +155,7 @@ public:
 	 * @brief override virtual, on_token, for each token ...
 	 * @param token
 	 */
-	int on_token( token& );
+	int on_token( const state& s, token& tok );
 
 
 	/**

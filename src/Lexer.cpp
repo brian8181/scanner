@@ -280,6 +280,7 @@ void Lexer::tokenize()
 
     for(auto iter = begin; iter != end; ++iter)
     {
+        CONTINUE_ON_NO_ACTION:
         token* ptok = 0;
         boost::smatch m = *(iter);
         size_t len = m.size();
@@ -298,7 +299,8 @@ void Lexer::tokenize()
                 ptok->value = m[i].str();
                 cout << "matched index: " << i << endl;
                 print_token(ptok->id);
-                //on_token( *ptok );
+                if(on_token( *_state, *ptok ) == NO_ACTION)
+                    goto CONTINUE_ON_NO_ACTION;
                 break;                    // found
             }
         }
@@ -357,8 +359,10 @@ int Lexer::get_token()
     #else
     stringstream ss;
     token* ptok = 0;
+
     if(*_p_iter != _end)
     {
+    CONTINUE_ON_NO_ACTION:
         cout << "get_token " << endl;
         // need to look up by sub_match index
         boost::smatch m = *(*_p_iter);
@@ -382,7 +386,11 @@ int Lexer::get_token()
                 _matches.push_back(ptok); // push matched
                 cout << "debug - id: " << ptok->id << "name: " << ptok->name  << endl;
                 print_token(ptok->id); // debug print
-                on_token( *ptok ); // do actions
+                if(on_token( *_state, *ptok ) == NO_ACTION)
+                {
+                    (*_p_iter)++;
+                    goto CONTINUE_ON_NO_ACTION; // do actions
+                }
                 break; // found
             }
         }
@@ -408,9 +416,9 @@ void Lexer::reset()
  * @brief override virtual, on_token, for each token ...
  * @param token
  */
-int Lexer::on_token( token& tok )
+int Lexer::on_token( const state& s, token& tok )
 {
-   return on_token_action(tok);
+   return on_token_action(s, tok);
 }
 
 /**
@@ -420,8 +428,9 @@ int Lexer::on_token( token& tok )
 void Lexer::on_token( const unsigned int& token_, const boost::smatch& m )
 {
     // bkp todo!
-    //stringstream ss;
-    //unsigned int token = ID_UNDEFINED;
+    stringstream ss;
+    unsigned int token = ID_UNDEFINED;
+
     cout << "on_token( " << token_ << ", \"" << m.str() << "\" );" << endl;
 }
 
@@ -488,13 +497,13 @@ void Lexer::print_token( int id )
 {
     token* ptok = _id_tab[id];
     cout << "token:\n{"
-            << setw(5) << left << "\n\tid: "          << setw(10) << right << ptok->id
-            << setw(5) << left << "\n\tname: "        << setw(10) << right << ptok->name
-            << setw(5) << left << "\n\tstype: "       << setw(10) << right << ptok->stype
-            << setw(5) << left << "\n\tindex: "       << setw(10) << right << ptok->index
-            << setw(5) << left << "\n\tvalue: "       << setw(10) << right << ptok->value
-            << setw(5) << left << "\n\trexp: "        << setw(10) << right << ptok->rexp
-            << setw(5) << left << "\n\ttest_value: "     << setw(10) << right << ptok->test_value
+            << setw(5) << left << "\n\tid: "         << setw(10) << right << ptok->id
+            << setw(5) << left << "\n\tname: "       << setw(10) << right << ptok->name
+            << setw(5) << left << "\n\tstype: "      << setw(10) << right << ptok->stype
+            << setw(5) << left << "\n\tindex: "      << setw(10) << right << ptok->index
+            << setw(5) << left << "\n\tvalue: "      << setw(10) << right << ptok->value
+            << setw(5) << left << "\n\trexp: "       << setw(10) << right << ptok->rexp
+            << setw(5) << left << "\n\ttest_value: " << setw(10) << right << ptok->test_value
         << "\n}"
     << endl;
 }

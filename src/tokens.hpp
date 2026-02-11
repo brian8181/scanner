@@ -7,6 +7,8 @@
 
 #include "Lexer.hpp"
 
+//int on_token_action(const state& s, token& tok);
+
 // VBAR                = |
 // COLON               = :
 // LBRACKET            = [
@@ -101,18 +103,19 @@ static int id = index + 2;
 //                 };
 
 vector<token*> tokens = {
-                    new token{ ++id, "VBAR", "string", 0, 0,       "\\|",          "\\|",    ++index, string("null") },
-                    new token{ ++id, "COLON", "string", 0, 0,       ":",          ":",    ++index, string("null") },
-                    new token{ ++id, "LBRACKET", "string", 0, 0,       "\\[",          "\\[",    ++index, string("null") },
-                    new token{ ++id, "RBRACKET", "string", 0, 0,       "\\]",          "\\]",    ++index, string("null") },
-                    new token{ ++id, "LBRACE", "string", 0, 0,       "\\{",          "\\{",    ++index, string("null") },
-                    new token{ ++id, "RBRACE", "string", 0, 0,       "\\}",          "\\}",    ++index, string("null") },
-                    new token{ ++id, "ASTERICK",    "string", 0, 0,       "\\*",          "\\*",    ++index, string("null") },
-                    new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
-                    new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") },
-                    new token{ ++id, "COMMA",    "string", 0, 0,       "\\,",          "\\,",    ++index, string("null") },
-                    new token{ ++id, "DOT",      "string", 0, 0,       "\\.",          "\\.",    ++index, string("null") },
-                    new token{ ++id, "SYBMOL",   "string", 0, 0,       "\\$[a-zA-Z]+", "\\$abc", ++index, string("null") }
+                    new token{ ++id, "VBAR",       "string", 0, 0,       "\\|",          "\\|",    ++index, string("null") },
+                    new token{ ++id, "COLON",      "string", 0, 0,       ":",            ":",      ++index, string("null") },
+                    new token{ ++id, "LBRACKET",   "string", 0, 0,       "\\[",          "\\[",    ++index, string("null") },
+                    new token{ ++id, "RBRACKET",   "string", 0, 0,       "\\]",          "\\]",    ++index, string("null") },
+                    new token{ ++id, "LBRACE",     "string", 0, 0,       "\\{",          "\\{",    ++index, string("null") },
+                    new token{ ++id, "RBRACE",     "string", 0, 0,       "\\}",          "\\}",    ++index, string("null") },
+                    new token{ ++id, "ASTERICK",   "string", 0, 0,       "\\*",          "\\*",    ++index, string("null") },
+                    new token{ ++id, "NOT_EQUAL",  "string", 0, 0,       "!=",           "!=",     ++index, string("null") },
+                    new token{ ++id, "EQUAL",      "string", 0, 0,       "=",            "=",      ++index, string("null") },
+                    new token{ ++id, "COMMA",      "string", 0, 0,       "\\,",          "\\,",    ++index, string("null") },
+                    new token{ ++id, "DOT",        "string", 0, 0,       "\\.",          "\\.",    ++index, string("null") },
+                    new token{ ++id, "SYBMOL",     "string", 0, 0,       "\\$[a-zA-Z]+", "\\$abc", ++index, string("null") },
+                    new token{ ++id, "WHITESPACE", "string", 0, 0,       "[ \\t]+",      "\\t",    ++index, string("null") }
                 };
 
 // token* tokens[TSIZE] =  {
@@ -121,7 +124,8 @@ vector<token*> tokens = {
 //                     new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") } };
 
 //const string expression = "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
-const string expression =   "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
+const string expression =   "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)|([ \\t]+)";
+//                          "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)|([ \\t]+)"
 
 #define VBAR                10
 #define COLON               20
@@ -201,13 +205,18 @@ const string expression =   "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|
 #define ERROR               -2
 #define SCAN_EOF             0
 
-int on_token_action(token& tok)
+int on_token_action(const state& s, token& tok)
 {
+
     switch(tok.id)
     {
         case VBAR:
+            cout << "VBAR" << endl;
+            return VBAR;
         case COLON:
         case LBRACKET:
+            cout << "LBRACKET" << endl;
+            return LBRACKET;
         case RBRACKET:
         case LBRACE:
         case RBRACE:
