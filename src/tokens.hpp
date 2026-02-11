@@ -84,22 +84,44 @@
 static int index = 0;
 static int id = index + 2;
 
-// const int TSIZE = 11;
+//const int TSIZE = 12;
 // token* tokens[TSIZE] =  {
-//                     new token{ ++id, "VBAR", "string", 0, 0,       "\\\\|",          "\\|",    ++index, string("null") },
+//                     new token{ ++id, "VBAR", "string", 0, 0,       "\\|",          "\\|",    ++index, string("null") },
 //                     new token{ ++id, "COLON", "string", 0, 0,       ":",          ":",    ++index, string("null") },
-//                     new token{ ++id, "LBRACKET", "string", 0, 0,       "\\\\[",          "\\[",    ++index, string("null") },
-//                     new token{ ++id, "RBRACKET", "string", 0, 0,       "\\\\]",          "\\]",    ++index, string("null") },
-//                     new token{ ++id, "LBRACE", "string", 0, 0,       "\\\\{",          "\\{",    ++index, string("null") },
-//                     new token{ ++id, "RBRACE", "string", 0, 0,       "\\\\}",          "\\}",    ++index, string("null") },
-//                     new token{ ++id, "ASTERICK",    "string", 0, 0,       "\\\\*",          "\\*",    ++index, string("null") },
+//                     new token{ ++id, "LBRACKET", "string", 0, 0,       "\\[",          "\\[",    ++index, string("null") },
+//                     new token{ ++id, "RBRACKET", "string", 0, 0,       "\\]",          "\\]",    ++index, string("null") },
+//                     new token{ ++id, "LBRACE", "string", 0, 0,       "\\{",          "\\{",    ++index, string("null") },
+//                     new token{ ++id, "RBRACE", "string", 0, 0,       "\\}",          "\\}",    ++index, string("null") },
+//                     new token{ ++id, "ASTERICK",    "string", 0, 0,       "\\*",          "\\*",    ++index, string("null") },
 //                     new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
-//                     //new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") },
-//                     new token{ ++id, "COMMA",    "string", 0, 0,       "\\\\,",          "\\,",    ++index, string("null") },
-//                     new token{ ++id, "DOT",      "string", 0, 0,       "\\\\.",          "\\.",    ++index, string("null") },
-//                     new token{ ++id, "SYBMOL",   "string", 0, 0,       "\\\\$[a-zA-Z]+", "\\$abc", ++index, string("null") }
+//                     new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") },
+//                     new token{ ++id, "COMMA",    "string", 0, 0,       "\\,",          "\\,",    ++index, string("null") },
+//                     new token{ ++id, "DOT",      "string", 0, 0,       "\\.",          "\\.",    ++index, string("null") },
+//                     new token{ ++id, "SYBMOL",   "string", 0, 0,       "\\$[a-zA-Z]+", "\\$abc", ++index, string("null") }
 //                 };
 
+vector<token*> tokens = {
+                    new token{ ++id, "VBAR", "string", 0, 0,       "\\|",          "\\|",    ++index, string("null") },
+                    new token{ ++id, "COLON", "string", 0, 0,       ":",          ":",    ++index, string("null") },
+                    new token{ ++id, "LBRACKET", "string", 0, 0,       "\\[",          "\\[",    ++index, string("null") },
+                    new token{ ++id, "RBRACKET", "string", 0, 0,       "\\]",          "\\]",    ++index, string("null") },
+                    new token{ ++id, "LBRACE", "string", 0, 0,       "\\{",          "\\{",    ++index, string("null") },
+                    new token{ ++id, "RBRACE", "string", 0, 0,       "\\}",          "\\}",    ++index, string("null") },
+                    new token{ ++id, "ASTERICK",    "string", 0, 0,       "\\*",          "\\*",    ++index, string("null") },
+                    new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
+                    new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") },
+                    new token{ ++id, "COMMA",    "string", 0, 0,       "\\,",          "\\,",    ++index, string("null") },
+                    new token{ ++id, "DOT",      "string", 0, 0,       "\\.",          "\\.",    ++index, string("null") },
+                    new token{ ++id, "SYBMOL",   "string", 0, 0,       "\\$[a-zA-Z]+", "\\$abc", ++index, string("null") }
+                };
+
+// token* tokens[TSIZE] =  {
+//                     new token{ ++id, "VBAR", "string", 0, 0,       "\\|",          "\\|",    ++index, string("null") },
+//                     new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
+//                     new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") } };
+
+//const string expression = "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
+const string expression =   "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
 
 #define VBAR                10
 #define COLON               20
@@ -176,17 +198,6 @@ static int id = index + 2;
 #define FILE_NAME          820
 #define WHITESPACE         822
 #define NO_ACTION           -1
-
-
-const int TSIZE = 2;
-token* tokens[TSIZE] =  {
-
-                    new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
-                    new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") } };
-
-
-//const string expression = "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
-const string expression = "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
 
 int on_token_action(token& tok)
 {

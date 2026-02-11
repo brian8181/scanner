@@ -103,7 +103,7 @@ bool Lexer::init( const string& file, const string &config_file )
 	_matches.clear();
 
     // init tables from tokens.hpp
-    for(int i = 0; i < TSIZE; ++i)
+    for(int i = 0; i < tokens.size(); ++i)
     {
         _tokens.push_back(tokens[i]);
         _id_tab[tokens[i]->id] = tokens[i];
@@ -111,8 +111,9 @@ bool Lexer::init( const string& file, const string &config_file )
         _idx_tab[tokens[i]->index] = tokens[i];
     }
     // testing ... todo ... use auto created expression
-    _expr = expression;
-
+    //_expr = expression;
+    init_epxr();
+    cout << _expr << endl;
     // bkp todo 1-3 ...
     _state = new state{ 1, "INITIAL" };
     _states.push_back(_state);
@@ -245,12 +246,12 @@ void Lexer::dump_config( ) const
     {
         token* ptok = _tokens[i];
         ss <<  "id: "         << left << setw(10) << ptok->id         <<
-              " name: "       << left << setw(15) << ptok->name       <<
-              " type: "       << left << setw(15) << ptok->stype      <<
-              " value: "      << left << setw(15) << ptok->value      <<
-              " rexp: "       << left << setw(15) << ptok->rexp       <<
-              " index: "      << left << setw(15) << ptok->index      <<
-              " test_value: " << left << setw(15) << ptok->test_value << endl;
+              " name: "       << left << setw(10) << ptok->name       <<
+              " type: "       << left << setw(10) << ptok->stype      <<
+              " value: "      << left << setw(10) << ptok->value      <<
+              " rexp: "       << left << setw(10) << ptok->rexp       <<
+              " index: "      << left << setw(10) << ptok->index      <<
+              " test_value: " << left << setw(10) << ptok->test_value << endl;
     }
     cout << ss.str();
 }
@@ -266,8 +267,9 @@ void Lexer::tokenize()
 
     // initialize expression ...
     // testing ... todo ... use auto created expression
-    _expr = "(!=)|(=)";
-    search_text = "! =!= =   !=";
+    // _expr = "(!=)|(=)";
+    // search_text = "! =!= =   !=";
+
     auto rexp = boost::regex( _expr, boost::regex::ECMAScript );
     auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
     auto end = boost::sregex_iterator();
@@ -276,14 +278,13 @@ void Lexer::tokenize()
     {
         token* ptok = 0;
         boost::smatch m = *(iter);
-
         size_t len = m.size();
         // find matched
         cout << "find index " << endl;
         for(int i = 1; i < len; ++i)
         {
             if(m[i].matched)
-            {   cout << "prefix {" << m.prefix() << "}{" << m[i].str() << "}{"  << m.suffix() << "}" << endl;
+            {   cout << "prefix: \"" << m.prefix() << "\" match: \"" << m[i].str() << "\"" << endl;
                 string prefix = m.prefix();
                 if(prefix.size() != 0)
                 {
@@ -347,6 +348,7 @@ int Lexer::get_token()
         //yylval.str = TOKS[i++];
         return 0;
     }
+
     // stringstream ss;
     // token* ptok = 0;
     // if(*_p_iter != _end)
@@ -430,8 +432,8 @@ void Lexer::init_epxr()
         // only if there are no submatches
         ptok->index = i;
         _idx_tab[ptok->index] = ptok;
-
-        ss << "(?<" << ptok->name << ">" + ptok->rexp + ")|";
+        //ss << "(?<" << ptok->name << ">" << ptok->rexp << ")|";
+        ss << "(" << ptok->rexp << ")|";
     }
     _expr = ss.str();
     _expr.pop_back();
@@ -467,12 +469,13 @@ void Lexer::print_token( int id )
 {
     token* ptok = _id_tab[id];
     cout << "token:\n{"
-            << "\n\tid: "         << ptok->id
-            << "\n\tname: "       << ptok->name
-            << "\n\tstype: "      << ptok->stype
-            << "\n\tindex: "      << ptok->index
-            << "\n\tvalue: "      << ptok->value
-            << "\n\ttest_value: " << ptok->test_value
+            << setw(5) << left << "\n\tid: "          << setw(10) << right << ptok->id
+            << setw(5) << left << "\n\tname: "        << setw(10) << right << ptok->name
+            << setw(5) << left << "\n\tstype: "       << setw(10) << right << ptok->stype
+            << setw(5) << left << "\n\tindex: "       << setw(10) << right << ptok->index
+            << setw(5) << left << "\n\tvalue: "       << setw(10) << right << ptok->value
+            << setw(5) << left << "\n\trexp: "        << setw(10) << right << ptok->rexp
+            << setw(5) << left << "\n\ttest_value: "     << setw(10) << right << ptok->test_value
         << "\n}"
     << endl;
 }

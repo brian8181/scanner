@@ -1,0 +1,78 @@
+#define VBAR                10 |
+#define COLON               20 :
+#define LBRACKET            30 [
+#define RBRACKET            40 ]
+#define LBRACE              50 {
+#define RBRACE              60 }
+#define LPAREN              70 (
+#define RPAREN              80 )
+#define COMMA               90 ,
+#define SEMI_COLON         100 ;
+#define DOUBLE_QUOTE       110 "
+#define SINGLE_QUOTE       120 '
+#define SLASH              130 /
+#define BACK_SLASH         140 \
+#define AT                 150 @
+#define PLUS               160 +
+#define MINUS              170 -
+#define ASTERIK            180 *
+#define EQUAL              190 =
+#define NOT_EQUAL          200 !=
+#define DOT                210 .
+#define INDIRECT_MEMBER    220 ->
+#define PERCENT            230 %
+#define AMPERSAND          240 &
+#define NOT                250 !
+#define AND                260 &&
+#define OR                 270 ||
+#define LESS_THAN          280 <
+#define LESS_THAN_EQUAL    290 <=
+#define GREATER_THAN       300 >
+#define GREATER_THAN_EQUAL 400 >=
+#define NUMERIC_LITERAL    410
+
+#lowercase
+#define REQUIRE            420
+#define CONFIG_LOAD        430
+#define INSERT             440
+#define INCLUDE            450
+#define FILE_ATTRIB        460
+#define ASSIGN             470
+#define VAR_ATTRIB         480
+#define VALUE_ATTRIB       490
+#define FROM_ATTRIB        500
+#define ITEM_ATTRIB        510
+#define KEY_ATTRIB         520
+#define NAME_ATTRIB        530
+#define CAPITALIZE         540
+#define CAT                550
+#define COUNT_CHARACTERS   560
+#define COUNT_PARAGRAPHS   570
+#define COUNT_SENTENCES    580
+#define COUNT_WORDS        590
+#define DATE_FORMAT        600
+#define DEFAULT            610
+#define ESCAPE             620
+#define INDENT             630
+#define LOWER              640
+#define UPPER              650
+#define STRIP              660
+#define NL2BR              670
+#define REGX_REPLACE       680
+#define REPLACE            690
+#define SPACIFY            700
+#define STRING_FORMAT      710
+#define STRIP_TAGS         720
+#define TRUNCATE           730
+#define WORDWRAP           740
+#define VALID_CHARS        750
+
+#define FIRST_CHAR         760
+#define ID                 770
+#define SYMBOL             780
+#define CONST_SYMBOL       790
+#define ARRAY              800
+#define COMMENT            810
+#define FILE_NAME          820
+#define WHITESPACE         822
+#define NO_ACTION           -1
