@@ -14,11 +14,9 @@
 #include <regex>
 #include <fmt/core.h>
 #include <fmt/format.h>
-#include <fmt/color.h>
 #include <boost/regex.hpp>
 #include "fileio.hpp"
 #include "Lexer.hpp"
-#include "utility.hpp"
 #include "constants.hpp"
 #include "tokens.hpp"
 
@@ -55,20 +53,23 @@ Lexer::Lexer( const string& file, const string &config_file ) : _scan_file(file)
  * @brief copy ctor
  * @param const Lexer& src
  */
-Lexer::Lexer( const Lexer& src ): _p_iter(nullptr) {}
+Lexer::Lexer( const Lexer& src ): _p_iter(nullptr)
+{
+
+}
 
 /**
  * @brief virtual dtor
  */
 Lexer::~Lexer()
 {
-    int tlen = _tokens.size();
+    const int tlen = _tokens.size();
     for(int i = 0; i < tlen; ++i)
     {
         delete _tokens[i];
     }
 
-    int mlen = _matches.size();
+    const int mlen = _matches.size();
     for(int i = 0; i < mlen; ++i)
     {
         delete _matches[i];
@@ -132,7 +133,7 @@ bool Lexer::init( const string& file, const string &config_file )
     _search_text = ss.str( );
 
     // initialize expression ...
-    //init_epxr();
+    //init_expr();
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
     _rexp = boost::regex( _expr, boost::regex::ECMAScript );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
@@ -180,11 +181,11 @@ void Lexer::load_config( const string &path )
             string stype = token_match["type"].str();
             string test_val = token_match["test"].str();
 
-            token* ptok = new token{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string(test_val), 0, string("null") };
+            auto* ptoken = new token{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string(test_val), 0, string("null") };
             // copy to term to vector
-            _tokens.push_back(ptok);
-            _id_tab[ptok->id] = ptok;
-            _name_tab[ptok->name] = ptok;
+            _tokens.push_back(ptoken);
+            _id_tab[ptoken->id] = ptoken;
+            _name_tab[ptoken->name] = ptoken;
         }
     }
 
@@ -220,8 +221,8 @@ void Lexer::load_config( const string &path )
             // use get line to split on commas
             while (std::getline(ss, str_token, ','))
             {
-                token* ptok = _name_tab[str_token];
-                tokens.push_back(ptok);
+                token* ptoken = _name_tab[str_token];
+                tokens.push_back(ptoken);
                 _state_tokens_tab[pstate->id] = tokens;
             }
         }
@@ -233,7 +234,7 @@ void Lexer::load_config( const string &path )
  * @param file
  * @return void
  */
-void Lexer::dump_config( const string& file )
+void Lexer::dump_config( const string& file ) const
 {
     dump_config( );
 }
@@ -248,14 +249,14 @@ void Lexer::dump_config( ) const
     const size_t len = _tokens.size();
     for(int i = 0; i < len; ++i)
     {
-        token* ptok = _tokens[i];
-        ss <<  "id: "         << left << setw(10) << ptok->id         <<
-              " name: "       << left << setw(10) << ptok->name       <<
-              " type: "       << left << setw(10) << ptok->stype      <<
-              " value: "      << left << setw(10) << ptok->value      <<
-              " rexp: "       << left << setw(10) << ptok->rexp       <<
-              " index: "      << left << setw(10) << ptok->index      <<
-              " test_value: " << left << setw(10) << ptok->test_value << endl;
+        const token* ptoken = _tokens[i];
+        ss <<  "id: "         << left << setw(10) << ptoken->id         <<
+              " name: "       << left << setw(10) << ptoken->name       <<
+              " type: "       << left << setw(10) << ptoken->stype      <<
+              " value: "      << left << setw(10) << ptoken->value      <<
+              " rexp: "       << left << setw(10) << ptoken->rexp       <<
+              " index: "      << left << setw(10) << ptoken->index      <<
+              " test_value: " << left << setw(10) << ptoken->test_value << endl;
     }
     cout << ss.str();
 }
@@ -281,30 +282,29 @@ void Lexer::tokenize()
     for(auto iter = begin; iter != end; ++iter)
     {
         CONTINUE_ON_NO_ACTION:
-        token* ptok = 0;
-        boost::smatch m = *(iter);
-        size_t len = m.size();
+        token* ptoken = nullptr;
+        const boost::smatch& m = *(iter);
+        const size_t len = m.size();
         // find matched
         cout << "find index " << endl;
         for(int i = 1; i < len; ++i)
         {
             if(m[i].matched)
             {   cout << "prefix: \"" << m.prefix() << "\" match: \"" << m[i].str() << "\"" << endl;
-                string prefix = m.prefix();
-                if(prefix.size() != 0)
+                if(string prefix = m.prefix(); prefix.empty())
                 {
                     cout << "error: invalid characters in sequence (" << prefix << ")" << endl;
                 }
-                ptok = _idx_tab[i];        // look up by index
-                ptok->value = m[i].str();
+                ptoken = _idx_tab[i];        // look up by index
+                ptoken->value = m[i].str();
                 cout << "matched index: " << i << endl;
-                print_token(ptok->id);
-                if(on_token( *_state, *ptok ) == NO_ACTION)
+                print_token(ptoken->id);
+                if(on_token( *_state, *ptoken ) == NO_ACTION)
                     goto CONTINUE_ON_NO_ACTION;
                 break;                    // found
             }
         }
-        if(ptok == 0)
+        if(ptoken == nullptr)
             cout << "error: no submatch (" << m.str() << ") ..." << endl;
     }
 }
@@ -355,6 +355,7 @@ int Lexer::get_token()
     case 6:
         //yylval.str = TOKS[i++];
         return 0;
+    default: ;
     }
     #else
     stringstream ss;

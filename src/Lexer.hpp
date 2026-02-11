@@ -137,19 +137,19 @@ public:
 	 * @param  file : config to dump
 	 * @return void
 	 */
-	void dump_config( const string &file );
+	void dump_config( const string &file ) const;
 
 	/**
 	 * @brief  get_token
 	 * @param token
 	 * @return int
 	 */
-	int get_token();
+	static int get_token();
 
 	/**
 	 * reset to intial state
 	 */
-	void reset();
+	static void reset();
 
 	/**
 	 * @brief override virtual, on_token, for each token ...

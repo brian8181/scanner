@@ -10,8 +10,8 @@ LEX = flex
 YACC = bison -y
 YACC = bison
 YFLAGS =
-CXXFLAGS = -std=c++20 -fPIC -DLEX_TEST
-CCFLAGS = -DLEX_TEST
+CXXFLAGS = -g -std=c++20 -fPIC -DLEX_TEST
+CCFLAGS = -g -DLEX_TEST
 FLEXFLAGS = --flex
 BISONFLAGS = -y -d --html --graph
 BLD = build
