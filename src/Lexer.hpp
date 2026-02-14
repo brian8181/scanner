@@ -3,8 +3,8 @@
  * @version 0.0.1
  * @date    Fri, 26 Sep 2025 17:05:10 +0000
  */
-#ifndef _Lexer_HPP_
-#define _Lexer_HPP_
+#ifndef Lexer_HPP_
+#define Lexer_HPP_
 
 #include <iostream>
 #include <string>
@@ -60,13 +60,13 @@ typedef struct token_match
 	token_def token;
 } token_match;
 
-typedef struct state
+typedef struct state_t
 {
 	int id;
 	string name;
-} state;
+} state_t;
 
-typedef struct context
+typedef struct context_t
 {
 	std::string&               scan_file;
 	std::string&               search_text;
@@ -74,10 +74,10 @@ typedef struct context
 	boost::sregex_iterator&    begin;
 	boost::sregex_iterator&    end;
 	boost::sregex_iterator*    p_iter;
-	state*                     state;
+	state_t*                     state;
 	string&                    expr;
-	vector<token*>*            matches;
-} context;
+	vector<token_def*>*            matches;
+} context_t;
 
 /**
   * @brief class Lexer
@@ -94,15 +94,12 @@ public:
 	 * @brief ctor
 	 * @param file
 	 * @param config_file
-	 * @param const string& file, scan file
-	 * @param const string &config_file, config file
 	 */
 	Lexer(const string& file, const string &config_file);
 
 	/**
 	 * @brief copy ctor
 	 * @param src
-	 * @param const Lexer& src
 	 */
 	Lexer( const Lexer& src );
 
@@ -134,41 +131,31 @@ public:
 
 	/**
 	 * @brief  dump config
-	 * @param  file : config to dump
+	 * @param  file
 	 * @return void
 	 */
 	void dump_config( const string &file ) const;
 
 	/**
 	 * @brief  get_token
-	 * @param token
 	 * @return int
 	 */
 	static int get_token();
 
 	/**
-	 * reset to intial state
+	 * @brief reset to initial state
 	 */
 	static void reset();
 
 	/**
 	 * @brief override virtual, on_token, for each token ...
+	 * @param state
 	 * @param token
 	 */
-	int on_token( const state& s, token& tok );
-
-
-	/**
-	 * @brief virtual, virtual for each token ...
-	 * @param token_
-	 * @param m
-	 */
-	virtual void on_token( const unsigned int& token_, const boost::smatch& m );
+	int on_token( const state_t& state, const token_def& token );
 
 	/**
 	 * @brief tokenize
-	 * @param exp
-	 * @param text
 	*/
 	void tokenize();
 
@@ -180,31 +167,32 @@ public:
 	/**
 	 * @brief init_expr
 	 */
-	void init_epxr();
+	void init_expr();
 
 	/**
      * @brief print token to stdout
+	 * @param id
  	 */
 	void print_token( int id );
 
 protected:
-	string                    _config_file;
-	vector<token*>            _tokens;
-	vector<state*>            _states;
-	map<int, token*>          _idx_tab;
-	map<int, token*>          _id_tab;
-	map<string, token*>       _name_tab;
-	map<int, vector<token*>>  _state_tokens_tab;
-	map<int, state*>          _state_tab;
-	vector<token*>            _matches;
-	std::string               _scan_file;
-	std::string               _search_text;
-	boost::regex              _rexp;
-	boost::sregex_iterator    _begin;
-	boost::sregex_iterator    _end;
-	boost::sregex_iterator*   _p_iter;
-	state*                    _state;
-	string                    _expr;
+	string                        _config_file;
+	vector<token_def*>            _tokens;
+	vector<state_t*>              _states;
+	map<int, token_def*>          _idx_tab;
+	map<int, token_def*>          _id_tab;
+	map<string, token*>           _name_tab;
+	map<int, vector<token_def*>>  _state_tokens_tab;
+	map<int, state_t*>            _state_tab;
+	vector<token_def*>            _matches;
+	std::string                   _scan_file;
+	std::string                   _search_text;
+	boost::regex                  _rexp;
+	boost::sregex_iterator        _begin;
+	boost::sregex_iterator        _end;
+	boost::sregex_iterator*      _p_iter;
+	state_t*                     _state;
+	string                       _expr;
 };
 
 //}

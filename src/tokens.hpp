@@ -85,7 +85,7 @@
 // FILE_NAME           = [A-Za-z0-9_.-~+#@]
 
 static int index = 0;
-static int id = index + 2;
+static int id = 0;
 
 //const int TSIZE = 12;
 // token* tokens[TSIZE] =  {
@@ -104,20 +104,28 @@ static int id = index + 2;
 //                 };
 
 inline vector tokens = {
-                    new token{ ++id, "VBAR",       "string",   0, 0,       "\\|",          "\\|",    ++index, string("null") },
-                    new token{ ++id, "COLON",      "string",   0, 0,       ":",            ":",      ++index, string("null") },
-                    new token{ ++id, "LBRACKET",   "string",   0, 0,       "\\[",          "\\[",    ++index, string("null") },
-                    new token{ ++id, "RBRACKET",   "string",   0, 0,       "\\]",          "\\]",    ++index, string("null") },
-                    new token{ ++id, "LBRACE",     "string",   0, 0,       "\\{",          "\\{",    ++index, string("null") },
-                    new token{ ++id, "RBRACE",     "string",   0, 0,       "\\}",          "\\}",    ++index, string("null") },
-                    new token{ ++id, "ASTERISK",   "string",   0, 0,       "\\*",          "\\*",    ++index, string("null") },
-                    new token{ ++id, "NOT_EQUAL",  "string",   0, 0,       "!=",           "!=",     ++index, string("null") },
-                    new token{ ++id, "EQUAL",      "string",   0, 0,       "=",            "=",      ++index, string("null") },
-                    new token{ ++id, "COMMA",      "string",   0, 0,       "\\,",          "\\,",    ++index, string("null") },
-                    new token{ ++id, "DOT",        "string",   0, 0,       "\\.",          "\\.",    ++index, string("null") },
-                    new token{ ++id, "CARROT",     "string",   0, 0,       "\\^",          "\\^",    ++index, string("null") },
-                    new token{ ++id, "SYMBOL",     "string",   0, 0,       "\\$[a-zA-Z]+", "\\$abc", ++index, string("null") },
-                    new token{ ++id, "WHITESPACE", "string",   0, 0,       "[ \\t]+",      "\\t",    ++index, string("null") }
+                    new token{  1, "VBAR",          "string",   0, 0,       "\\|",          "\\|",            1, string("null") },
+                    new token{  2, "COLON",         "string",   0, 0,       ":",            ":",              2, string("null") },
+                    new token{  3, "DOUBLE_QUOTE",  "string",   0, 0,       "\"",      "",                    3, string("null") },
+                    new token{  4, "LBRACKET",      "string",   0, 0,       "\\[",          "\\[",            4, string("null") },
+                    new token{  5, "RBRACKET",      "string",   0, 0,       "\\]",          "\\]",            5, string("null") },
+                    new token{  6, "LBRACE",        "string",   0, 0,       "\\{",          "\\{",            6, string("null") },
+                    new token{  7, "RBRACE",        "string",   0, 0,       "\\}",          "\\}",            7, string("null") },
+                    new token{  8, "LPAREN",        "string",   0, 0,       "\\(",          "\\(",            8, string("null") },
+                    new token{  9, "RPAREN",        "string",   0, 0,       "\\)",          "\\)",            9, string("null") },
+                    new token{ 10, "ASTERISK",      "string",   0, 0,       "\\*",          "\\*",           10, string("null") },
+                    new token{ 11, "NOT_EQUAL",     "string",   0, 0,       "!=",           "!=",            11, string("null") },
+                    new token{ 12, "EQUAL",         "string",   0, 0,       "=",            "=",             12, string("null") },
+                    new token{ 13, "COMMA",         "string",   0, 0,       "\\,",          "\\,",           13, string("null") },
+                    new token{ 14, "DOT",           "string",   0, 0,       "\\.",          "\\.",           14, string("null") },
+                    new token{ 15, "CARROT",        "string",   0, 0,       "\\^",          "\\^",           15, string("null") },
+                    new token{ 16, "QUESTION_MARK", "string",   0, 0,       "\\?",          "\\?",           16, string("null") },
+                    new token{ 17, "DOLLAR_SIGN",   "string",   0, 0,       "\\$",          "$",             17, string("null") },
+                    new token{ 18, "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",         18, string("null") },
+                    new token{ 19, "SYMBOL",        "string",   0, 0,       "\\$[a-zA-Z]+", "\\$abc",        19, string("null") },
+                    new token{ 20, "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",          20, string("null") },
+                    new token{ 21, "ANYTHING",      "string",   0, 0,          ".",           "~#",          21, string("null") }
+                    //new token{ 16, "EOF", "string",   0, 0,          "0",               "0", 16, string("null") }
                 };
 
 // token* tokens[TSIZE] =  {
@@ -125,14 +133,16 @@ inline vector tokens = {
 //                     new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
 //                     new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") } };
 
+// .[{()\*+?|^$
+// [[.NUL.]] matches a NUL character.
 //const string expression = "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
-const string expression =   R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(\.)|(\$[a-zA-Z]+)|([ \t]+))";
+const string expression =   R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(\.)|(\$[a-zA-Z]+)|([ \t])|(.))";
 //                          "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)|([ \\t]+)"
 
 // states
-#define INITIAL 0
-#define COMMENT 1
-#define ESCAPED  2
+#define INITIAL_ 0
+#define COMMENT_ 1
+#define ESCAPED_  2
 
 // tokens
 #define VBAR                10
@@ -209,24 +219,26 @@ const string expression =   R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(
 #define COMMENT            810
 #define FILE_NAME          820
 #define WHITESPACE         822
-#define NO_ACTION           -1
+#define SKIP_TOKEN           -1
 #define ERROR               -2
 #define SCAN_EOF             0
+#define ANYTHING            -3
 
-inline int on_state(const state& s )
+inline int on_state(const state_t& s )
 {
     switch (s.id)
     {
-        case INITIAL:
-            return INITIAL;
+        case INITIAL_:
+            return INITIAL_;
     }
+    return ERROR;
 }
 
-inline int on_token_action(const state& s, const token& tok)
+inline int on_token_action(const state_t& s, const token_def& tok)
 {
     switch (s.id)
     {
-        case INITIAL:
+        case INITIAL_:
         {
             switch(tok.id)
             {
@@ -309,10 +321,13 @@ inline int on_token_action(const state& s, const token& tok)
                 case FILE_NAME:
                     return tok.id;
                 case WHITESPACE:
-                case NO_ACTION:
-                    return NO_ACTION;
+                case SKIP_TOKEN:
+                    return SKIP_TOKEN;
                 case SCAN_EOF:
                     return EOF;
+                case ANYTHING:
+                    cout << "error: " << tok.value << "is invalid." << endl;
+                    return ERROR;
                 default:
                     return ERROR;
             }

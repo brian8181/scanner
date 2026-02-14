@@ -5,6 +5,13 @@
       <w>pstate</w>
       <w>spacify</w>
       <w>tlen</w>
+      <w>yyempty</w>
+      <w>yyeof</w>
+      <w>yyerror</w>
+      <w>yylval</w>
+      <w>yytoken</w>
+      <w>yytokentype</w>
+      <w>yyundef</w>
     </words>
   </dictionary>
 </component>
