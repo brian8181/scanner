@@ -48,7 +48,10 @@ namespace ast
 		 * @return T*
 		 */
 		template< typename T >
-		T* eval();
+		T* eval()
+		{
+			return T::eval();
+		}
 
 	protected:
 		 void* _val;
@@ -165,7 +168,7 @@ namespace ast
 	{
 	public:
 		add_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
-		add_expr(const add_expr<T>& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
+		add_expr(const expr& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
 
 		T* eval()
 		{

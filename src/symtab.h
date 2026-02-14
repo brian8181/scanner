@@ -30,7 +30,6 @@ typedef struct tree_node
     struct tree_node* nodes;
 } tree_node;
 
-
 typedef struct map_node
 {
     int key;

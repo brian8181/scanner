@@ -104,28 +104,31 @@ static int id = 0;
 //                 };
 
 inline vector tokens = {
-                    new token{  1, "VBAR",          "string",   0, 0,       "\\|",          "\\|",            1, string("null") },
-                    new token{  2, "COLON",         "string",   0, 0,       ":",            ":",              2, string("null") },
-                    new token{  3, "DOUBLE_QUOTE",  "string",   0, 0,       "\"",      "",                    3, string("null") },
-                    new token{  4, "LBRACKET",      "string",   0, 0,       "\\[",          "\\[",            4, string("null") },
-                    new token{  5, "RBRACKET",      "string",   0, 0,       "\\]",          "\\]",            5, string("null") },
-                    new token{  6, "LBRACE",        "string",   0, 0,       "\\{",          "\\{",            6, string("null") },
-                    new token{  7, "RBRACE",        "string",   0, 0,       "\\}",          "\\}",            7, string("null") },
-                    new token{  8, "LPAREN",        "string",   0, 0,       "\\(",          "\\(",            8, string("null") },
-                    new token{  9, "RPAREN",        "string",   0, 0,       "\\)",          "\\)",            9, string("null") },
-                    new token{ 10, "ASTERISK",      "string",   0, 0,       "\\*",          "\\*",           10, string("null") },
-                    new token{ 11, "NOT_EQUAL",     "string",   0, 0,       "!=",           "!=",            11, string("null") },
-                    new token{ 12, "EQUAL",         "string",   0, 0,       "=",            "=",             12, string("null") },
-                    new token{ 13, "COMMA",         "string",   0, 0,       "\\,",          "\\,",           13, string("null") },
-                    new token{ 14, "DOT",           "string",   0, 0,       "\\.",          "\\.",           14, string("null") },
-                    new token{ 15, "CARROT",        "string",   0, 0,       "\\^",          "\\^",           15, string("null") },
-                    new token{ 16, "QUESTION_MARK", "string",   0, 0,       "\\?",          "\\?",           16, string("null") },
-                    new token{ 17, "DOLLAR_SIGN",   "string",   0, 0,       "\\$",          "$",             17, string("null") },
-                    new token{ 18, "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",         18, string("null") },
-                    new token{ 19, "SYMBOL",        "string",   0, 0,       "\\$[a-zA-Z]+", "\\$abc",        19, string("null") },
-                    new token{ 20, "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",          20, string("null") },
-                    new token{ 21, "ANYTHING",      "string",   0, 0,          ".",           "~#",          21, string("null") }
-                    //new token{ 16, "EOF", "string",   0, 0,          "0",               "0", 16, string("null") }
+                    new token{  1,  "VBAR",          "string",   0, 0,       "\\|",           "\\|",            1, string("null") },
+                    new token{  2,  "COLON",         "string",   0, 0,       ":",             ":",              2, string("null") },
+                    new token{  3,  "DOUBLE_QUOTE",  "string",   0, 0,       "\"",            "\"",             3, string("null") },
+                    new token{  4,  "LBRACKET",      "string",   0, 0,       "\\[",           "\\[",            4, string("null") },
+                    new token{  5,  "RBRACKET",      "string",   0, 0,       "\\]",           "\\]",            5, string("null") },
+                    new token{  6,  "LBRACE",        "string",   0, 0,       "\\{",           "\\{",            6, string("null") },
+                    new token{  7,  "RBRACE",        "string",   0, 0,       "\\}",           "\\}",            7, string("null") },
+                    new token{  8,  "LPAREN",        "string",   0, 0,       "\\(",           "\\(",            8, string("null") },
+                    new token{  9,  "RPAREN",        "string",   0, 0,       "\\)",           "\\)",            9, string("null") },
+                    new token{ 10,  "ASTERISK",      "string",   0, 0,       "\\*",           "\\*",           10, string("null") },
+                    new token{ 11,  "NOT_EQUAL",     "string",   0, 0,       "!=",            "!=",            11, string("null") },
+                    new token{ 12,  "EQUAL",         "string",   0, 0,       "=",             "=",             12, string("null") },
+                    new token{ 13,  "COMMA",         "string",   0, 0,       "\\,",           "\\,",           13, string("null") },
+                    new token{ 14,  "DOT",           "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
+                    new token{ 15,  "CARROT",        "string",   0, 0,       "\\^",           "\\^",           15, string("null") },
+                    new token{ 16,  "QUESTION_MARK", "string",   0, 0,       "\\?",           "\\?",           16, string("null") },
+                    new token{ 17,  "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",          17, string("null") },
+                    new token{ 18,  "PLUS",          "string",   0, 0,       "\\+",           "\\+",            18, string("null") },
+                    new token{ 19,  "MINUS",         "string",   0, 0,       "-",             "-",              19, string("null") },
+                    new token{ 20,  "SYMBOL",        "string",   0, 0,       "\\$[a-zA-Z]+",  "\\$abc",        20, string("null") },
+                    new token{ 23,  "DOLLAR_SIGN",   "string",   0, 0,       "\\$",           "$",             21, string("null") },
+                    new token{ 21,  "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",           22, string("null") },
+                    new token{ 22,  "ANYTHING",      "string",   0, 0,       ".",             "~#",            23, string("null") },
+
+                    //new token{ 16, "EOF", "string",   0, 0,          "0",               "0", 16, string("null" }
                 };
 
 // token* tokens[TSIZE] =  {
