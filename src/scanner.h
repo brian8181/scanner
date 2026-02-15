@@ -9,7 +9,7 @@
 #ifndef _SCANNER_HPP_
 #define _SCANNER_HPP_
 
-using namespace std;
+//using namespace std;
 
 /**
  * @brief parse command line options
@@ -45,7 +45,7 @@ int yylex ();
  * @brief
  * @param
  */
-void yyerror (char const *);
+//void yyerror (char const *);
 
 #define lex yylex
 

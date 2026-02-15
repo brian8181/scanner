@@ -32,8 +32,9 @@ FMT_CYAN='\e[36m'
 all: $(BLD)/scanner
 
 
-$(BLD)/scanner: $(BLD)/parser.tab.c $(BLD)/parser.tab.h $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/scanner.hpp $(SRC)/tokens.hpp $(SRC)/Lexer.cpp $(BLD)/Lexer.hpp $(SRC)/utility.cpp $(BLD)/ast.o
-	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) -I"/home/brian/src/boost_1_89_0" $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/Lexer.cpp $(SRC)/utility.cpp $(LDFLAGS) -o $@
+$(BLD)/scanner: $(BLD)/parser.tab.o $(BLD)/parser.tab.h $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/scanner.h $(SRC)/tokens.hpp $(SRC)/Lexer.cpp $(BLD)/Lexer.hpp $(SRC)/utility.cpp $(BLD)/ast.o
+	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) -I"/home/brian/src/boost_1_89_0" $(BLD)/parser.tab.c $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/Lexer.cpp $(SRC)/utility.cpp $(LDFLAGS) -o $@
+
 
 
 $(BLD)/parser.tab.c $(BLD)/parser.tab.h: $(SRC)/parser.y
@@ -46,6 +47,10 @@ $(BLD)/%.h : $(SRC)/%.h
 
 $(BLD)/%.hpp: $(SRC)/%.hpp
 	cp $< $@
+
+$(OBJ)/%.o: $(SRC)/%.c
+	$(CC) $(CCFLAGS) -I$(ROOT)/build -c $< -o $@
+
 
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXXFLAGS) -I$(ROOT)/build -I"/home/brian/src/boost_1_89_0" -c $< -o $@

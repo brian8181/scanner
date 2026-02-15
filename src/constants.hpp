@@ -57,7 +57,7 @@ const string ASTERIK              = "\\*";
 const string AMPERSAND            = "&";
 const string SEMI_COLON           = ";";
 const string COMMA                = ",";
-const string DOT                  = "\\.";
+const string MY_DOT                  = "\\.";
 const string OPEN_PAREN           = "\\(";
 const string CLOSE_PAREN          = "\\)";
 const string OPEN_BRACKET         = "\\[";
@@ -112,7 +112,7 @@ const string OPERATORS            = "(" + BIT_SHIFT_LEFT        + ")|" +
                                     "(" + PERCENT               + ")";
 const string PUNCTUATION          = "(" + SEMI_COLON            + ")|" +
                                     "(" + COMMA                 + ")|" +
-                                    "(" + DOT                   + ")|" +
+                                    "(" + MY_DOT                   + ")|" +
                                     "(" + OPEN_BRACE            + ")|" +
                                     "(" + CLOSE_BRACE           + ")|" +
                                     "(" + OPEN_PAREN            + ")|" +

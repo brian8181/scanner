@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "lex.hpp"
-#include "scanner.hpp"
+#include "scanner.h"
 
 //char* TOKS[] = { "3", "+", "2", ";", "\n", "\0" };
 //symbol_type (int token, const value_type& value)

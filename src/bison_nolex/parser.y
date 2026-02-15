@@ -1,7 +1,7 @@
 %{
     #include <stdio.h>
     #include <string.h>
-    #include "parser.tab.h"
+    #include "parser.tab2.h"
 
     int yylex(void);
     int yyerror(char * s);
@@ -110,7 +110,7 @@ terminal:
 
 %%
 
-int yyerror(char * s)
+int yyerror(const char * s)
 {
     fprintf(stderr, "%s\n", s);
     return 0;

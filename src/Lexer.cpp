@@ -1,5 +1,5 @@
 /**
- * @file    Lexer.hpp
+ * @file    Lexer.cpp
  * @version 0.0.1
  * @date    Fri, 26 Sep 2025 17:05:10 +0000
  * @info    ...
@@ -19,6 +19,8 @@
 #include "Lexer.hpp"
 #include "constants.hpp"
 #include "tokens.hpp"
+#include "../build/parser.tab.h"
+//#include "pars.h"
 
 using std::cerr;
 using std::cout;
@@ -63,13 +65,13 @@ Lexer::Lexer( const Lexer& src ): _p_iter(nullptr)
  */
 Lexer::~Lexer()
 {
-    const int tlen = _tokens.size();
+    const unsigned int tlen = _tokens.size();
     for(int i = 0; i < tlen; ++i)
     {
         delete _tokens[i];
     }
 
-    const int mlen = _matches.size();
+    const unsigned int mlen = _matches.size();
     for(int i = 0; i < mlen; ++i)
     {
         delete _matches[i];
@@ -276,7 +278,7 @@ void Lexer::tokenize()
     // _expr = "(!=)|(=)";
     // search_text = "! =!= =   !=";
 
-    const auto rexp = boost::regex( _expr, boost::regex::ECMAScript | boost::match_not_dot_newline );
+    const auto rexp = boost::regex( _expr, boost::regex::ECMAScript );
     //const auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol | boost::match_continuous );
     const auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
     const auto end = boost::sregex_iterator();
@@ -311,6 +313,8 @@ void Lexer::tokenize()
     }
 }
 
+int yyparse();
+
 /**
  * @brief  get_token
  * @return int
@@ -336,26 +340,28 @@ int Lexer::get_token()
      };
     //typedef yytokentype yytoken_kind_t;
 
+    char* TOKS[] = { "3", "+", "2", ";", "\n", "\0" };
+
     static int i = 0;
     switch(++i)
     {
     case 1:
-        //yylval.num = atoi(TOKS[i++]);
+        //yylval.ival = atoi(TOKS[i++]);
         return INTEGER;
     case 2:
-        //yylval.str = TOKS[i++];
+        yylval.sval = TOKS[i++];
         return PLUS;
     case 3:
-        //yylval.num = atoi(TOKS[i++]);
+        yylval.ival = atoi(TOKS[i++]);
         return INTEGER;
     case 4:
-        //yylval.str = TOKS[i++];
+        yylval.sval = TOKS[i++];
         return SEMI_COLON;
      case 5:
-        //yylval.str = TOKS[i++];
+        yylval.sval = TOKS[i++];
         return NEWLINE;
     case 6:
-        //yylval.str = TOKS[i++];
+        yylval.sval = TOKS[i++];
         return 0;
     default: ;
     }

@@ -9,13 +9,11 @@
     </sourceRoots>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="Make.Settings">
-    <option name="useCygwin" value="true" />
-  </component>
   <component name="MakefileSettings">
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
-        <option name="buildDirectory" value="$PROJECT_DIR$" />
+        <option name="buildDirectory" value="" />
+        <option name="buildOptions" value="makefile" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>

@@ -28,7 +28,7 @@
 // ASTERISK             = \*
 // EQUAL               = =
 // NOT_EQUAL           = !=
-// DOT                 = \.
+// MY_DOT                 = \.
 // CARROT              = \^
 // INDIRECT_MEMBER     = ->
 // PERCENT             = %
@@ -99,7 +99,7 @@ static int id = 0;
 //                     new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
 //                     new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") },
 //                     new token{ ++id, "COMMA",    "string", 0, 0,       "\\,",          "\\,",    ++index, string("null") },
-//                     new token{ ++id, "DOT",      "string", 0, 0,       "\\.",          "\\.",    ++index, string("null") },
+//                     new token{ ++id, "MY_DOT",      "string", 0, 0,       "\\.",          "\\.",    ++index, string("null") },
 //                     new token{ ++id, "SYMBOL",   "string", 0, 0,       "\\$[a-zA-Z]+", "\\$abc", ++index, string("null") }
 //                 };
 
@@ -117,7 +117,7 @@ inline vector tokens = {
                     new token{ 11,  "NOT_EQUAL",     "string",   0, 0,       "!=",            "!=",            11, string("null") },
                     new token{ 12,  "EQUAL",         "string",   0, 0,       "=",             "=",             12, string("null") },
                     new token{ 13,  "COMMA",         "string",   0, 0,       "\\,",           "\\,",           13, string("null") },
-                    new token{ 14,  "DOT",           "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
+                    new token{ 14,  "MY_DOT",           "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
                     new token{ 15,  "CARROT",        "string",   0, 0,       "\\^",           "\\^",           15, string("null") },
                     new token{ 16,  "QUESTION_MARK", "string",   0, 0,       "\\?",           "\\?",           16, string("null") },
                     new token{ 17,  "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",          17, string("null") },
@@ -168,8 +168,8 @@ const string expression =   R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(
 #define ASTERIK            180
 #define EQUAL              190
 #define NOT_EQUAL          200
-#define DOT                210
-#define INDIRECT_MEMBER    220
+#define MY_DOT                210
+#define INDIRECT_MEMBER_OPER    220
 #define PERCENT            230
 #define AMPERSAND          240
 #define NOT                250
@@ -269,8 +269,8 @@ inline int on_token_action(const state_t& s, const token_def& tok)
                 case ASTERIK:
                 case EQUAL:
                 case NOT_EQUAL:
-                case DOT:
-                case INDIRECT_MEMBER:
+                case MY_DOT:
+                case INDIRECT_MEMBER_OPER:
                 case PERCENT:
                 case AMPERSAND:
                 case NOT:

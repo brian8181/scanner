@@ -25,7 +25,7 @@ add_library(lexer_a STATIC
 #target_link_libraries(scanner PRIVATE lexer_a)
 
 add_executable(scanner
-    src/scanner.cpp
+        src/scanner.cpp
         src/Lexer.cpp
     src/utility.cpp
     src/fileio.cpp
