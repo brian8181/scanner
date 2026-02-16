@@ -13,7 +13,7 @@
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
         <option name="buildDirectory" value="" />
-        <option name="buildOptions" value="makefile" />
+        <option name="buildOptions" value="makefile LEX_TEST=1" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>

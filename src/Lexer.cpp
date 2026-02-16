@@ -111,7 +111,6 @@ bool Lexer::init( const string& file, const string &config_file )
 	_state_tab.clear();
 	_matches.clear();
 
-    #define LEX_TEST
     #ifdef LEX_TEST
 
     // init tables from tokens.hpp
@@ -319,15 +318,12 @@ void Lexer::tokenize()
     }
 }
 
-int yyparse();
-
 /**
  * @brief  get_token
  * @return int
  */
 int Lexer::get_token()
 {
-    #define LEX_TEST
     #ifdef LEX_TEST
     //  enum yytokentype
     //  {
@@ -351,7 +347,8 @@ int Lexer::get_token()
     switch(++i)
     {
     case 1:
-        yylval.ival = atoi(TOKS[i++]);
+        //yylval.ival = atoi(TOKS[i++]);
+        yylval.ival = 3;
         //token* ptok = _id_tab[TOKS[i]];
         return yytokentype::INTEGER;
     case 2:
@@ -489,7 +486,6 @@ void Lexer::init_expr()
     _expr = ss.str();
     _expr.pop_back();
 
-    #define LEX_TEST
     #ifndef LEX_TEST
     auto index using test_value
     const auto rgx = boost::regex( _expr );
