@@ -115,14 +115,18 @@ int parse_options(int argc, char* argv[])
         cout << "configuration dumped." << endl;
     }
 
-    cout << "lexing ..." << endl;
-    // while( int token_id = lex() )
+    // cout << "lexing ..." << endl;
+    // while(const int token_id = lex() )
     // {
-    //     lexer.print_token(token_id);
+    //     //lexer.print_token(token_id);
     //     cout << "found token: " << token_id << endl;
     // }
     // testing
-    lexer.tokenize();
+    //lexer.tokenize();
+
+    cout << "parsing ..." << endl;
+    yyparse();
+
     cout << endl;
 
     cout << "finished scanning. " << endl;

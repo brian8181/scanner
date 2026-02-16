@@ -84,7 +84,7 @@
 // COMMENT             = \{[ \t]*\*[^*}]*\*[ \t]*\}
 // FILE_NAME           = [A-Za-z0-9_.-~+#@]
 
-static int index = 0;
+static int index_ = 0;
 static int id = 0;
 
 //const int TSIZE = 12;
@@ -157,13 +157,13 @@ const string expression =   R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(
 #define LPAREN              70
 #define RPAREN              80
 #define COMMA               90
-#define SEMI_COLON         100
+//#define SEMI_COLON         100
 #define DOUBLE_QUOTE       110
 #define SINGLE_QUOTE       120
 #define SLASH              130
 #define BACK_SLASH         140
 #define AT                 150
-#define PLUS               160
+//#define PLUS               160
 #define MINUS              170
 #define ASTERIK            180
 #define EQUAL              190
@@ -258,13 +258,13 @@ inline int on_token_action(const state_t& s, const token_def& tok)
                 case LPAREN:
                 case RPAREN:
                 case COMMA:
-                case SEMI_COLON:
+        //        case SEMI_COLON:
                 case DOUBLE_QUOTE:
                 case SINGLE_QUOTE:
                 case SLASH:
                 case BACK_SLASH:
                 case AT:
-                case PLUS:
+ //               case PLUS:
                 case MINUS:
                 case ASTERIK:
                 case EQUAL:

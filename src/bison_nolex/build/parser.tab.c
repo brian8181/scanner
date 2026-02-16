@@ -41,7 +41,6 @@
 /* All symbols defined below should begin with yy or YY, to avoid
    infringing on user name space.  This should be done even for local
    variables, as they might otherwise be expanded by user macros.
-   variables, as they might otherwise be expanded by user macros.
    There are some unavoidable exceptions within include files to
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
@@ -72,7 +71,7 @@
 
     #include <stdio.h>
     #include <string.h>
-    #include "parser.tab.h"
+    #include "parser.tab2.h"
 
     int yylex(void);
     int yyerror(char * s);
@@ -1473,7 +1472,7 @@ yyreturnlab:
 #line 111 "parser.y"
 
 
-int yyerror(char * s)
+int yyerror(const char * s)
 {
     fprintf(stderr, "%s\n", s);
     return 0;

@@ -278,6 +278,8 @@ int Lexer::get_token( /*out*/ unsigned int& token )
     {
     case 0:
         //yylval.num = atoi(TOKS[i++]);
+            // tok = _token_map[what.str()].first;
+            //         // string name = _token_map[what.str( )].second;
         return INTEGER;
     case 1:
         //yylval.str = TOKS[i++];

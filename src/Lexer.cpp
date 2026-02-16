@@ -4,6 +4,12 @@
  * @date    Fri, 26 Sep 2025 17:05:10 +0000
  * @info    ...
  */
+
+#define _GNU_SOURCE
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -323,51 +329,55 @@ int Lexer::get_token()
 {
     #define LEX_TEST
     #ifdef LEX_TEST
-     enum yytokentype
-     {
-         YYEMPTY = -2,
-         YYEOF = 0,                     /* "end of file"  */
-         YYERROR = 256,                 /* error  */
-         YYUNDEF = 257,                 /* "invalid token"  */
-         INTEGER = 258,                 /* INTEGER  */
-         //token_ = 259,                   /* token  */
-         //SEMI_COLON = 260,              /* SEMI_COLON  */
-         NEWLINE = 261,                 /* NEWLINE  */
-         // PLUS = 262,                    /* PLUS  */
-         // MINUS = 263,                   /* MINUS  */
-         // MULT = 264,                    /* MULT  */
-         // DIV = 265                      /* DIV  */
-     };
+    //  enum yytokentype
+    //  {
+    //      YYEMPTY = -2,
+    //      YYEOF = 0,                     /* "end of file"  */
+    //      YYERROR = 256,                 /* error  */
+    //      YYUNDEF = 257,                 /* "invalid token"  */
+    //      INTEGER = 258,                 /* INTEGER  */
+    //      //token_ = 259,                   /* token  */
+    //      MY_SEMI_COLON = 260,              /* SEMI_COLON  */
+    //      NEWLINE = 261,                 /* NEWLINE  */
+    //      MY_PLUS = 262,                    /* PLUS  */
+    //      // MINUS = 263,                   /* MINUS  */
+    //      // MULT = 264,                    /* MULT  */
+    //      // DIV = 265                      /* DIV  */
+    // };
     //typedef yytokentype yytoken_kind_t;
 
-    char* TOKS[] = { "3", "+", "2", ";", "\n", "\0" };
-
+    const char* TOKS[] = { "3", "+", "2", ";", "\n", "\0" };
     static int i = 0;
     switch(++i)
     {
     case 1:
-        //yylval.ival = atoi(TOKS[i++]);
-        return INTEGER;
+        yylval.ival = atoi(TOKS[i++]);
+        //token* ptok = _id_tab[TOKS[i]];
+        return yytokentype::INTEGER;
     case 2:
-        yylval.sval = TOKS[i++];
-        return PLUS;
+        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
+        return yytokentype::PLUS;
     case 3:
         yylval.ival = atoi(TOKS[i++]);
-        return INTEGER;
+        return yytokentype::INTEGER;
     case 4:
-        yylval.sval = TOKS[i++];
-        return SEMI_COLON;
+        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
+        return yytokentype::SEMI_COLON;
      case 5:
-        yylval.sval = TOKS[i++];
-        return NEWLINE;
+        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
+        return yytokentype::NEWLINE;
     case 6:
-        yylval.sval = TOKS[i++];
+        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
         return 0;
     default: ;
     }
+
+    // if(on_token( "INITIAL", TOKS[i] ) == SKIP_TOKEN)
+    //     continue;
+
     #else
 
-//SKIPPED_TOKEN:
+    //SKIPPED_TOKEN:
     stringstream ss;
     token* ptoken = 0;
     if(*_p_iter != _end)
@@ -423,7 +433,8 @@ void Lexer::reset()
 
 int Lexer::on_token( const state_t& s, const token_def& token )
 {
-    return 0;
+    //return on_token_action(s, token);
+    return token.id;
 }
 
 

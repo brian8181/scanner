@@ -55,7 +55,7 @@ const string KEYWORDS             = "(if)|(else)|(for)|(while)|(return)|(break)|
 // punctuations
 const string ASTERIK              = "\\*";
 const string AMPERSAND            = "&";
-const string SEMI_COLON           = ";";
+//const string SEMI_COLON           = ";";
 const string COMMA                = ",";
 const string MY_DOT                  = "\\.";
 const string OPEN_PAREN           = "\\(";
@@ -76,7 +76,7 @@ const string CARROT               = "\\^";
 const string PERCENT              = "%";
 const string EXCLAMATION          = "!";
 // operators
-const string PLUS                 = "\\+";
+//const string PLUS                 = "\\+";
 const string MINUS                = "-";
 // multi char operators
 const string BIT_SHIFT_LEFT       = "<<";
@@ -105,23 +105,23 @@ const string OPERATORS            = "(" + BIT_SHIFT_LEFT        + ")|" +
                                     "(" + SCOPE_RESOLUTION      + ")|" +
                                     "(" + INDIRECT_SELECTION    + ")|" +
                                     "(" + EQUAL                 + ")|" +
-                                    "(" + PLUS                  + ")|" +
+                                    //"(" + PLUS                  + ")|" +
                                     "(" + MINUS                 + ")|" +
                                     "(" + ASTERIK               + ")|" +
                                     "(" + FORWARD_SLASH         + ")|" +
                                     "(" + PERCENT               + ")";
-const string PUNCTUATION          = "(" + SEMI_COLON            + ")|" +
-                                    "(" + COMMA                 + ")|" +
-                                    "(" + MY_DOT                   + ")|" +
-                                    "(" + OPEN_BRACE            + ")|" +
-                                    "(" + CLOSE_BRACE           + ")|" +
-                                    "(" + OPEN_PAREN            + ")|" +
-                                    "(" + CLOSE_PAREN           + ")|" +
-                                    "(" + OPEN_BRACKET          + ")|" +
-                                    "(" + CLOSE_BRACKET         + ")|" +
-                                    "(" + DOUBLE_QUOTE          + ")|" +
-                                    "(" + SINGLE_QUOTE          + ")|" +
-                                    "(" + TICK_MARK             + ")";
+const string PUNCTUATION          = //"(" + SEMI_COLON            + ")|" +
+                                     "(" + COMMA                 + ")|" +
+                                     "(" + MY_DOT                   + ")|" +
+                                     "(" + OPEN_BRACE            + ")|" +
+                                     "(" + CLOSE_BRACE           + ")|" +
+                                     "(" + OPEN_PAREN            + ")|" +
+                                        "(" + CLOSE_PAREN           + ")|" +
+                                     "(" + OPEN_BRACKET          + ")|" +
+                                     "(" + CLOSE_BRACKET         + ")|" +
+                                     "(" + DOUBLE_QUOTE          + ")|" +
+                                     "(" + SINGLE_QUOTE          + ")|" +
+                                     "(" + TICK_MARK             + ")";
 const string DECL                 = "(" + TYPES                 + ")|" +
                                     "(" + TYPE_MODIFIERS        + ")|" +
                                     "(" + SYMBOL                + ")";
@@ -132,7 +132,7 @@ const string LITERAL              = "(" + STRING_LITERAL        + ")|" +
                                     "(" + CHAR_LITERAL          + ")";
 const string EVERYTHING           =       LITERAL               + "|"
                                         + OPERATORS             + "|"
-                                        + PUNCTUATION           + "|"
+                                        //+ PUNCTUATION           + "|"
                                         + DECL;
 /**
  * @brief Enumeration of token IDs
