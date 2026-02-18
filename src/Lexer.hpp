@@ -35,6 +35,20 @@ using std::regex;
 // namespace bkp
 // {
 //vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
+typedef struct token_t {
+	int id;
+	string name;
+	string type;
+	string rexpr;
+} token_t;
+
+typedef struct token_match_t
+{
+	int line;
+	int col;
+	string value;
+	token_t token;
+} token_match_t;
 
 typedef struct token_def
 {
@@ -74,10 +88,20 @@ typedef struct context_t
 	boost::sregex_iterator&    begin;
 	boost::sregex_iterator&    end;
 	boost::sregex_iterator*    p_iter;
-	state_t*                     state;
+	state_t*                   state;
 	string&                    expr;
-	vector<token_def*>*            matches;
+	vector<token_def*>*        matches;
 } context_t;
+
+const string TOKEN_TYPE           = "[A-Za-z][A-Za-z_]*((::)[A-Za-z_]*)?";
+const string TOKEN_TYPE_           = "[A-Za-z][A-Za-z_]*";
+const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
+const string VALID_CHARS          = "[[:punct:][:alnum:]]"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`
+const string CONFIG_STATES        = R"((?<states>^\s*(?<state>[A-Za-z][A-Za-z0-9_]*)\s*=\s*\s*\{(?<tokens>[A-Za-z][A-Za-z0-9_]*(, [A-Za-z][A-Za-z0-9_]*)*)\}\s*\s*$))";
+const string CONFIG_SECTIONS      = R"(^\s*\[\s*(?<tokens>tokens)|(?<groups>groups)|(?<states>states)\s*\]\s*$)";
+const string CONFIG_PAIR          = "\\s*(?<type>" + TOKEN_TYPE_ + ")\\s+(?<name>[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(?<rexp>" + VALID_CHARS + "*)\\s*\"(?<test>.*)\"\\s*";
+const string CONFIG_COMMENT       = "^\\s*#.*$";
+const string CONFIG               = "(?<pairs>" + CONFIG_PAIR + ")|(?<comments>" + CONFIG_COMMENT + ")";
 
 /**
   * @brief class Lexer
@@ -152,7 +176,7 @@ public:
 	 * @param state
 	 * @param token
 	 */
-	int on_token( const state_t& state, const token_def& token );
+	static int on_token( const state_t& state, const token_def& token );
 
 	/**
 	 * @brief tokenize
@@ -179,9 +203,9 @@ protected:
 	string                        _config_file;
 	vector<token_def*>            _tokens;
 	vector<state_t*>              _states;
-	map<int, token_def*>          _idx_tab;
-	map<int, token_def*>          _id_tab;
-	map<string, token*>           _name_tab;
+	map<int, token_def*>          _idx_tab;  // idx -> token_def
+	map<int, token_def*>          _id_tab;   // id -> token_def
+	map<string, token*>           _name_tab; // name -> token_def
 	map<int, vector<token_def*>>  _state_tokens_tab;
 	map<int, state_t*>            _state_tab;
 	vector<token_def*>            _matches;

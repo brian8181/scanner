@@ -6,7 +6,14 @@
 #ifndef TOKENS_HPP_
 #define TOKENS_HPP_
 
+#include <iostream>
 #include "Lexer.hpp"
+#include "parser.tab.h"
+
+using std::cerr;
+using std::cout;
+using std::endl;
+
 
 // VBAR                = \|
 // COLON               = :
@@ -117,30 +124,24 @@ inline vector tokens = {
                     new token{ 11,  "NOT_EQUAL",     "string",   0, 0,       "!=",            "!=",            11, string("null") },
                     new token{ 12,  "EQUAL",         "string",   0, 0,       "=",             "=",             12, string("null") },
                     new token{ 13,  "COMMA",         "string",   0, 0,       "\\,",           "\\,",           13, string("null") },
-                    new token{ 14,  "MY_DOT",           "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
+                    new token{ 14,  "MY_DOT",        "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
                     new token{ 15,  "CARROT",        "string",   0, 0,       "\\^",           "\\^",           15, string("null") },
                     new token{ 16,  "QUESTION_MARK", "string",   0, 0,       "\\?",           "\\?",           16, string("null") },
                     new token{ 17,  "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",          17, string("null") },
-                    new token{ 18,  "PLUS",          "string",   0, 0,       "\\+",           "\\+",            18, string("null") },
-                    new token{ 19,  "MINUS",         "string",   0, 0,       "-",             "-",              19, string("null") },
+                    new token{ 18,  "PLUS",          "string",   0, 0,       "\\+",           "\\+",           18, string("null") },
+                    new token{ 19,  "MINUS",         "string",   0, 0,       "-",             "-",             19, string("null") },
                     new token{ 20,  "SYMBOL",        "string",   0, 0,       "\\$[a-zA-Z]+",  "\\$abc",        20, string("null") },
                     new token{ 23,  "DOLLAR_SIGN",   "string",   0, 0,       "\\$",           "$",             21, string("null") },
                     new token{ 21,  "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",           22, string("null") },
                     new token{ 22,  "ANYTHING",      "string",   0, 0,       ".",             "~#",            23, string("null") },
-
-                    //new token{ 16, "EOF", "string",   0, 0,          "0",               "0", 16, string("null" }
                 };
 
-// token* tokens[TSIZE] =  {
-//                     new token{ ++id, "VBAR", "string", 0, 0,       "\\|",          "\\|",    ++index, string("null") },
-//                     new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
-//                     new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") } };
 
 // .[{()\*+?|^$
 // [[.NUL.]] matches a NUL character.
-//const string expression = "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)";
+
+//                           "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)|([ \\t]+)"
 const string expression =   R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(\.)|(\$[a-zA-Z]+)|([ \t])|(.))";
-//                          "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)|([ \\t]+)"
 
 // states
 #define INITIAL_ 0
@@ -251,75 +252,7 @@ inline int on_token_action(const state_t& s, const token_def& tok)
                 case COLON:
                 case LBRACKET:
                     cout << "LBRACKET" << endl;
-                    return LBRACKET;
-                case RBRACKET:
-                case LBRACE:
-                case RBRACE:
-                case LPAREN:
-                case RPAREN:
-                case COMMA:
-        //        case SEMI_COLON:
-                case DOUBLE_QUOTE:
-                case SINGLE_QUOTE:
-                case SLASH:
-                case BACK_SLASH:
-                case AT:
- //               case PLUS:
-                case MINUS:
-                case ASTERIK:
-                case EQUAL:
-                case NOT_EQUAL:
-                case MY_DOT:
-                case INDIRECT_MEMBER_OPER:
-                case PERCENT:
-                case AMPERSAND:
-                case NOT:
-                case AND:
-                case OR:
-                case LESS_THAN:
-                case LESS_THAN_EQUAL:
-                case GREATER_THAN:
-                case GREATER_THAN_EQUAL:
-                case NUMERIC_LITERAL:
-                case REQUIRE:
-                case CONFIG_LOAD:
-                case INSERT:
-                case INCLUDE:
-                case FILE_ATTRIB:
-                case ASSIGN:
-                case VAR_ATTRIB:
-                case VALUE_ATTRIB:
-                case FROM_ATTRIB:
-                case ITEM_ATTRIB:
-                case KEY_ATTRIB:
-                case NAME_ATTRIB:
-                case CAPITALIZE:
-                case CAT:
-                case COUNT_CHARACTERS:
-                case COUNT_PARAGRAPHS:
-                case COUNT_SENTENCES:
-                case COUNT_WORDS:
-                case DATE_FORMAT:
-                case DEFAULT:
-                case ESCAPE:
-                case INDENT:
-                case LOWER:
-                case UPPER:
-                case STRIP:
-                case NL2BR:
-                case REGX_REPLACE:
-                case REPLACE:
-                case SPACIFY:
-                case STRING_FORMAT:
-                case STRIP_TAGS:
-                case TRUNCATE:
-                case WORDWRAP:
-                case VALID_CHARS:
-                case FIRST_CHAR:
-                case ID:
-                case SYMBOL:
-                case CONST_SYMBOL:
-                case ARRAY:
+                    return LBRACKET;                case ESCAPE:
                 case COMMENT:
                 case FILE_NAME:
                     return tok.id;

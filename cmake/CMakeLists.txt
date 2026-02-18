@@ -11,8 +11,8 @@ project(inflex VERSION 0.1.0
 
                 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    # Specify the C++ standard (e.g., C++14)
-    set(CMAKE_CXX_STANDARD 14)
+    # Enable C++11 for GNU compilers
+    set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
@@ -21,33 +21,19 @@ if(CMAKE_SYSTEM_NAME STREQUAL "CYGWIN")
     add_definitions(-DCYGWIN)
 endif()
 
-#set(Boost_DIR  "/home/brian/src/boost_1_89_0/tools/cmake/config/")  # only find static libs
-include_directories(${Boost_INCLUDE_DIRS})
-# Find the Boost package, requiring the 'regex' component
-# 'CONFIG' mode is generally preferred with modern Boost versions (1.70+)
-#find_package(Boost 1.66.0 CONFIG REQUIRED COMPONENTS regex)
-
-#
-find_package(Boost 1.66.0)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    add_executable(foo foo.cc)
+# Find Bison package
+find_package(BISON REQUIRED)
+if(NOT BISON_FOUND)
+    message(FATAL_ERROR "Bison not found")
 endif()
 
-
-# Find Bison package
-#find_package(BISON REQUIRED)
-#if(NOT BISON_FOUND)
-#    message(FATAL_ERROR "Bison not found")
-#endif()
-
 # Now you can use BISON_TARGET
-BISON_TARGET(build/parser.tab.c parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp
-        DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.h)
+BISON_TARGET(MyParser parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp
+             DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.h)
 
 # Rest of your original code
-#find_package(FLEX)
-#FLEX_TARGET(MyScanner scanner.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
+find_package(FLEX)
+FLEX_TARGET(MyScanner scanner.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
 
 # Find required packages
 find_package(fmt REQUIRED)
@@ -64,7 +50,7 @@ endif()
 #endif()
 
 # Include directories
-include_directories(${CMAKE_SOURCE_DIR}/src, ${CMAKE_SOURCE_DIR}/build, )
+include_directories(${CMAKE_SOURCE_DIR}/src, ${CMAKE_SOURCE_DIR}/build)
 
 # Add source files
 set(SOURCES
@@ -78,15 +64,6 @@ set(SOURCES
         src/utility.cpp
         src/ast.cpp
 )
-
-
-# Create test executable
-add_executable(scanner ${SOURCES})
-
-# Link the executable against the Boost::regex imported target
-# CMake handles linking to the correct library file and adding the include directories
-target_link_libraries(scanner PRIVATE Boost::regex)
-
 
 # Create library from sources
 #add_library(${PROJECT_NAME}_lib ${SOURCES})

@@ -42,8 +42,8 @@ int lex()
         lexer.init(g_scan_file, g_config_file);
         initialized = true;
     }
-    unsigned int token_id = lexer.get_token();
-    return token_id;
+    const unsigned int token_id = Lexer::get_token();
+    return static_cast<int>(token_id);
 }
 
 /**
@@ -52,7 +52,7 @@ int lex()
  * @param argv
  * @return
  */
-int parse_options(int argc, char* argv[])
+int parse_options(const int argc, char* argv[])
 {
     int opt;
     auto optstring = "hVdf:";
@@ -89,7 +89,7 @@ int parse_options(int argc, char* argv[])
 
     // configure scanner ...
     cout << "configure scanner ..." << endl;
-    string file = argv[optind + SRC_IDX_OFFSET];
+    const string file = argv[optind + SRC_IDX_OFFSET];
     string config_file = file_flag ? g_config_file : ".config/default.txt";
     cout << FMT_FG_BLUE << "load configuration file=\"" << FMT_RESET
          << FMT_FG_GREEN << FMT_ITALIC <<  config_file << "\"" << FMT_RESET << endl;
@@ -104,11 +104,10 @@ int parse_options(int argc, char* argv[])
     cout << "configuration loaded." << endl;
 
     // begin lexer ...
-    Lexer lexer(file, config_file);
+    const Lexer lexer(file, config_file);
     cout << "scanner configured." << endl;
     if(dump_flag)
     {
-
         cout << "dumping configuration ... " << endl;
         lexer.dump_config();
         cout << lexer.get_expr() << endl;

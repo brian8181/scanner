@@ -1,55 +1,39 @@
 %{
     #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
-    #include "parser.tab.h"
-    #include "../src/scanner.h"
 
+    int sym[26];
+    //int yyparse(void);
     int yylex(void);
     int yyerror(const char * s);
-
-    /* string literal buffer */
-    char buf[100];
-    char *s;
 %}
 
 %union
 {
-    int ival;
-    char* sval;
-};
+    int num;
+    char* str;
+}
 
-%type<sval> stmt
-%type<ival> literal add
-%token<ival> INTEGER
-%token END_OF_FILE PLUS SEMI_COLON NEWLINE
-%start file
+%token<num> INTEGER
+%token<str> SEMI_COLON NEWLINE
+%type<num> expr statement
+%left<str> PLUS MINUS
+%left<str> MULT DIV
 
 %%
 
-file:
-       stmts YYEOF                          { printf("PARSER:file:blocks END_OF_FILE\n"); exit(0); }
-               ;
-
-stmts:
-    stmt
-    | stmts stmt
-    ;
-
-stmt:
-    add SEMI_COLON { }
-
-add:
-    literal PLUS literal {
-        printf("%s + %s\n", $1, $3);
-        $$ = $1 + $3;
-    }
-
-literal:
-    INTEGER {
-                printf("Literal: %d\n", $1);
-                $$=$1;
-           }
+program:
+            | program statement NEWLINE { printf("%d\n", $2); exit(0); }
+            ;
+statement:
+            expr SEMI_COLON { printf("%d\n", $1); $$=$1; }
+            ;
+expr:
+            INTEGER          { printf("%d\n", $1); $$=$1;  }
+            | expr PLUS expr { printf("%d %s %d\n", $1, $2, $3); $$ = $1 + $3; };
+            | expr MINUS expr { $$ = $1 - $3; };
+            | expr MULT expr { $$ = $1 * $3; };
+            | expr DIV expr { $$ = $1 / $3; };
+            | '(' expr ')' { $$ = $2; }
 
 %%
 

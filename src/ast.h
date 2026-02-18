@@ -67,13 +67,13 @@ namespace ast
 		/**
 		 * @brief : default ctor
 		 */
-		urnary_expr(const T& val) : _val_t(0)
+		explicit urnary_expr(const T& val) : _val_t(0)
 		{
 			expr::_val = new T(val);
 			_val_t = (T*)expr::_val;
 		}
 
-		~urnary_expr()
+		~urnary_expr() override
 		{
 			delete _val_t;
 		}
@@ -91,21 +91,20 @@ namespace ast
 	 * @class expr
 	 */
 	template< class T >
-	class literal_expr : urnary_expr<T>
+	class literal_expr final : urnary_expr<T>
 	{
 	public:
 		/**
 		 * @brief : default ctor
 		 */
-		literal_expr(T val) : urnary_expr<T>(val)
+		explicit literal_expr(T val) : urnary_expr<T>(val)
 		{
 		}
 
 		/**
 		 * @brief : dtor
 		 */
-		~literal_expr()
-		{
+		~literal_expr() override {
 			delete urnary_expr<T>::_val_t;
 		}
 	};
@@ -155,7 +154,7 @@ namespace ast
 		/**
 		 * @brief dtor
 		 */
-		~binary_expr() { /* let consumer free/release/delete*/ }
+		~binary_expr() override { /* let consumer free/release/delete*/ }
 
 	public:
 		 T* _val;
@@ -164,7 +163,7 @@ namespace ast
 	};
 
 	template< class T >
-	class add_expr : binary_expr<T>
+	class add_expr final : binary_expr<T>
 	{
 	public:
 		add_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -179,7 +178,7 @@ namespace ast
 	};
 
 	template< class T >
-	class subtract_expr : binary_expr<T>
+	class subtract_expr final : binary_expr<T>
 	{
 	public:
 		subtract_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -194,7 +193,7 @@ namespace ast
 	};
 
 	template< class T >
-	class multiply_expr : binary_expr<T>
+	class multiply_expr final : binary_expr<T>
 	{
 	public:
 		multiply_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -209,7 +208,7 @@ namespace ast
 	};
 
 	template< class T >
-	class divide_expr : binary_expr<T>
+	class divide_expr final : binary_expr<T>
 	{
 	public:
 		divide_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -239,7 +238,7 @@ namespace ast
 	};
 
 	template< class T >
-	class assign_expr : binary_expr<T>
+	class assign_expr final : binary_expr<T>
 	{
 	public:
 		assign_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -254,7 +253,7 @@ namespace ast
 	};
 
     template< class T >
-    class equal_expr : binary_expr<T>
+    class equal_expr final : binary_expr<T>
     {
     public:
         equal_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -269,7 +268,7 @@ namespace ast
     };
 
 	template< class T >
-	class less_than_expr : binary_expr<T>
+	class less_than_expr final : binary_expr<T>
 	{
 	public:
 		less_than_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -284,7 +283,7 @@ namespace ast
 	};
 
 	template< class T >
-	class less_than_equal_expr : binary_expr<T>
+	class less_than_equal_expr final : binary_expr<T>
 	{
 	public:
 		less_than_equal_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -299,7 +298,7 @@ namespace ast
 	};
 
     template< class T >
-    class greater_than_expr : binary_expr<T>
+    class greater_than_expr final : binary_expr<T>
     {
 	public:
         greater_than_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -314,7 +313,7 @@ namespace ast
 	};
 
 	template< class T >
-	class greater_than_equal_expr : binary_expr<T>
+	class greater_than_equal_expr final : binary_expr<T>
 	{
 	public:
         greater_than_equal_expr(const T& lhs, const T& rhs) : binary_expr<T>(lhs, rhs) { }
@@ -339,9 +338,10 @@ namespace ast
         };
 
     public:
-        LList() {};
-        LList(const Node* _head) {};
-        ~LList() {};
+        LList() = default;
+    	explicit LList(const Node* _head): mHead(nullptr) {
+        } ;
+        ~LList() = default;
 
     private:
         Node* mHead;

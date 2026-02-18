@@ -9,9 +9,9 @@
 
 symbol_tab* get_stable()
 {
-    static symbol_tab* tab = 0;
+    static symbol_tab* tab = nullptr;
 
-    if(tab != 0)
+    if(tab != nullptr)
         return tab;
 
     symbol* streamy_init_object = (symbol*)malloc(sizeof(symbol));
@@ -19,11 +19,11 @@ symbol_tab* get_stable()
     streamy_init_object->id = "$streamy";
     streamy_init_object->type = "object";
     streamy_init_object->type_modifiers = "static";
-    streamy_init_object->pval = 0;
+    streamy_init_object->pval = nullptr;
     tab = (symbol_tab*)malloc(sizeof(symbol_tab));
     tab->head = (node*)malloc(sizeof(node));
     tab->head->sym = streamy_init_object;
-    tab->head->next = 0;
+    tab->head->next = nullptr;
 
     return tab;
 }
@@ -31,9 +31,9 @@ symbol_tab* get_stable()
 void free_node(symbol_tab* stab, node* n)
 {
     free(n->sym);
-    n->sym = 0;
+    n->sym = nullptr;
     free(n);
-    n = 0;
+    n = nullptr;
 }
 
 void init_symbol(symbol** s, const char* id, const char* type_modifiers, const char* type)
@@ -50,7 +50,7 @@ void init_symbol(symbol** s, const char* id, const char* type_modifiers, const c
 void init_sub_table(symbol_tab* parent)
 {
     symbol_tab* symtab = (symbol_tab*)malloc( sizeof(symbol_tab) );
-    symtab->head = 0;
+    symtab->head = nullptr;
     // bkp todo!
     //symtab->parent = parent->head;
 }
@@ -65,7 +65,7 @@ void add_symbol(symbol_tab* stab, const char* id, const char* val)
     new_node->sym = sym;
     // add node / symbol to tail
     node* tail = find_tail(stab);
-    new_node->next = 0;
+    new_node->next = nullptr;
     tail->next = new_node;
 }
 
@@ -86,9 +86,9 @@ void insert_symbol(symbol_tab* stab, const char* dst_id, const char* src_id, con
 void remove_symbol(symbol_tab* stab, const char* id)
 {
     node* cur = get_stable()->head;
-    if(stab != 0)
+    if(stab != nullptr)
         cur = stab->head;
-    while(cur->next != 0)
+    while(cur->next != nullptr)
     {
         symbol* s = cur->next->sym;
         if(strcmp((char*)s->pval, id))
@@ -103,9 +103,9 @@ void remove_symbol(symbol_tab* stab, const char* id)
 void clear_symbols(symbol_tab* stab)
 {
     node* cur = get_stable()->head;
-    if(stab != 0)
+    if(stab != nullptr)
         cur = stab->head;
-    while(cur != 0)
+    while(cur != nullptr)
     {
         node* next = cur->next;
         free_node(stab, cur);
@@ -116,69 +116,69 @@ void clear_symbols(symbol_tab* stab)
 symbol* find_symbol_by_addr(symbol_tab* stab, symbol* sym)
 {
     node* cur = get_stable()->head;
-    if(stab != 0)
+    if(stab != nullptr)
         cur = stab->head;
-    while(cur->next != 0)
+    while(cur->next != nullptr)
     {
         symbol* s = cur->sym;
         if(s == sym)
             return s;
         cur = cur->next;
     }
-    return 0;
+    return nullptr;
 }
 
 symbol* find_symbol_by_id(symbol_tab* stab, const char* id)
 {
     node* cur = get_stable()->head;
-    if(stab != 0)
+    if(stab != nullptr)
         cur = stab->head;
-    while(cur->next != 0)
+    while(cur->next != nullptr)
     {
         symbol* s = cur->sym;
         if(strcmp((char*)s->pval, id))
             return s;
         cur = cur->next;
     }
-    return 0;
+    return nullptr;
 }
 
 symbol* find_symbol(symbol_tab* stab, const char* id)
 {
     node* cur = get_stable()->head;
-    if(stab != 0)
+    if(stab != nullptr)
         cur = stab->head;
-    while(cur->next != 0)
+    while(cur->next != nullptr)
     {
         symbol* s = cur->sym;
         if(strcmp((char*)s->pval, id))
             return s;
         cur = cur->next;
     }
-    return 0;
+    return nullptr;
 }
 
 node* find_node(symbol_tab* stab, const char* id)
 {
     node* cur = get_stable()->head;
-    if(stab != 0)
+    if(stab != nullptr)
         cur = stab->head;
-    while(cur->next != 0)
+    while(cur->next != nullptr)
     {
         symbol* s = cur->sym;
         if(strcmp((char*)s->pval, id))
             return cur;
         cur = cur->next;
     }
-    return 0;
+    return nullptr;
 }
 
 node* find_tail(symbol_tab* stab)
 {
     node* cur = get_stable()->head;
-    if(stab != 0)
+    if(stab != nullptr)
         cur = stab->head;
-    while(cur->next != 0)
+    while(cur->next != nullptr)
     {
         cur = cur->next;
     }
@@ -187,12 +187,12 @@ node* find_tail(symbol_tab* stab)
 
 int size(symbol_tab* stab)
 {
-        int k = 0;
-        node *cur = stab->head;
-        while (cur)
-        {
-                cur = cur->next;
-                k++;
-        }
-        return k;
+    int k = 0;
+    node *cur = stab->head;
+    while (cur)
+    {
+            cur = cur->next;
+            k++;
+    }
+    return k;
 }

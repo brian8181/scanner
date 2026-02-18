@@ -23,9 +23,9 @@
 #include <boost/regex.hpp>
 #include "fileio.hpp"
 #include "Lexer.hpp"
-#include "constants.hpp"
+//#include "constants.hpp"
 #include "tokens.hpp"
-#include "../build/parser.tab.h"
+#include "parser.tab.h"
 //#include "pars.h"
 
 using std::cerr;
@@ -43,25 +43,24 @@ using namespace std;
 /**
  * @brief default ctor
  */
-Lexer::Lexer(): _p_iter(nullptr) {}
+Lexer::Lexer() : _p_iter(nullptr) {}
 
 /**
  * @brief  ctor
  * @param file
  * @param config_file
- * @param  const string& file, scan file
- * @param  const string &config_file, config file
+ * @param  file
  */
-Lexer::Lexer( const string& file, const string &config_file ) : _scan_file(file), _config_file(config_file)
+Lexer::Lexer( const string& file, const string &config_file ) : _p_iter(nullptr), _scan_file(file), _config_file(config_file)
 {
     init( _scan_file, _config_file );
 }
 
 /**
  * @brief copy ctor
- * @param const Lexer& src
+ * @param src
  */
-Lexer::Lexer( const Lexer& src ): _p_iter(nullptr)
+Lexer::Lexer( const Lexer& src ) : _p_iter(nullptr)
 {
 
 }
@@ -92,17 +91,6 @@ Lexer::~Lexer()
  */
 bool Lexer::init( const string& file, const string &config_file )
 {
-    // bkp todo!
-    // _scan_file = "";
-    // _search_text = "";
-    // _rexp = "";
-    // _begin;
-    // _end;
-    // _p_iter;
-    // delete _state;
-    // _state = new state{ 1, "INITIAL" };
-    // _expr;
-
     _tokens.clear();
 	_idx_tab.clear();
 	_id_tab.clear();
@@ -189,7 +177,9 @@ void Lexer::load_config( const string &file )
             string stype = token_match["type"].str();
             string test_val = token_match["test"].str();
 
-            auto* ptoken = new token_def{ 0xFF + j*0x06, string(name), stype, 0, 0, string(expr), string(test_val), 0, string("null") };
+            auto* ptoken = new token_def{ 0xFF + j*0x06, string(name), stype, 0, 0,
+                string(expr), string(test_val), 0, string("null") };
+
             // copy to term to vector
             _tokens.push_back(ptoken);
             _id_tab[ptoken->id] = ptoken;
@@ -284,7 +274,6 @@ void Lexer::tokenize()
     // search_text = "! =!= =   !=";
 
     const auto rexp = boost::regex( _expr, boost::regex::ECMAScript );
-    //const auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol | boost::match_continuous );
     const auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
     const auto end = boost::sregex_iterator();
 
@@ -342,34 +331,37 @@ int Lexer::get_token()
     // };
     //typedef yytokentype yytoken_kind_t;
 
-    const char* TOKS[] = { "3", "+", "2", ";", "\n", "\0" };
+    char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
     static int i = 0;
     switch(++i)
     {
     case 1:
-        //yylval.ival = atoi(TOKS[i++]);
-        yylval.ival = 3;
-        //token* ptok = _id_tab[TOKS[i]];
+        //cout << TOKENS[0] << endl;
+        //yylval.ival = atoi(TOKENS[0]);
+        yylval.num = 3;
         return yytokentype::INTEGER;
     case 2:
-        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
+        yylval.str = "+";
         return yytokentype::PLUS;
+        //return 0;
     case 3:
-        yylval.ival = atoi(TOKS[i++]);
+        //yylval.ival = atoi(TOKENS[2]);
+        yylval.num = 2;
         return yytokentype::INTEGER;
     case 4:
-        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
+        //yylval.sval = TOKENS[3];
+        yylval.str = ";";
         return yytokentype::SEMI_COLON;
      case 5:
-        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
+        yylval.str = "\n";
         return yytokentype::NEWLINE;
     case 6:
-        yylval.sval = strndup(TOKS[i++], strlen(TOKS[i]));
+        yylval.str = "\0";
         return 0;
     default: ;
     }
 
-    // if(on_token( "INITIAL", TOKS[i] ) == SKIP_TOKEN)
+    // if(on_token( "INITIAL", TOKENS[i] ) == SKIP_TOKEN)
     //     continue;
 
     #else
@@ -402,10 +394,11 @@ int Lexer::get_token()
                 _matches.push_back(ptoken); // push matched
                 cout << "debug - id: " << ptoken->id << "name: " << ptoken->name  << endl;
                 print_token(ptoken->id); // debug print
-                if(on_token( *_state, *ptoken ) = SKIP_TOKEN)
+                if(on_token( *_state, *ptoken ) == SKIP_TOKEN)
                 {
-                    (*_p_iter)++;
-                    //goto SKIPPED_TOKEN; // do actions
+                    ++(*_p_iter);
+                    // goto SKIPPED_TOKEN; // do actions
+                    // recursive skipping logic
                     return get_token();
                 }
                 break; // end loop
@@ -428,34 +421,18 @@ void Lexer::reset()
 
 }
 
-int Lexer::on_token( const state_t& s, const token_def& token )
+
+
+/**
+ * @brief override virtual, on_token, for each token ...
+  * @param token
+ */
+int Lexer::on_token( const state_t& state, const token_def& token )
 {
-    //return on_token_action(s, token);
+   //return on_token_action(s, token);
     return token.id;
+    //cout << "on_token( " << state.id << ", \"" << token.id << "\" );" << endl;
 }
-
-
-// /**
-//  * @brief override virtual, on_token, for each token ...
-//   * @param token
-//  */
-// int Lexer::on_token( const state_t& s, const token_def& token );
-// {
-//    return on_token_action(s, token);
-// }
-
-// /**
-//  * @brief override virtual, on_token, for each token ...
-//  * @param token
-//  */
-// void Lexer::on_token( const unsigned int& token_, const boost::smatch& m )
-// {
-//     // bkp todo!
-//     stringstream ss;
-//     unsigned int token = ID_UNDEFINED;
-//
-//     cout << "on_token( " << token_ << ", \"" << m.str() << "\" );" << endl;
-// }
 
 /**
  * @brief get regex expression
@@ -476,11 +453,6 @@ void Lexer::init_expr()
     for(int i = 0; i < len; ++i)
     {
         token_def* ptoken = _tokens[i];
-
-        // only if there are no submatches
-        //ptoken->index = i+1;
-        _idx_tab[ptoken->index] = ptoken;
-        //ss << "(?<" << ptoken->name << ">" << ptoken->rexp << ")|";
         ss << "(" << ptoken->rexp << ")|";
     }
     _expr = ss.str();
@@ -517,7 +489,7 @@ void Lexer::init_expr()
  */
 void Lexer::print_token( int id )
 {
-    token* ptoken = _id_tab[id];
+    const token* ptoken = _id_tab[id];
     cout << "token:\n{"
             << setw(5) << left << "\n\tid: "         << setw(10) << right << ptoken->id
             << setw(5) << left << "\n\tname: "       << setw(10) << right << ptoken->name
