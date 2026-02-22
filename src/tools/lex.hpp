@@ -1,9 +1,9 @@
 #ifndef __LEXER_H__
 #define __LEXER_H__
-#include "pcxx.hh"
+//#include "pparser.tab.hh"
 
 // return the next token
-yy::parser::symbol_type llex();
+//yy::parser::symbol_type llex();
 
 //#include "lex.hpp"
 // namespace yy

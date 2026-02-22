@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "Lexer.hpp"
-#include "parser.tab.h"
+#include "pparser.tab.hh"
 
 using std::cerr;
 using std::cout;

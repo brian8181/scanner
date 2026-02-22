@@ -29,36 +29,47 @@ FMT_YELLOW='\e[33m'
 FMT_BLUE='\e[34m'
 FMT_CYAN='\e[36m'
 
+ifdef CLANG
+	CXX=clang++
+endif
+
+
 all: $(BLD)/scanner
 
+$(BLD)/scanner: $(BLD)/pparser.tab.o $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/scanner.h $(SRC)/tokens.hpp $(SRC)/Lexer.cpp $(BLD)/Lexer.hpp $(SRC)/utility.cpp $(BLD)/ast.o
+	@echo -e "$(FMT_GREEN)\nBuilding \"$(BLD)/scanner\"$(FMT_RESET) ...\n"
+	$(CXX) $(CXXFLAGS) -fPIC -I$(BLD) -I$(SRC) -I"/home/brian/src/boost_1_89_0" $(BLD)/pparser.tab.o $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/Lexer.cpp $(SRC)/utility.cpp $(LDFLAGS) -o $@
 
-$(BLD)/scanner: $(BLD)/parser.tab.o $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/scanner.h $(SRC)/tokens.hpp $(SRC)/Lexer.cpp $(BLD)/Lexer.hpp $(SRC)/utility.cpp $(BLD)/ast.o
-	$(CXX) $(CXXFLAGS) -fPIC -I./$(BLD) -I"/home/brian/src/boost_1_89_0" $(BLD)/parser.tab.c $(SRC)/fileio.cpp $(SRC)/scanner.cpp $(SRC)/Lexer.cpp $(SRC)/utility.cpp $(LDFLAGS) -o $@
+#$(BLD)/pparser.tab.o: $(SRC)/symtab.c $(SRC)/symtab.h $(BLD)/pparser.tab.cc $(BLD)/pparser.tab.hh
+#	$(CC) $(CCFLAGS) -fPIC -c $< -o $@
+#
+#$(BLD)/pparser.tab.cc $(BLD)/parser.tab.hh: $(SRC)/pparser.yy
+#	@echo -e "$(FMT_GREEN)\nGenerate \"parser.tab.c\"$(FMT_RESET) ...\n"
+#	$(YACC) -Wcounterexamples --header $^ -o $@
 
-$(BLD)/parser.tab.o: $(BLD)/parser.tab.c $(BLD)/parser.tab.h
-	$(CC) $(CCFLAGS) -fPIC -c $< -o $@
-
-$(BLD)/parser.tab.c $(BLD)/parser.tab.h: $(SRC)/parser.y
+ROOT="/home/brian/scanner"
+$(BLD)/pparser.tab.cc $(BLD)/pparser.tab.hh: $(SRC)/pparser.yy
 	@echo -e "$(FMT_GREEN)\nGenerate \"parser.tab.c\"$(FMT_RESET) ...\n"
-	$(YACC) -Wcounterexamples --header $^ -o $@
+	$(YACC) $(SRC)/pparser.yy --header=$(BLD)/pparser.tab.hh -o $(BLD)/pparser.tab.cc
+
+$(BLD)/pparser.tab.o: $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pparser.tab.hh $(BLD)/pparser.tab.cc
+	@echo -e "$(FMT_GREEN)\nBuilding \"parser.tab.o\"$(FMT_RESET) ...\n"
+	$(CXX) -g -std=c++14 -I$(BLD) -I$(SRC) -c $(BLD)/pparser.tab.cc -o $@
 
 # copy header files
 $(BLD)/%.h : $(SRC)/%.h
 	cp $^ $@
 
 $(BLD)/%.hpp: $(SRC)/%.hpp
-	cp $< $@
+	cp $^ $@
 
 $(OBJ)/%.o: $(SRC)/%.c
-	$(CC) $(CCFLAGS) -I$(ROOT)/build -c $< -o $@
-
+	$(CC) $(CCFLAGS) -I$(BLD) -c $< -o $@
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXXFLAGS) -I$(ROOT)/build -I"/home/brian/src/boost_1_89_0" -c $< -o $@
-
+	$(CXX) $(CXXFLAGS) -I$(BLD) -I"/home/brian/src/boost_1_89_0" -c $< -o $@
 
 .PHONY: all rebuild dist install uninstall clean help
-
 rebuild: clean all
 
 dist:

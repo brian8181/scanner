@@ -13,6 +13,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include "pparser.tab.hh"
 #include <regex>
 #include <boost/regex.hpp>
 
@@ -169,7 +170,7 @@ public:
 	/**
 	 * @brief reset to initial state
 	 */
-	static void reset();
+	void reset();
 
 	/**
 	 * @brief override virtual, on_token, for each token ...

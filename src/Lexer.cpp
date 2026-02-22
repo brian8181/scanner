@@ -25,7 +25,7 @@
 #include "Lexer.hpp"
 //#include "constants.hpp"
 #include "tokens.hpp"
-#include "parser.tab.h"
+#include "pparser.tab.hh"
 //#include "pars.h"
 
 using std::cerr;
@@ -267,11 +267,9 @@ void Lexer::tokenize()
     stringstream ss;
     read_sstream( _scan_file, ss );
     string search_text = ss.str( );
-
     // initialize expression ...
     // testing ... todo ... use auto created expression
     // _expr = "(!=)|(=)";
-    // search_text = "! =!= =   !=";
 
     const auto rexp = boost::regex( _expr, boost::regex::ECMAScript );
     const auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
@@ -331,35 +329,36 @@ int Lexer::get_token()
     // };
     //typedef yytokentype yytoken_kind_t;
 
-    char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
-    static int i = 0;
-    switch(++i)
-    {
-    case 1:
-        //cout << TOKENS[0] << endl;
-        //yylval.ival = atoi(TOKENS[0]);
-        yylval.num = 3;
-        return yytokentype::INTEGER;
-    case 2:
-        yylval.str = "+";
-        return yytokentype::PLUS;
-        //return 0;
-    case 3:
-        //yylval.ival = atoi(TOKENS[2]);
-        yylval.num = 2;
-        return yytokentype::INTEGER;
-    case 4:
-        //yylval.sval = TOKENS[3];
-        yylval.str = ";";
-        return yytokentype::SEMI_COLON;
-     case 5:
-        yylval.str = "\n";
-        return yytokentype::NEWLINE;
-    case 6:
-        yylval.str = "\0";
-        return 0;
-    default: ;
-    }
+    // char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
+    // static int i = 0;
+    // switch(++i)
+    // {
+    // case 1:
+    //     //cout << TOKENS[0] << endl;
+    //     //yylval.ival = atoi(TOKENS[0]);
+    //     //yylval.num = 3;
+    //     //return yytokentype::INTEGER;
+    //     return yy::parser::make_INTEGER(42);
+    // case 2:
+    //     //yylval.str = "+";
+    //         return yy::parser::make_PLUS("+");
+    //     //return 0;
+    // case 3:
+    //     //yylval.ival = atoi(TOKENS[2]);
+    //     //yylval.num = 2;
+    //     return yy::parser::make_INTEGER(42);
+    // case 4:
+    //     //yylval.sval = TOKENS[3];
+    //     //yylval.str = ";";
+    //         return yy::parser::make_SEMI_COLON(";");
+    //  case 5:
+    //     //yylval.str = "\n";
+    //         return yy::parser::make_NEWLINE("\n");
+    // case 6:
+    //     //yylval.str = "\0";
+    //     return 0;
+    // default: ;
+    // }
 
     // if(on_token( "INITIAL", TOKENS[i] ) == SKIP_TOKEN)
     //     continue;
@@ -410,18 +409,16 @@ int Lexer::get_token()
     }
     #endif
     return 0; // error or eof
-
 }
+
 
 /**
  * @brief reset
  */
 void Lexer::reset()
 {
-
+    init(_scan_file, _config_file);
 }
-
-
 
 /**
  * @brief override virtual, on_token, for each token ...
@@ -429,9 +426,7 @@ void Lexer::reset()
  */
 int Lexer::on_token( const state_t& state, const token_def& token )
 {
-   //return on_token_action(s, token);
-    return token.id;
-    //cout << "on_token( " << state.id << ", \"" << token.id << "\" );" << endl;
+    return on_token_action(state, token);
 }
 
 /**

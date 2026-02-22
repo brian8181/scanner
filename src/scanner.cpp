@@ -13,12 +13,14 @@
 #include <set>
 #include "scanner.h"
 #include "Lexer.hpp"
-//#include "constants.hpp"
 #include "config.hpp"
-#include "parser.tab.h"
 #include "bash_color.h"
+#include "pparser.tab.hh"
 
-using namespace std;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::string;
 
 constexpr int SRC_IDX_OFFSET = 0;
 constexpr int CONFIG_IDX_OFFSET = 1;
@@ -28,6 +30,8 @@ static bool file_flag = false;
 static bool dump_flag = false;
 static string g_scan_file;
 static bool initialized = false;
+
+yy::parser::symbol_type llex();
 static Lexer lexer;
 
 /**
@@ -45,6 +49,12 @@ int lex()
     const unsigned int token_id = Lexer::get_token();
     return static_cast<int>(token_id);
 }
+
+// int main()
+// {
+//     yy::parser parse;
+//     return parse();
+// }
 
 /**
  * @brief parse command line options
@@ -101,8 +111,8 @@ int parse_options(const int argc, char* argv[])
 
     if( argc > (optind + CONFIG_IDX_OFFSET) )
         config_file = argv[optind + CONFIG_IDX_OFFSET];
-    cout << "configuration loaded." << endl;
 
+    cout << "configuration loaded." << endl;
     // begin lexer ...
     const Lexer lexer(file, config_file);
     cout << "scanner configured." << endl;
@@ -124,10 +134,9 @@ int parse_options(const int argc, char* argv[])
     //lexer.tokenize();
 
     cout << "parsing ..." << endl;
-    yyparse();
-
-    cout << endl;
-
+    //yyparse();
+    yy::parser parser;
+    parser.parse();
     cout << "finished scanning. " << endl;
     return 0;
 }
@@ -150,7 +159,6 @@ int stdin_ready (int filedes)
         // initialize the file descriptor set
         FD_ZERO(&set);
         FD_SET(filedes, &set);
-
         // check stdin_ready is ready on filedes
 #ifndef CYGWIN
         return pselect(filedes + 1, &set, NULL, NULL, &timeout, NULL);
@@ -235,10 +243,10 @@ int yylex (void)
  * @brief
  * @param
  */
-void yyerror (char const *s)
-{
-    printf("%s\n", s);
-}
+// void yyerror (char const *s)
+// {
+//     printf("%s\n", s);
+// }
 
 
 /**

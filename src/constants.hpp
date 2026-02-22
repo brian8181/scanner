@@ -30,22 +30,22 @@ const string VALID_FILE_CHARS     = "[A-Za-z0-9_. ]";
 const string TOKEN_TYPE           = "[A-Za-z][A-Za-z_]*((::)[A-Za-z_]*)?";
 const string TOKEN_TYPE_           = "[A-Za-z][A-Za-z_]*";
 const string CONFIG_PAIR          = "\\s*(?<type>" + TOKEN_TYPE_ + ")\\s+(?<name>[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(?<rexp>" + VALID_CHARS + "*)\\s*\"(?<test>.*)\"\\s*";
-const string CONFIG_STATES        = "(?<states>^\\s*(?<state>[A-Za-z][A-Za-z0-9_]*)\\s*=\\s*\\s*\\{(?<tokens>[A-Za-z][A-Za-z0-9_]*(, [A-Za-z][A-Za-z0-9_]*)*)\\}\\s*\\s*$)";
+const string CONFIG_STATES        = R"((?<states>^\s*(?<state>[A-Za-z][A-Za-z0-9_]*)\s*=\s*\s*\{(?<tokens>[A-Za-z][A-Za-z0-9_]*(, [A-Za-z][A-Za-z0-9_]*)*)\}\s*\s*$))";
 //const string CONFIG_PAIR          = "\\s*(?:" + TOKEN_TYPE_ + ")\\s+(?:[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(?:" + VALID_CHARS + "*)\\s*";
 const string CONFIG_PAIR_VAR      = "\\s*\\s*([A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*($[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*";
-const string CONFIG_SECTION       = "\\s*\\[(?<section>[a-zA-Z][a-zA-Z0-9]*)\\]\\s*";
-const string CONFIG_SECTIONS      = "^\\s*\\[\\s*(?<tokens>tokens)|(?<groups>groups)|(?<states>states)\\s*\\]\\s*$";
+const string CONFIG_SECTION       = R"(\s*\[(?<section>[a-zA-Z][a-zA-Z0-9]*)\]\s*)";
+const string CONFIG_SECTIONS      = R"(^\s*\[\s*(?<tokens>tokens)|(?<groups>groups)|(?<states>states)\s*\]\s*$)";
 const string CONFIG_COMMENT       = "^\\s*#.*$";
 string CONFIG                     = "(?<pairs>" + CONFIG_PAIR + ")|(?<comments>" + CONFIG_COMMENT + ")";
 const string PREPROCESSOR         = "#[A-Za-z_]+";
-const string COMMENT              = "(?://.*$)|(\\/\\*[\\s\\S]*?\\*\\/)";
+const string COMMENT              = R"((?://.*$)|(\/\*[\s\S]*?\*\/))";
 const string FILE_NAME            = "[0-9A-Za-z_\\.]+";
 // literals
 const string FLOAT_LITERAL        = "[0-9]*\\.[0-9]+";
 const string INTEGER_LITERAL      = DIGIT + "+";
 const string HEX_LITERAL          = "0x" + HEX_DIGIT+ "+";
 const string STRING_LITERAL       = "\"" + VALID_CHARS + "*\"";
-const string CHAR_LITERAL         = "'[a-zA-Z0-9_{}\\[\\]#()<>%:;.?*+-\\/^&|~!=,\"]'";
+const string CHAR_LITERAL         = R"('[a-zA-Z0-9_{}\[\]#()<>%:;.?*+-\/^&|~!=,"]')";
 // declration
 const string TYPES                = "(char)|(int)|(float)|(double)|(string)|(long)|(short)|(bool)|(void)";
 const string TYPE_MODIFIERS       = "(signed)|(unsigned)|(static)|(const)|(volatile)";
