@@ -31,7 +31,7 @@ static bool dump_flag = false;
 static string g_scan_file;
 static bool initialized = false;
 
-yy::parser::symbol_type llex();
+//yy::parser::symbol_type llex();
 static Lexer lexer;
 
 /**
@@ -48,6 +48,27 @@ int lex()
     }
     const unsigned int token_id = Lexer::get_token();
     return static_cast<int>(token_id);
+}
+
+// return the next token
+yy::parser::symbol_type llex()
+{
+     char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
+    static int i = 0;
+    switch(++i)
+    {
+        case 1:
+            //return yy::parser::make_NUMBER(42);
+            return yy::parser::make_DOLLAR_SIGN("$");
+        case 2:
+            return yy::parser::make_ID("abc");
+        case 3:
+            return yy::parser::make_END();
+        case 4:
+            return 0;
+        default: ;
+    }
+
 }
 
 // int main()
@@ -202,7 +223,6 @@ int main(int argc, char* argv[])
 }
 
 #ifdef BISON_BRIDGE
-#define BISON_BRIDGE
 
 #include <ctype.h>
 #include <stdlib.h>

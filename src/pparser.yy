@@ -12,7 +12,7 @@
     #include <string.h>
     #include "../src/bash_color.h"
     #include "../src/symtab.h"
-    //#include "../src/scanner.h"
+    #include "../src/scanner.h"
 
     using std::string;
     using std::cout;
@@ -45,20 +45,7 @@
         // return the next token
         parser::symbol_type yylex()
         {
-            //return llex();
-
-            char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
-            static int i = 0;
-            switch(++i)
-            {
-            case 1:
-                return yy::parser::make_NUMBER(42);
-            case 2:
-                return yy::parser::make_END();
-            case 3:
-                return 0;
-            default: ;
-            }
+            return llex();
         }
     }
 
@@ -159,6 +146,10 @@ block:
     | NUMBER                                                    {
                                                                     cout << FMT_FG_RED
                                                                             << "block: NUMBER = " << $1
+                                                                        << FMT_RESET << endl;   }
+    | symbol                                                    {
+                                                                    cout << FMT_FG_RED
+                                                                            << "block: symbol = " << $1
                                                                         << FMT_RESET << endl;   }
                                                                 ;
 

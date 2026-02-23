@@ -56,6 +56,9 @@ $(BLD)/pparser.tab.o: $(BLD)/bash_color.h $(BLD)/symtab.h $(BLD)/pparser.tab.hh 
 	@echo -e "$(FMT_GREEN)\nBuilding \"parser.tab.o\"$(FMT_RESET) ...\n"
 	$(CXX) -g -std=c++14 -I$(BLD) -I$(SRC) -c $(BLD)/pparser.tab.cc -o $@
 
+$(BLD)/t1: $(SRC)/main_t1.c
+	$(CC) $^ -o $@
+
 # copy header files
 $(BLD)/%.h : $(SRC)/%.h
 	cp $^ $@

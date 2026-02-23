@@ -46,11 +46,12 @@ int yylex ();
  */
 //void yyerror (char const *);
 
-#define lex yylex
+//#define lex yylex
 
 //yy::parser parser;
-//typedef yy::parser::symbol_type sym_t;
+typedef yy::parser::symbol_type sym_t;
 
+yy::parser::symbol_type llex();
 // yy::parser::symbol_type llex()
 // {
 //     //int token = lex();
