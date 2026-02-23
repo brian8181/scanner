@@ -38,7 +38,7 @@ int main(int argc, char* argv[]);
  * @param
  * @return
  */
-int yylex ();
+//int yylex ();
 
 /**
  * @brief
@@ -47,29 +47,10 @@ int yylex ();
 //void yyerror (char const *);
 
 //#define lex yylex
-
 //yy::parser parser;
-typedef yy::parser::symbol_type sym_t;
 
-yy::parser::symbol_type llex();
-// yy::parser::symbol_type llex()
-// {
-//     //int token = lex();
-//
-//     static int i = 0;
-//     static int count = 0;
-//     switch(int stage = count++)
-//     {
-//         case 0:
-//             return yy::parser::make_NUMBER(42);
-//         case 1:
-//             return yy::parser::make_END();
-//     }
-//     return 0;
-// }
-
-
-
-
+typedef yy::parser parser;
+typedef parser::symbol_type sym_t;
+sym_t llex();
 
 #endif // _SCANNER_HPP_

@@ -39,43 +39,33 @@ static Lexer lexer;
  * @param
  * @return
  */
-int lex()
-{
-    if(!initialized)
-    {
-        lexer.init(g_scan_file, g_config_file);
-        initialized = true;
-    }
-    const unsigned int token_id = Lexer::get_token();
-    return static_cast<int>(token_id);
-}
+// int lex()
+// {
+//     if(!initialized)
+//     {
+//         lexer.init(g_scan_file, g_config_file);
+//         initialized = true;
+//     }
+//     const unsigned int token_id = Lexer::get_token();
+//     return static_cast<int>(token_id);
+// }
 
 // return the next token
-yy::parser::symbol_type llex()
+sym_t llex()
 {
-     char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
+    //char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
     static int i = 0;
     switch(++i)
     {
         case 1:
-            //return yy::parser::make_NUMBER(42);
-            return yy::parser::make_DOLLAR_SIGN("$");
+            return parser::make_DOLLAR_SIGN("$");
         case 2:
-            return yy::parser::make_ID("abc");
+            return parser::make_ID("abc");
         case 3:
-            return yy::parser::make_END();
-        case 4:
-            return 0;
-        default: ;
+            return parser::make_END();
+        default: return 0;
     }
-
 }
-
-// int main()
-// {
-//     yy::parser parse;
-//     return parse();
-// }
 
 /**
  * @brief parse command line options
