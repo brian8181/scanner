@@ -51,9 +51,10 @@ Lexer::Lexer() : _p_iter(nullptr) {}
  * @brief  ctor
  * @param file
  * @param config_file
+ * @param pp
  * @param  file
  */
-Lexer::Lexer( const string& file, const string &config_file ) : _p_iter(nullptr), _scan_file(file), _config_file(config_file)
+Lexer::Lexer( const string& file, const string &config_file, yy::parser* pp ) : _p_iter(nullptr), _scan_file(file), _config_file(config_file), _pparser(pp)
 {
     init( _scan_file, _config_file );
 }
@@ -64,7 +65,6 @@ Lexer::Lexer( const string& file, const string &config_file ) : _p_iter(nullptr)
  */
 Lexer::Lexer( const Lexer& src ) : _p_iter(nullptr)
 {
-
 }
 
 /**
@@ -72,6 +72,7 @@ Lexer::Lexer( const Lexer& src ) : _p_iter(nullptr)
  */
 Lexer::~Lexer()
 {
+    //delete [] _tokens.data;
     const unsigned int tlen = _tokens.size();
     for(int i = 0; i < tlen; ++i)
     {
@@ -497,4 +498,15 @@ void Lexer::print_token( int id )
             << setw(5) << left << "\n\ttest_value: " << setw(10) << right << ptoken->test_value
         << "\n}"
     << endl;
+}
+
+state_t* Lexer::get_state()
+{
+    return _state;
+}
+
+void Lexer::set_state(const state_t& s)
+{
+    _state->id = s.id;
+    _state->name = s.name;
 }

@@ -14,83 +14,6 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
-
-// VBAR                = \|
-// COLON               = :
-// LBRACKET            = \[
-// RBRACKET            = \]
-// LBRACE              = \{
-// RBRACE              = \}
-// LPAREN              = \(
-// RPAREN              = \)
-// COMMA               = ,
-// SEMI_COLON          = ;
-// DOUBLE_QUOTE        = \
-// SINGLE_QUOTE        = '
-// SLASH               = /
-// BACK_SLASH          = \\
-// AT                  = @
-// PLUS                = \+
-// MINUS               = -
-// ASTERISK             = \*
-// EQUAL               = =
-// NOT_EQUAL           = !=
-// MY_DOT                 = \.
-// CARROT              = \^
-// INDIRECT_MEMBER     = ->
-// PERCENT             = %
-// AMPERSAND           = &
-// NOT                 = !
-// AND                 = &&
-// OR                  = \|\|
-// DOLLAR              = \$
-// LESS_THAN           = <
-// LESS_THAN_EQUAL     = <=
-// GREATER_THAN        = >
-// GREATER_THAN_EQUAL  = >=
-// NUMERIC_LITERAL     = [0-9]+
-// REQUIRE             = require
-// CONFIG_LOAD         = config_load
-// INSERT              = insert
-// INCLUDE             = include
-// FILE_ATTRIB         = file
-// ASSIGN              = assign
-// VAR_ATTRIB          = var
-// VALUE_ATTRIB        = value
-// FROM_ATTRIB         = from
-// ITEM_ATTRIB         = item
-// KEY_ATTRIB          = key
-// NAME_ATTRIB         = name
-// CAPITALIZE          = captialize
-// CAT                 = cat
-// COUNT_CHARACTERS    = count_chacters
-// COUNT_PARAGRAPHS    = count_paragraphs
-// COUNT_SENTENCES     = count_sentences
-// COUNT_WORDS         = count_words
-// DATE_FORMAT         = date_format
-// DEFAULT             = default
-// ESCAPE              = escape
-// INDENT              = indent
-// LOWER               = lower
-// UPPER               = upper
-// STRIP               = strip
-// NL2BR               = nl2br
-// REGX_REPLACE        = regx_replace
-// REPLACE             = replace
-// SPACIFY             = spacify
-// STRING_FORMAT       = string_format
-// STRIP_TAGS          = strip_tags
-// TRUNCATE            = truncate
-// WORDWRAP            = wordwrap
-// VALID_CHARS         = [A-Za-z0-9*@_.~+-]
-// FIRST_CHAR          = [A-Za-z*@_.~+-]
-// ID                  = [A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*
-// SYMBOL              = \$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*
-// CONST_SYMBOL        = #[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#
-// ARRAY               = [A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\]
-// COMMENT             = \{[ \t]*\*[^*}]*\*[ \t]*\}
-// FILE_NAME           = [A-Za-z0-9_.-~+#@]
-
 static int index_ = 0;
 static int id = 0;
 
@@ -111,105 +34,113 @@ static int id = 0;
 //                 };
 
 inline vector tokens = {
-                    new token{  1,  "VBAR",          "string",   0, 0,       "\\|",           "\\|",            1, string("null") },
-                    new token{  2,  "COLON",         "string",   0, 0,       ":",             ":",              2, string("null") },
-                    new token{  3,  "DOUBLE_QUOTE",  "string",   0, 0,       "\"",            "\"",             3, string("null") },
-                    new token{  4,  "LBRACKET",      "string",   0, 0,       "\\[",           "\\[",            4, string("null") },
-                    new token{  5,  "RBRACKET",      "string",   0, 0,       "\\]",           "\\]",            5, string("null") },
-                    new token{  6,  "LBRACE",        "string",   0, 0,       "\\{",           "\\{",            6, string("null") },
-                    new token{  7,  "RBRACE",        "string",   0, 0,       "\\}",           "\\}",            7, string("null") },
-                    new token{  8,  "LPAREN",        "string",   0, 0,       "\\(",           "\\(",            8, string("null") },
-                    new token{  9,  "RPAREN",        "string",   0, 0,       "\\)",           "\\)",            9, string("null") },
-                    new token{ 10,  "ASTERISK",      "string",   0, 0,       "\\*",           "\\*",           10, string("null") },
-                    new token{ 11,  "NOT_EQUAL",     "string",   0, 0,       "!=",            "!=",            11, string("null") },
-                    new token{ 12,  "EQUAL",         "string",   0, 0,       "=",             "=",             12, string("null") },
-                    new token{ 13,  "COMMA",         "string",   0, 0,       "\\,",           "\\,",           13, string("null") },
-                    new token{ 14,  "MY_DOT",        "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
-                    new token{ 15,  "CARROT",        "string",   0, 0,       "\\^",           "\\^",           15, string("null") },
-                    new token{ 16,  "QUESTION_MARK", "string",   0, 0,       "\\?",           "\\?",           16, string("null") },
-                    new token{ 17,  "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",          17, string("null") },
-                    new token{ 18,  "PLUS",          "string",   0, 0,       "\\+",           "\\+",           18, string("null") },
-                    new token{ 19,  "MINUS",         "string",   0, 0,       "-",             "-",             19, string("null") },
-                    new token{ 20,  "SYMBOL",        "string",   0, 0,       "\\$[a-zA-Z]+",  "\\$abc",        20, string("null") },
-                    new token{ 23,  "DOLLAR_SIGN",   "string",   0, 0,       "\\$",           "$",             21, string("null") },
-                    new token{ 21,  "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",           22, string("null") },
-                    new token{ 22,  "ANYTHING",      "string",   0, 0,       ".",             "~#",            23, string("null") }
-                };
+    new token{1, "VBAR", "string", 0, 0, "\\|", "\\|", 1, string("null")},
+    new token{2, "COLON", "string", 0, 0, ":", ":", 2, string("null")},
+    new token{3, "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"", 3, string("null")},
+    new token{4, "LBRACKET", "string", 0, 0, "\\[", "\\[", 4, string("null")},
+    new token{5, "RBRACKET", "string", 0, 0, "\\]", "\\]", 5, string("null")},
+    new token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
+    new token{7, "RBRACE", "string", 0, 0, "\\}", "\\}", 7, string("null")},
+    new token{8, "LPAREN", "string", 0, 0, "\\(", "\\(", 8, string("null")},
+    new token{9, "RPAREN", "string", 0, 0, "\\)", "\\)", 9, string("null")},
+    new token{10, "ASTERISK", "string", 0, 0, "\\*", "\\*", 10, string("null")},
+    new token{11, "NOT_EQUAL", "string", 0, 0, "!=", "!=", 11, string("null")},
+    new token{12, "EQUAL", "string", 0, 0, "=", "=", 12, string("null")},
+    new token{13, "COMMA", "string", 0, 0, "\\,", "\\,", 13, string("null")},
+    new token{14, "MY_DOT", "string", 0, 0, "\\.", "\\.", 14, string("null")},
+    new token{15, "CARROT", "string", 0, 0, "\\^", "\\^", 15, string("null")},
+    new token{16, "QUESTION_MARK", "string", 0, 0, "\\?", "\\?", 16, string("null")},
+    new token{17, "BACKSLASH", "string", 0, 0, "\\\\", "\\\\", 17, string("null")},
+    new token{18, "PLUS", "string", 0, 0, "\\+", "\\+", 18, string("null")},
+    new token{19, "MINUS", "string", 0, 0, "-", "-", 19, string("null")},
+    new token{20, "SYMBOL", "string", 0, 0, "\\$[a-zA-Z]+", "\\$abc", 20, string("null")},
+    new token{23, "DOLLAR_SIGN", "string", 0, 0, "\\$", "$", 21, string("null")},
+    new token{21, "WHITESPACE", "string", 0, 0, "[ \\t]", "\\t", 22, string("null")},
+    new token{22, "ANYTHING", "string", 0, 0, ".", "~#", 23, string("null")}
+};
 
 /**
  * @brief lex states
 **/
 inline vector state_initial = {
-                    new token{  6,  "LBRACE",        "string",   0, 0,       "\\{",           "\\{",            6, string("null") },
-                    new token{ 21,  "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",           22, string("null") },
-                    new token{ 22,  "ANYTHING",      "string",   0, 0,       ".",             "~#",            23, string("null") }
-                };
+    new token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
+    new token{22, "COMMENT", "string", 0, 0, R"(\{[ \t]*\*[^*}]*\*[ \t]*\})", R"(\\\* test \\*\)", 23, string("null")},
+    new token{22, "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "anything", 23, string("null")}
+};
 
 inline vector state_comment = {
-                    new token{  1,  "VBAR",          "string",   0, 0,       "\\|",           "\\|",            1, string("null") },
-                    new token{  2,  "COLON",         "string",   0, 0,       ":",             ":",              2, string("null") },
-                    new token{  3,  "DOUBLE_QUOTE",  "string",   0, 0,       "\"",            "\"",             3, string("null") },
-                    new token{  4,  "LBRACKET",      "string",   0, 0,       "\\[",           "\\[",            4, string("null") },
-                    new token{  5,  "RBRACKET",      "string",   0, 0,       "\\]",           "\\]",            5, string("null") },
-                    new token{  6,  "LBRACE",        "string",   0, 0,       "\\{",           "\\{",            6, string("null") },
-                    new token{  7,  "RBRACE",        "string",   0, 0,       "\\}",           "\\}",            7, string("null") },
-                    new token{  8,  "LPAREN",        "string",   0, 0,       "\\(",           "\\(",            8, string("null") },
-                    new token{  9,  "RPAREN",        "string",   0, 0,       "\\)",           "\\)",            9, string("null") },
-                    new token{ 10,  "ASTERISK",      "string",   0, 0,       "\\*",           "\\*",           10, string("null") },
-                    new token{ 11,  "NOT_EQUAL",     "string",   0, 0,       "!=",            "!=",            11, string("null") },
-                    new token{ 12,  "EQUAL",         "string",   0, 0,       "=",             "=",             12, string("null") },
-                    new token{ 13,  "COMMA",         "string",   0, 0,       "\\,",           "\\,",           13, string("null") },
-                    new token{ 14,  "MY_DOT",        "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
-                    new token{ 15,  "CARROT",        "string",   0, 0,       "\\^",           "\\^",           15, string("null") },
-                    new token{ 16,  "QUESTION_MARK", "string",   0, 0,       "\\?",           "\\?",           16, string("null") },
-                    new token{ 17,  "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",          17, string("null") },
-                    new token{ 18,  "PLUS",          "string",   0, 0,       "\\+",           "\\+",           18, string("null") },
-                    new token{ 19,  "MINUS",         "string",   0, 0,       "-",             "-",             19, string("null") },
-                    new token{ 20,  "SYMBOL",        "string",   0, 0,       "\\$[a-zA-Z]+",  "\\$abc",        20, string("null") },
-                    new token{ 23,  "DOLLAR_SIGN",   "string",   0, 0,       "\\$",           "$",             21, string("null") },
-                    new token{ 21,  "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",           22, string("null") },
-                    new token{ 22,  "ANYTHING",      "string",   0, 0,       ".",             "~#",            23, string("null") }
-                };
+    new token{1, "VBAR", "string", 0, 0, "\\|", "\\|", 1, string("null")},
+    new token{2, "COLON", "string", 0, 0, ":", ":", 2, string("null")},
+    new token{3, "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"", 3, string("null")},
+    new token{4, "LBRACKET", "string", 0, 0, "\\[", "\\[", 4, string("null")},
+    new token{5, "RBRACKET", "string", 0, 0, "\\]", "\\]", 5, string("null")},
+    new token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
+    new token{7, "RBRACE", "string", 0, 0, "\\}", "\\}", 7, string("null")},
+    new token{8, "LPAREN", "string", 0, 0, "\\(", "\\(", 8, string("null")},
+    new token{9, "RPAREN", "string", 0, 0, "\\)", "\\)", 9, string("null")},
+    new token{10, "ASTERISK", "string", 0, 0, "\\*", "\\*", 10, string("null")},
+    new token{11, "NOT_EQUAL", "string", 0, 0, "!=", "!=", 11, string("null")},
+    new token{12, "EQUAL", "string", 0, 0, "=", "=", 12, string("null")},
+    new token{13, "COMMA", "string", 0, 0, "\\,", "\\,", 13, string("null")},
+    new token{14, "MY_DOT", "string", 0, 0, "\\.", "\\.", 14, string("null")},
+    new token{15, "CARROT", "string", 0, 0, "\\^", "\\^", 15, string("null")},
+    new token{16, "QUESTION_MARK", "string", 0, 0, "\\?", "\\?", 16, string("null")},
+    new token{17, "BACKSLASH", "string", 0, 0, "\\\\", "\\\\", 17, string("null")},
+    new token{18, "PLUS", "string", 0, 0, "\\+", "\\+", 18, string("null")},
+    new token{19, "MINUS", "string", 0, 0, "-", "-", 19, string("null")},
+    new token{20, "SYMBOL", "string", 0, 0, "\\$[a-zA-Z]+", "\\$abc", 20, string("null")},
+    new token{23, "DOLLAR_SIGN", "string", 0, 0, "\\$", "$", 21, string("null")},
+    new token{21, "WHITESPACE", "string", 0, 0, "[ \\t]", "\\t", 22, string("null")},
+    new token{22, "ANYTHING", "string", 0, 0, ".", "~#", 23, string("null")}
+};
 
 inline vector state_escaped = {
-                    new token{  1,  "VBAR",          "string",   0, 0,       "\\|",           "\\|",            1, string("null") },
-                    new token{  2,  "COLON",         "string",   0, 0,       ":",             ":",              2, string("null") },
-                    new token{  3,  "DOUBLE_QUOTE",  "string",   0, 0,       "\"",            "\"",             3, string("null") },
-                    new token{  4,  "LBRACKET",      "string",   0, 0,       "\\[",           "\\[",            4, string("null") },
-                    new token{  5,  "RBRACKET",      "string",   0, 0,       "\\]",           "\\]",            5, string("null") },
-                    new token{  6,  "LBRACE",        "string",   0, 0,       "\\{",           "\\{",            6, string("null") },
-                    new token{  7,  "RBRACE",        "string",   0, 0,       "\\}",           "\\}",            7, string("null") },
-                    new token{  8,  "LPAREN",        "string",   0, 0,       "\\(",           "\\(",            8, string("null") },
-                    new token{  9,  "RPAREN",        "string",   0, 0,       "\\)",           "\\)",            9, string("null") },
-                    new token{ 10,  "ASTERISK",      "string",   0, 0,       "\\*",           "\\*",           10, string("null") },
-                    new token{ 11,  "NOT_EQUAL",     "string",   0, 0,       "!=",            "!=",            11, string("null") },
-                    new token{ 12,  "EQUAL",         "string",   0, 0,       "=",             "=",             12, string("null") },
-                    new token{ 13,  "COMMA",         "string",   0, 0,       "\\,",           "\\,",           13, string("null") },
-                    new token{ 14,  "MY_DOT",        "string",   0, 0,       "\\.",           "\\.",           14, string("null") },
-                    new token{ 15,  "CARROT",        "string",   0, 0,       "\\^",           "\\^",           15, string("null") },
-                    new token{ 16,  "QUESTION_MARK", "string",   0, 0,       "\\?",           "\\?",           16, string("null") },
-                    new token{ 17,  "BACKSLASH",     "string",   0, 0,       "\\\\",          "\\\\",          17, string("null") },
-                    new token{ 18,  "PLUS",          "string",   0, 0,       "\\+",           "\\+",           18, string("null") },
-                    new token{ 19,  "MINUS",         "string",   0, 0,       "-",             "-",             19, string("null") },
-                    new token{ 20,  "SYMBOL",        "string",   0, 0,       "\\$[a-zA-Z]+",  "\\$abc",        20, string("null") },
-                    new token{ 23,  "DOLLAR_SIGN",   "string",   0, 0,       "\\$",           "$",             21, string("null") },
-                    new token{ 21,  "WHITESPACE",    "string",   0, 0,       "[ \\t]",        "\\t",           22, string("null") },
-                    new token{ 22,  "ANYTHING",      "string",   0, 0,       ".",             "~#",            23, string("null") }
-                };
+    // new token{3, "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"", 3, string("null")},
+    // new token{3, "SINGLE_QUOTE", "string", 0, 0, "'", "'", 3, string("null")},
+    // new token{3, "AT", "string", 0, 0, "@", "@", 3, string("null")},
+
+    new token{1, "VBAR", "string", 0, 0, "\\|", "\\|", 1, string("null")},
+    new token{2, "COLON", "string", 0, 0, ":", ":", 2, string("null")},
+    new token{4, "LBRACKET", "string", 0, 0, "\\[", "\\[", 4, string("null")},
+    new token{5, "RBRACKET", "string", 0, 0, "\\]", "\\]", 5, string("null")},
+    new token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
+    new token{7, "RBRACE", "string", 0, 0, "\\}", "\\}", 7, string("null")},
+    new token{8, "LPAREN", "string", 0, 0, "\\(", "\\(", 8, string("null")},
+    new token{9, "RPAREN", "string", 0, 0, "\\)", "\\)", 9, string("null")},
+    new token{10, "ASTERISK", "string", 0, 0, "\\*", "\\*", 10, string("null")},
+    new token{11, "NOT_EQUAL", "string", 0, 0, "!=", "!=", 11, string("null")},
+    new token{12, "EQUAL", "string", 0, 0, "=", "=", 12, string("null")},
+    new token{13, "COMMA", "string", 0, 0, "\\,", "\\,", 13, string("null")},
+    new token{14, "MY_DOT", "string", 0, 0, "\\.", "\\.", 14, string("null")},
+    new token{15, "CARROT", "string", 0, 0, "\\^", "\\^", 15, string("null")},
+    new token{16, "QUESTION_MARK", "string", 0, 0, "\\?", "\\?", 16, string("null")},
+    new token{17, "BACKSLASH", "string", 0, 0, "\\\\", "\\\\", 17, string("null")},
+    new token{18, "PLUS", "string", 0, 0, "\\+", "\\+", 18, string("null")},
+    new token{19, "MINUS", "string", 0, 0, "-", "-", 19, string("null")},
+    new token{20, "SYMBOL", "string", 0, 0, "\\$[a-zA-Z]+", "\\$abc", 20, string("null")},
+    new token{23, "DOLLAR_SIGN", "string", 0, 0, "\\$", "$", 21, string("null")},
+    new token{21, "WHITESPACE", "string", 0, 0, "[ \\t]", "\\t", 22, string("null")},
+    new token{22, "ANYTHING", "string", 0, 0, ".", "~#", 23, string("null")}
+};
 
 // .[{()\*+?|^$
 // [[.NUL.]] matches a NUL character.
-
 //                           "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)|([ \\t]+)"
-const string expression =   R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(\.)|(\$[a-zA-Z]+)|([ \t])|(.))";
+const string expression = R"((\|)|(:)|(\[)|(\])|(\{)|(\})|(\*)|(!=)|(=)|(\,)|(\.)|(\$[a-zA-Z]+)|([ \t])|(.))";
 
 // states
 #define INITIAL_ 0
 #define COMMENT_ 1
 #define ESCAPED_  3
+#define DOUBLE_QUOTED 4
+#define SINGLE_QUOTED 5
+#define INCLUDING 6
+#define IF_BLOCK 7
+#define IF_CONDITION 8
 
-map<int, vector<token_def*> > state_tokens_tab = { { INITIAL_, { state_initial } }, { COMMENT_, { state_comment } }, { ESCAPED_, { state_escaped } } };
-
+inline map<int, vector<token_def *> > state_tokens_tab = {
+    {INITIAL_, {state_initial}}, {COMMENT_, {state_comment}}, {ESCAPED_, {state_escaped}}
+};
 
 // tokens
 #define VBAR                10
@@ -286,55 +217,160 @@ map<int, vector<token_def*> > state_tokens_tab = { { INITIAL_, { state_initial }
 #define COMMENT            810
 #define FILE_NAME          820
 #define WHITESPACE         822
-#define SKIP_TOKEN           -1
-#define ERROR               -2
+#define SKIP_TOKEN           (-1)
+#define ERROR               (-2)
 #define SCAN_EOF             0
-#define ANYTHING            -3
+#define ANYTHING            (-3)
 
-inline int on_state(const state_t& s )
-{
-    switch (s.id)
-    {
+inline int on_state(const state_t &s) {
+    switch (s.id) {
         case INITIAL_:
             return INITIAL_;
     }
     return ERROR;
 }
 
-inline int on_token_action(const state_t& s, const token_def& tok)
-{
-    switch (s.id)
-    {
-        case INITIAL_:
-        {
-            switch(tok.id)
-            {
-                case VBAR:
-                    cout << "VBAR" << endl;
-                    return VBAR;
-                case COLON:
+inline int on_token_action(const state_t &s, const token_def &tok) {
+    switch (s.id) {
+        case INITIAL_: {
+            switch (tok.id) {
                 case LBRACKET:
                     cout << "LBRACKET" << endl;
-                    return LBRACKET;                case ESCAPE:
+                    return LBRACKET;
                 case COMMENT:
-                case FILE_NAME:
-                    return tok.id;
-                case WHITESPACE:
+                //case WHITESPACE:
                 case SKIP_TOKEN:
                     return SKIP_TOKEN;
                 case SCAN_EOF:
                     //parser::make_END();
                     return EOF;
-
                 case ANYTHING:
-                    cout << "error: " << tok.value << "is invalid." << endl;
+                    cout << tok.value << endl;
                     return ERROR;
                 default:
                     return ERROR;
+            }
+        }
+        case ESCAPED_: {
+            switch (tok.id) {
+                case DOUBLE_QUOTE:
+                    cout << "DOUBLE_QUOTE" << endl;
+                    break;
+                case SINGLE_QUOTE:
+                    cout << "SINGLE_QUOTE" << endl;
+                    break;
+                case SLASH:
+                    cout << "SLASH" << endl;
+                    break;
+                case BACK_SLASH:
+                    cout << "BACK_SLASH" << endl;
+                    break;
+                case AT:
+                    cout << "AT" << endl;
+                    break;
+                //case PLUS            : break;
+                case MINUS:
+                    cout << "MINUS" << endl;
+                    break;
+                case ASTERIK:
+                    cout << "ASTERIK" << endl;
+                    break;
+                case EQUAL:
+                    cout << "EQUAL" << endl;
+                                         break;
+                case NOT_EQUAL:
+                    cout << "NOT_EQUAL" << endl;
+                    break;
+                //case DOT             : break;
+                //case INDIRECT_MEMBER_SELECT: break;
+                case PERCENT:
+                    cout << "PERCENT" << endl;
+                    break;
+                case AMPERSAND:
+                    cout << "AMPERSAND" << endl;
+                    break;
+                case NOT:
+                    cout << "NOT" << endl;
+                    break;
+                case AND:
+                    cout << "AND" << endl;
+                    break;
+                case OR:
+                    cout << "OR:" << endl;
+                    break;
+                case LESS_THAN:
+                    cout << "LESS_THAN" << endl;
+                    break;
+                case LESS_THAN_EQUAL:
+                    cout << "LESS_THAN_EQUAL" << endl;
+                    break;
+                case GREATER_THAN:
+                    cout << "GREATER_THAN" << endl;
+                    break;
+                case GREATER_THAN_EQUAL:
+                    cout << "GREATER_THAN_EQUAL" << endl;
+                    break;
+                case NUMERIC_LITERAL:
+                    cout << "NUMERIC_LITERAL" << endl;
+                    break;
+                case REQUIRE:
+                    cout << "REQUIRE" << endl;
+                    break;
+                case CONFIG_LOAD:
+                    cout << "CONFIG_LOAD" << endl;
+                    break;
+                case INSERT:
+                    cout << "INSERT" << endl;
+                    break;
+                case INCLUDE:
+                    cout << "INCLUDE" << endl;
+                    break;
+                case FILE_ATTRIB:
+                    cout << "FILE_ATTRIB" << endl;
+                    break;
+                case ASSIGN:
+                    cout << "ASSIGN" << endl;
+                    break;
+                case VAR_ATTRIB:
+                    cout << "VAR_ATTRIB" << endl;
+                    break;
+                case VALUE_ATTRIB:
+                    cout << "VALUE_ATTRIB" << endl;
+                    break;
+                case FROM_ATTRIB:
+                    cout << "FROM_ATTRIB" << endl;
+                    break;
+                case ITEM_ATTRIB:
+                    cout << "ITEM_ATTRIB" << endl;
+                    break;
+                case KEY_ATTRIB:
+                    cout << "KEY_ATTRIB" << endl;
+                    break;
+                case NAME_ATTRIB:
+                    cout << "NAME_ATTRIB" << endl;
+                    break;
             }
         }
         default: ;
     }
     return ERROR;
 }
+
+//  enum yytokentype
+//  {
+//      YYEMPTY = -2,
+//      YYEOF = 0,                     /* "end of file"  */
+//      YYERROR = 256,                 /* error  */
+//      YYUNDEF = 257,                 /* "invalid token"  */
+//      INTEGER = 258,                 /* INTEGER  */
+//      //token_ = 259,                   /* token  */
+//      MY_SEMI_COLON = 260,              /* SEMI_COLON  */
+//      NEWLINE = 261,                 /* NEWLINE  */
+//      MY_PLUS = 262,                    /* PLUS  */
+//      // MINUS = 263,                   /* MINUS  */
+//      // MULT = 264,                    /* MULT  */
+//      // DIV = 265                      /* DIV  */
+// };
+//typedef yytokentype yytoken_kind_t;
+
 #endif

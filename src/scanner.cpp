@@ -58,11 +58,11 @@ sym_t lex()
     switch(++i)
     {
         case 1:
-            return parser::make_DOLLAR_SIGN("$");
+            return yy::parser::make_DOLLAR_SIGN("$");
         case 2:
-            return parser::make_ID("abc");
+            return yy::parser::make_ID("abc");
         case 3:
-            return parser::make_END();
+            return yy::parser::make_END();
         default: return 0;
     }
 }
@@ -117,6 +117,8 @@ int parse_options(const int argc, char* argv[])
     cout << FMT_FG_BLUE << "input file=\"" << FMT_RESET
          << FMT_FG_GREEN << FMT_ITALIC <<  file << "\"" << FMT_RESET << endl;
 
+
+    yy::parser parser;
     g_config_file = config_file;
     g_scan_file = file;
 
@@ -125,7 +127,7 @@ int parse_options(const int argc, char* argv[])
 
     cout << "configuration loaded." << endl;
     // begin lexer ...
-    const Lexer lexer(file, config_file);
+    const Lexer lexer(file, config_file, &parser);
     cout << "scanner configured." << endl;
     if(dump_flag)
     {
@@ -146,7 +148,6 @@ int parse_options(const int argc, char* argv[])
 
     cout << "parsing ..." << endl;
     //yyparse();
-    yy::parser parser;
     parser.parse();
     cout << "finished scanning. " << endl;
     return 0;

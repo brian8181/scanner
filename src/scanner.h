@@ -49,8 +49,8 @@ int main(int argc, char* argv[]);
 //#define lex yylex
 //yy::parser parser;
 
-typedef yy::parser parser;
-typedef parser::symbol_type sym_t;
+//typedef yy::parser parser;
+typedef yy::parser::symbol_type sym_t;
 sym_t lex();
 
 #endif // _SCANNER_HPP_

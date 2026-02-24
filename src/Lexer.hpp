@@ -120,7 +120,7 @@ public:
 	 * @param file
 	 * @param config_file
 	 */
-	Lexer(const string& file, const string &config_file);
+	Lexer(const string& file, const string &config_file, yy::parser* pp );
 
 	/**
 	 * @brief copy ctor
@@ -200,7 +200,12 @@ public:
  	 */
 	void print_token( int id );
 
+	state_t* get_state();
+
+	void set_state(const state_t& s);
+
 protected:
+	yy::parser*                       _pparser;
 	string                        _config_file;
 	vector<token_def*>            _tokens;
 	vector<state_t*>              _states;
