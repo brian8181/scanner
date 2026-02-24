@@ -32,6 +32,7 @@ static string g_scan_file;
 static bool initialized = false;
 
 //yy::parser::symbol_type llex();
+static yy::parser parser;
 static Lexer lexer;
 
 /**
@@ -118,7 +119,7 @@ int parse_options(const int argc, char* argv[])
          << FMT_FG_GREEN << FMT_ITALIC <<  file << "\"" << FMT_RESET << endl;
 
 
-    yy::parser parser;
+
     g_config_file = config_file;
     g_scan_file = file;
 
