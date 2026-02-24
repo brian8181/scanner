@@ -190,7 +190,7 @@ inline vector state_escaped = {
 #define IF_CONDITION 8
 
 inline map<int, vector<token_def *> > state_tokens_tab = {
-    {INITIAL_, {state_initial}}, {COMMENT_, {state_comment}}, {ESCAPED_, {state_escaped}}
+    {INITIAL_, {state_comment}}, {COMMENT_, {state_comment}}, {ESCAPED_, {state_escaped}}
 };
 
 // tokens

@@ -33,6 +33,135 @@ using std::regex;
 #define INT 1
 #define FLOAT 2
 
+/*
+ /// Symbol kinds.
+struct symbol_kind
+{
+	enum symbol_kind_type
+	{
+	YYNTOKENS = 28, ///< Number of tokens.
+	S_YYEMPTY = -2,
+	S_YYEOF = 0,                             // "end of input"
+	S_YYerror = 1,                           // error
+	S_YYUNDEF = 2,                           // "invalid token"
+	S_NUMBER = 3,                            // NUMBER
+	S_DOLLAR_SIGN = 4,                       // DOLLAR_SIGN
+	S_DOT = 5,                               // DOT
+	S_INDIRECT_MEMBER = 6,                   // INDIRECT_MEMBER
+	S_COMMA = 7,                             // COMMA
+	S_EQUAL = 8,                             // EQUAL
+	S_STRING_LITERAL = 9,                    // STRING_LITERAL
+	S_NUMERIC_LITERAL = 10,                  // NUMERIC_LITERAL
+	S_ID = 11,                               // ID
+	S_CONST_ID = 12,                         // CONST_ID
+	S_LBRACE = 13,                           // LBRACE
+	S_RBRACE = 14,                           // RBRACE
+	S_LBRACKET = 15,                         // LBRACKET
+	S_RBRACKET = 16,                         // RBRACKET
+	S_LPAREN = 17,                           // LPAREN
+	S_RPAREN = 18,                           // RPAREN
+	S_CONFIG_LOAD = 19,                      // CONFIG_LOAD
+	S_INCLUDE = 20,                          // INCLUDE
+	S_REQUIRE = 21,                          // REQUIRE
+	S_INSERT = 22,                           // INSERT
+	S_ASSIGN = 23,                           // ASSIGN
+	S_VAR_ATTRIB = 24,                       // VAR_ATTRIB
+	S_VALUE_ATTRIB = 25,                     // VALUE_ATTRIB
+	S_FILE_ATTRIB = 26,                      // FILE_ATTRIB
+	S_FILE_NAME = 27,                        // FILE_NAME
+	S_YYACCEPT = 28,                         // $accept
+	// S_complier = 29,                         // complier
+	// S_files = 30,                            // files
+	// S_file = 31,                             // file
+	// S_blocks = 32,                           // blocks
+	// S_block = 33,                            // block
+	// S_qualafied_id = 34,                     // qualafied_id
+	// S_sub_proc = 35,                         // sub_proc
+	// S_array = 36,                            // array
+	// S_params = 37,                           // params
+	// S_symbol = 38,                           // symbol
+	// S_built_in = 39,                         // built_in
+	// S_attributes = 40,                       // attributes
+	// S_attrib = 41                            // attrib
+	};
+};
+
+// basic_symbol.
+  template <typename Base>
+  parser::basic_symbol<Base>::basic_symbol (const basic_symbol& that)
+    : Base (that)
+    , value ()
+  {
+    switch (this->kind ())
+    {
+      case symbol_kind::S_NUMBER: // NUMBER
+        value.copy< int > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_attrib: // attrib
+        value.copy< std::pair< std::string, std::string > > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_DOLLAR_SIGN: // DOLLAR_SIGN
+      case symbol_kind::S_DOT: // DOT
+      case symbol_kind::S_INDIRECT_MEMBER: // INDIRECT_MEMBER
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_STRING_LITERAL: // STRING_LITERAL
+      case symbol_kind::S_NUMERIC_LITERAL: // NUMERIC_LITERAL
+      case symbol_kind::S_ID: // ID
+      case symbol_kind::S_CONST_ID: // CONST_ID
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LPAREN: // LPAREN
+      case symbol_kind::S_RPAREN: // RPAREN
+      case symbol_kind::S_CONFIG_LOAD: // CONFIG_LOAD
+      case symbol_kind::S_INCLUDE: // INCLUDE
+      case symbol_kind::S_REQUIRE: // REQUIRE
+      case symbol_kind::S_INSERT: // INSERT
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_VAR_ATTRIB: // VAR_ATTRIB
+      case symbol_kind::S_VALUE_ATTRIB: // VALUE_ATTRIB
+      case symbol_kind::S_FILE_ATTRIB: // FILE_ATTRIB
+      case symbol_kind::S_FILE_NAME: // FILE_NAME
+      case symbol_kind::S_qualafied_id: // qualafied_id
+      case symbol_kind::S_sub_proc: // sub_proc
+      case symbol_kind::S_array: // array
+      case symbol_kind::S_symbol: // symbol
+      case symbol_kind::S_built_in: // built_in
+      case symbol_kind::S_attributes: // attributes
+        value.copy< std::string > (YY_MOVE (that.value));
+        break;
+
+      default:
+        break;
+    }
+
+struct symbol_type : basic_symbol<by_kind>
+{
+	// superclass
+	typedef basic_symbol<by_kind> super_type;
+
+	symbol_type () YY_NOEXCEPT {}
+
+	// valueless symbols, and symbols from each type
+	symbol_type (int tok) : super_type (token_kind_type (tok))
+	{
+	}
+
+	symbol_type (int tok, const int& v)	: super_type (token_kind_type (tok), v)
+	{
+	}
+
+	symbol_type (int tok, const std::string& v)	: super_type (token_kind_type (tok), v)
+	{
+	}
+};
+
+*/
+
 // namespace bkp
 // {
 //vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
