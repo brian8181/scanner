@@ -18,7 +18,6 @@
     using std::cout;
     using std::endl;
     using std::pair;
-
     typedef std::pair< std::string, std::string > attribute;
 
     // print a list of strings
@@ -38,22 +37,15 @@
 %define api.token.constructor
 %code
 {
-    yy::parser::symbol_type lex();
-    // call custom lexers lex()
+    // declare yylex
     namespace yy
     {
-        // return the next token
-        parser::symbol_type yylex()
-        {
-            return llex();
-        }
+        parser::symbol_type yylex();
     }
 
-//}
-//%code
-//{
     //int yylex(void);
     //int yyerror(char * s);
+
     char* STRDUP(char* s);
     /* string literal buffer */
     char buf[100];
@@ -88,8 +80,6 @@
 %token<std::string> VAR_ATTRIB VALUE_ATTRIB FILE_ATTRIB FILE_NAME
 %type<std::string> symbol sub_proc array qualafied_id
 %start complier
-
-
 
 %%
 
@@ -318,11 +308,8 @@ int yyerror(char * s)
 #endif
 
 #ifdef MAIN_FUNC
-
 #endif
 
-
-//#include "lex.hpp"
 namespace yy
 {
     // return the next token
@@ -339,6 +326,12 @@ namespace yy
         }
         return 0;
     } */
+
+     // return the next token
+    parser::symbol_type yylex()
+    {
+        return lex();
+    }
 
     // report an error to the user
     auto parser::error(const std::string& msg) -> void

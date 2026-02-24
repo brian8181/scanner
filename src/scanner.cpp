@@ -39,19 +39,19 @@ static Lexer lexer;
  * @param
  * @return
  */
-// int lex()
-// {
-//     if(!initialized)
-//     {
-//         lexer.init(g_scan_file, g_config_file);
-//         initialized = true;
-//     }
-//     const unsigned int token_id = Lexer::get_token();
-//     return static_cast<int>(token_id);
-// }
+int lex_()
+{
+    if(!initialized)
+    {
+        lexer.init(g_scan_file, g_config_file);
+        initialized = true;
+    }
+    const unsigned int token_id = Lexer::get_token();
+    return static_cast<int>(token_id);
+}
 
 // return the next token
-sym_t llex()
+sym_t lex()
 {
     //char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
     static int i = 0;
