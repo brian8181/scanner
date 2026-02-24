@@ -27,6 +27,7 @@
 //#include "constants.hpp"
 #include "tokens.hpp"
 #include "pparser.tab.hh"
+#include "scanner.h"
 //#include "pars.h"
 
 using std::cerr;
