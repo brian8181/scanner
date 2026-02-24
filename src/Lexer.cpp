@@ -26,7 +26,7 @@
 #include "Lexer.hpp"
 //#include "constants.hpp"
 #include "tokens.hpp"
-#include "pparser.tab.hh"
+
 #include "scanner.h"
 //#include "pars.h"
 
@@ -112,11 +112,8 @@ bool Lexer::init( const string& file, const string &config_file )
         _name_tab[tokens[i]->name] = tokens[i];
         //_idx_tab[tokens[i]->index] = tokens[i];
     }
-    // testing ... todo ... use auto created expression
-    //_expr = expression;
-    init_expr();
 
-    cout << _expr << endl;
+
     #endif
 
     // bkp todo 1-3 ...
@@ -133,7 +130,9 @@ bool Lexer::init( const string& file, const string &config_file )
     _search_text = ss.str( );
 
     // initialize expression ...
-    //init_expr();
+
+    init_expr();
+    cout << _expr << endl;
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
     _rexp = boost::regex( _expr, boost::regex::ECMAScript );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
@@ -297,8 +296,8 @@ void Lexer::tokenize()
                 ptoken->value = m[i].str();
                 cout << "matched index: " << i << endl;
                 print_token(ptoken->id);
-                if(on_token( *_state, *ptoken ) == SKIP_TOKEN)
-                    continue;
+                // if(on_token( *_state, *ptoken ) != yy::parser::symbol_type( token::))
+                //     continue;
                     //goto CONTINUE_ON_NO_ACTION;
                 break; // found
             }
@@ -411,7 +410,7 @@ int Lexer::get_token()
         return ptoken->id; // return token id
     }
     #endif
-    return 0; // error or eof
+    return (int)yy::parser::token::END; // error or eof
 }
 
 
@@ -427,7 +426,7 @@ void Lexer::reset()
  * @brief override virtual, on_token, for each token ...
   * @param token
  */
-int Lexer::on_token( const state_t& state, const token_def& token )
+yy::parser::symbol_type Lexer::on_token( const state_t& state, const token_def& token )
 {
     return on_token_action(state, token);
 }
@@ -500,13 +499,11 @@ void Lexer::print_token( int id )
     << endl;
 }
 
-state_t* Lexer::get_state()
-{
+state_t* Lexer::get_state() const {
     return _state;
 }
 
-void Lexer::set_state(const state_t& s)
-{
+void Lexer::set_state(const state_t& s) const {
     _state->id = s.id;
     _state->name = s.name;
 }

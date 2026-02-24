@@ -177,7 +177,11 @@ public:
 	 * @param state
 	 * @param token
 	 */
-	static int on_token( const state_t& state, const token_def& token );
+
+
+	yy::parser::symbol_type on_token( const state_t& state, const token_def& token );
+	yy::parser::symbol_type on_token_action( const state_t& state, const token_def &token );
+	int on_state(const state_t &s);
 
 	/**
 	 * @brief tokenize
@@ -200,9 +204,9 @@ public:
  	 */
 	void print_token( int id );
 
-	state_t* get_state();
+	state_t* get_state() const;
 
-	void set_state(const state_t& s);
+	void set_state(const state_t& s) const;
 
 protected:
 	yy::parser*                       _pparser;

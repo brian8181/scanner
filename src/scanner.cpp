@@ -118,8 +118,6 @@ int parse_options(const int argc, char* argv[])
     cout << FMT_FG_BLUE << "input file=\"" << FMT_RESET
          << FMT_FG_GREEN << FMT_ITALIC <<  file << "\"" << FMT_RESET << endl;
 
-
-
     g_config_file = config_file;
     g_scan_file = file;
 
@@ -127,6 +125,8 @@ int parse_options(const int argc, char* argv[])
         config_file = argv[optind + CONFIG_IDX_OFFSET];
 
     cout << "configuration loaded." << endl;
+    // create parser
+
     // begin lexer ...
     const Lexer lexer(file, config_file, &parser);
     cout << "scanner configured." << endl;
