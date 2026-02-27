@@ -507,7 +507,7 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                     return yy::parser::make_FROM_ATTRIB(tok.value);
                 case ITEM_ATTRIB:
                     cout << "ITEM_ATTRIB" << endl;
-                    break;
+                    return yy::parser::make_ITEM_ATTRIB(tok.value);
                 case KEY_ATTRIB:
                     cout << "KEY_ATTRIB" << endl;
                     return yy::parser::make_KEY_ATTRIB(tok.value);
