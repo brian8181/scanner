@@ -44,8 +44,9 @@ sym_t lex()
         lexer.init(g_scan_file, g_config_file, &parser);
         initialized = true;
     }
-    const unsigned int token_id = lexer.get_token();
-    return static_cast<int>(token_id);
+    return lexer.get_token();
+    //token t = _tokens[token_id];
+    //return static_cast<int>(token_id);
 }
 /**
  * @brief parse command line options

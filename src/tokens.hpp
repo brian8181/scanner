@@ -68,7 +68,7 @@ inline vector g_tokens =
     /**
     * All
     */
-    new token{++g_index, "DOLLAR_SIGN", "string", 0, 0, R"(\$)", "$",                                     g_index, string("null"), yy::parser::make_YYUNDEF()},
+    //new token{++g_index, "DOLLAR_SIGN", "string", 0, 0, R"(\$)", "$",                                     g_index, string("null"), yy::parser::make_YYUNDEF()},
     new token{++g_index, "CARROT", "string", 0, 0, R"(\^)", "\\^",                                        g_index, string("null"), yy::parser::make_YYUNDEF()},
     new token{++g_index, "AMPERSAND", "string", 0, 0, R"(\*)", "\\*",                                     g_index, string("null"), yy::parser::make_YYUNDEF()},
     new token{++g_index, "ASTERISK", "string", 0, 0, R"(\*)", "\\*",                                      g_index, string("null"), yy::parser::make_YYUNDEF()},
@@ -104,12 +104,13 @@ inline vector g_tokens =
      */
     new token{++g_index,  "NUMERIC_LITERAL", "string", 0, 0, "[0-9]+", "12345",                           g_index, string("null"), yy::parser::make_YYUNDEF()},
     new token{++g_index,  "ARRAY", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])", "/", g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/",             g_index, string("null"), yy::parser::make_YYUNDEF()},
+    //new token{++g_index,  "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/",             g_index, string("null"), yy::parser::make_YYUNDEF()},
     new token{++g_index, "SYMBOL", "string", 0, 0, R"(\$[a-zA-Z]+)", "\\$abc",                            g_index, string("null"), yy::parser::make_YYUNDEF()},
+    new token{++g_index, "COMMENT", "string", 0, 0, R"(\{[ ]*\*[^*}]*\*[ ]*\})",  R"(\* test *\)",        g_index, string("null"), yy::parser::make_YYUNDEF()},
     new token{++g_index,  "CONST_SYMBOL", "string", 0, 0, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", g_index, string("null"), yy::parser::make_YYUNDEF()},
     new token{++g_index,  "WHITESPACE", "string", 0, 0, R"([ \t])", "\\t",                                g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "ANYTHING", "string", 0, 0, ".", "~#",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
+    //new token{++g_index,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    g_index, string("null"), yy::parser::make_YYUNDEF()},
+    //new token{++g_index,  "ANYTHING", "string", 0, 0, ".", "~#",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
     /**
      * @brief keywords
      */
@@ -316,7 +317,7 @@ inline map<int, vector<token_def *> > state_tokens_tab = {
 #define AT                 150
 //#define PLUS               160
 #define MINUS              170
-#define ASTERIK            180
+#define ASTERISK            180
 #define EQUAL              190
 #define NOT_EQUAL          200
 #define MY_DOT                210
@@ -397,20 +398,20 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
             {
                 case LBRACKET:
                     cout << "LBRACKET" << endl;
+                    set_state(*_state_tab[ESCAPED_]);
                     return yy::parser::make_LBRACE("{");
-                    //return LBRACKET;
                 case COMMENT:
-                    //case WHITESPACE:
+                    return yy::parser::make_YYUNDEF();
+                case WHITESPACE:
+                    return yy::parser::make_YYUNDEF();
                 case SKIP_TOKEN:
-                    //return SKIP_TOKEN;
+                    return yy::parser::make_YYUNDEF();
                 case SCAN_EOF:
-                    //parser::make_END();
                     return EOF;
                 case ANYTHING:
-                    cout << tok.value << endl;
-                    //return ERROR;
+                    return yy::parser::make_YYUNDEF();
                 default:
-                    return yy::parser::make_END();
+                    return yy::parser::make_YYUNDEF();
             }
             return yy::parser::make_END();
         }
@@ -433,11 +434,10 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                 case AT:
                     cout << "AT" << endl;
                     return yy::parser::make_AT(tok.value);
-                    //case PLUS            : break;
                 case MINUS:
                     cout << "MINUS" << endl;
                     return yy::parser::make_MINUS();
-                case ASTERIK:
+                case ASTERISK:
                     cout << "ASTERISK" << endl;
                     return yy::parser::make_ASTERISK();
                 case EQUAL:
@@ -504,16 +504,16 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                     return yy::parser::make_VALUE_ATTRIB(tok.value);
                 case FROM_ATTRIB:
                     cout << "FROM_ATTRIB" << endl;
-                    //return yy::parser::make_FROM_ATTRIB(tok.value);
+                    return yy::parser::make_FROM_ATTRIB(tok.value);
                 case ITEM_ATTRIB:
                     cout << "ITEM_ATTRIB" << endl;
                     break;
                 case KEY_ATTRIB:
                     cout << "KEY_ATTRIB" << endl;
-                    //return yy::parser::make_KEY_ATTRIB(tok.value);
+                    return yy::parser::make_KEY_ATTRIB(tok.value);
                 case NAME_ATTRIB:
                     cout << "NAME_ATTRIB" << endl;
-                    ///return yy::parser::make_NAME_ATTRIB(tok.value);
+                    return yy::parser::make_NAME_ATTRIB(tok.value);
             }
         }
         default: ;

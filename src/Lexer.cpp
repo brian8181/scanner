@@ -306,7 +306,7 @@ void Lexer::tokenize()
  * @brief  get_token
  * @return int
  */
-int Lexer::get_token()
+yy::parser::symbol_type Lexer::get_token()
 {
     //SKIPPED_TOKEN:
     stringstream ss;
@@ -334,7 +334,6 @@ int Lexer::get_token()
                 cout << "debug - id: " << ptoken->id << "name: " << ptoken->name  << endl;
                 print_token(ptoken->id); // debug print
                 //auto skip = yy::parser::symbol_type( SKIP_TOKEN );
-                //int r = on_token( *_state, *ptoken );
                 if(SKIP_TOKEN)
                 {
                     ++(*_p_iter);
@@ -347,7 +346,7 @@ int Lexer::get_token()
         }
         ++(*_p_iter); // increment iterator
         cout << "return -> " << ptoken->id << endl;
-        return ptoken->id; // return token id
+        return on_token( *_state, *ptoken ); // return token id
     }
     return (int)yy::parser::token::END; // error or eof
 }

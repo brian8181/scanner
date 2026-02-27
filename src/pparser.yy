@@ -80,7 +80,8 @@
 %token<std::string> INDIRECT_MEMBER
 %token<std::string> STRING_LITERAL NUMERIC_LITERAL
 %token<std::string> ID CONST_ID
-%token<std::string> VAR_ATTRIB VALUE_ATTRIB FILE_ATTRIB FILE_NAME
+%token<std::string> VAR_ATTRIB VALUE_ATTRIB FILE_ATTRIB FROM_ATTRIB KEY_ATTRIB NAME_ATTRIB FILE_NAME
+%token COMMENT
 %token<int> NUMBER
 
 %nonassoc IFX

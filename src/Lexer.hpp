@@ -299,7 +299,7 @@ public:
 	 * @brief  get_token
 	 * @return int
 	 */
-	int get_token();
+	yy::parser::symbol_type get_token();
 
 	/**
 	 * @brief reset to initial state
@@ -343,7 +343,7 @@ public:
 	void set_state(const state_t& s) const;
 
 protected:
-	yy::parser*                       _pparser;
+	yy::parser*                    _pparser;
 	string                        _config_file;
 	vector<token_def*>            _tokens;
 	vector<state_t*>              _states;
