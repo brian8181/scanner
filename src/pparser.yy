@@ -71,13 +71,24 @@
 %type<std::pair< std::string, std::string >> attrib
 %type<std::string> built_in
 %type<std::string> attributes
-%token<int> NUMBER
-%token<std::string> DOLLAR_SIGN DOT INDIRECT_MEMBER COMMA EQUAL
+%token<std::string> CAPTURE CONFIG_LOAD INCLUDE REQUIRE REQUIRE_ONCE INSERT ASSIGN ISSET SECTION LDELIM RDELIM VERSION CYCLE COUNTER
+%token<std::string> CAPITALIZE CAT COUNT_CHARACTERS COUNT_SENTENCES COUNT_PARAGRAPHS COUNT_WORDS DATE_FORMAT DEFAULT ESCAPE
+%token<std::string> INDENT LOWER UPPER STRIP NL2BR REGEX_REPLACE REPLACE SPACIFY STRING_FORMAT STRIP_TAGS TRUNCATE WORDWARP
+%token<std::string> LBRACE RBRACE LBRACKET RBRACKET LPAREN RPAREN
+%token<std::string> COLON SEMI_COLON DOUBLE_QUOTE SINGLE_QUOTE BACK_SLASH
+%token<std::string> AT VBAR AMPERSAND AND OR NOT DOLLAR_SIGN DOT
+%token<std::string> INDIRECT_MEMBER
 %token<std::string> STRING_LITERAL NUMERIC_LITERAL
 %token<std::string> ID CONST_ID
-%token<std::string> LBRACE RBRACE LBRACKET RBRACKET LPAREN RPAREN
-%token<std::string> CONFIG_LOAD INCLUDE REQUIRE INSERT ASSIGN
 %token<std::string> VAR_ATTRIB VALUE_ATTRIB FILE_ATTRIB FILE_NAME
+%token<int> NUMBER
+
+%nonassoc IFX
+%nonassoc ELSE ELSEIF
+%left GREATER_THAN_EQUAL LESS_THAN_EQUAL EQUAL NOT_EQUAL LESS_THAN GREATER_THAN COMMA
+%left PLUS MINUS
+%left ASTERISK SLASH PERCENT
+%nonassoc UMINUS
 %type<std::string> symbol sub_proc array qualafied_id
 %start complier
 
@@ -236,7 +247,7 @@ attrib:
                                                                         << $1 << "\" EQUAL STRING_LITERAL=\""
                                                                         << buf << "\"" << FMT_RESET << endl;
 
-                                                                    std::pair<std::string, std::string>  pair($1, $2);
+                                                                    std::pair<std::string, std::string>  pair($1, $3);
                                                                     $$ = pair;
                                                                }
     | VAR_ATTRIB EQUAL STRING_LITERAL                          {
@@ -244,17 +255,17 @@ attrib:
                                                                             << "PARSER name_value: | VAR_ATTRIB=\"\" EQUAL STRING_LITERAL=\"\""
                                                                          << FMT_FG_GREEN << FMT_RESET << endl;
 
-                                                                    std::pair<std::string, std::string>  pair($1, $2);
+                                                                    std::pair<std::string, std::string>  pair($1, $3);
                                                                     $$ = pair;
                                                                 }
     | FILE_ATTRIB EQUAL STRING_LITERAL                          {
                                                                     cout << FMT_FG_YELLOW
                                                                             << "PARSER name_value: | FILE_ATTRIB=\""
                                                                             << $1 << "\" EQUAL STRING_LITERAL=\""
-                                                                            << $2 << "\""
+                                                                            << $3 << "\""
                                                                          << FMT_RESET << endl;
 
-                                                                     std::pair<std::string, std::string>  pair($1, $2);
+                                                                     std::pair<std::string, std::string>  pair($1, $3);
                                                                     $$ = pair;
                                                                }
                                                                ;

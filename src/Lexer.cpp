@@ -128,7 +128,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     // initialize expression ...
     init_expr();
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
-    _rexp = boost::regex( _expr, boost::regex::ECMAScript );
+    _rexp = boost::regex( _expr, boost::regex::extended );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
     _end = boost::sregex_iterator();

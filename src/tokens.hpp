@@ -225,7 +225,7 @@ new token{23, "ARRAY", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^
 new token{24, "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/", 19, string("null")},
 new token{ 25, "SYMBOL", "string", 0, 0, R"(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/", 19, string("null")},
 new token{26, "CONST_SYMBOL", "string", 0, 0, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", 19, string("null")},
-new token{27, "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...", 19, string("null")},
+//new token{27, "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...", 19, string("null")},
 new token{28, "WHITESPACE", "string", 0, 0, "[ \\t]", "\\t", 22, string("null")},
 new token{29, "ANYTHING", "string", 0, 0, ".", "~#", 23, string("null")},
 /**
@@ -420,100 +420,100 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
             {
                 case DOUBLE_QUOTE:
                     cout << "DOUBLE_QUOTE" << endl;
-                    break;
+                    return yy::parser::make_DOUBLE_QUOTE(tok.value);
                 case SINGLE_QUOTE:
                     cout << "SINGLE_QUOTE" << endl;
-                    break;
+                    return yy::parser::make_SINGLE_QUOTE(tok.value);
                 case SLASH:
                     cout << "SLASH" << endl;
-                    break;
+                    return yy::parser::make_SLASH();
                 case BACK_SLASH:
                     cout << "BACK_SLASH" << endl;
-                    break;
+                    return yy::parser::make_BACK_SLASH(tok.value);
                 case AT:
                     cout << "AT" << endl;
-                    break;
+                    return yy::parser::make_AT(tok.value);
                     //case PLUS            : break;
                 case MINUS:
                     cout << "MINUS" << endl;
-                    break;
+                    return yy::parser::make_MINUS();
                 case ASTERIK:
-                    cout << "ASTERIK" << endl;
-                    break;
+                    cout << "ASTERISK" << endl;
+                    return yy::parser::make_ASTERISK();
                 case EQUAL:
                     cout << "EQUAL" << endl;
-                    break;
+                    return yy::parser::make_EQUAL();
                 case NOT_EQUAL:
                     cout << "NOT_EQUAL" << endl;
-                    break;
+                    return yy::parser::make_NOT_EQUAL();
                     //case DOT             : break;
                     //case INDIRECT_MEMBER_SELECT: break;
                 case PERCENT:
                     cout << "PERCENT" << endl;
-                    break;
+                    return yy::parser::make_PERCENT();
                 case AMPERSAND:
                     cout << "AMPERSAND" << endl;
-                    break;
+                    return yy::parser::make_AMPERSAND(tok.value);
                 case NOT:
                     cout << "NOT" << endl;
-                    break;
+                    return yy::parser::make_NOT(tok.value);
                 case AND:
                     cout << "AND" << endl;
-                    break;
+                    return yy::parser::make_AND(tok.value);
                 case OR:
                     cout << "OR:" << endl;
-                    break;
+                    return yy::parser::make_OR(tok.value);
                 case LESS_THAN:
                     cout << "LESS_THAN" << endl;
-                    break;
+                    return yy::parser::make_LESS_THAN();
                 case LESS_THAN_EQUAL:
                     cout << "LESS_THAN_EQUAL" << endl;
-                    break;
+                    return yy::parser::make_LESS_THAN_EQUAL();
                 case GREATER_THAN:
                     cout << "GREATER_THAN" << endl;
-                    break;
+                    return yy::parser::make_GREATER_THAN();
                 case GREATER_THAN_EQUAL:
                     cout << "GREATER_THAN_EQUAL" << endl;
-                    break;
+                    return yy::parser::make_GREATER_THAN_EQUAL();
                 case NUMERIC_LITERAL:
                     cout << "NUMERIC_LITERAL" << endl;
-                    break;
+                    return yy::parser::make_NUMERIC_LITERAL(tok.value);
                 case REQUIRE:
                     cout << "REQUIRE" << endl;
-                    break;
+                    return yy::parser::make_REQUIRE(tok.value);
                 case CONFIG_LOAD:
                     cout << "CONFIG_LOAD" << endl;
-                    break;
+                    return yy::parser::make_CONFIG_LOAD(tok.value);
                 case INSERT:
                     cout << "INSERT" << endl;
-                    break;
+                    return yy::parser::make_INSERT(tok.value);
                 case INCLUDE:
                     cout << "INCLUDE" << endl;
-                    break;
+                    return yy::parser::make_INCLUDE(tok.value);
                 case FILE_ATTRIB:
                     cout << "FILE_ATTRIB" << endl;
-                    break;
+                    return yy::parser::make_FILE_ATTRIB(tok.value);
                 case ASSIGN:
                     cout << "ASSIGN" << endl;
-                    break;
+                    return yy::parser::make_ASSIGN(tok.value);
                 case VAR_ATTRIB:
                     cout << "VAR_ATTRIB" << endl;
-                    break;
+                    return yy::parser::make_VAR_ATTRIB(tok.value);
                 case VALUE_ATTRIB:
                     cout << "VALUE_ATTRIB" << endl;
-                    break;
+                    return yy::parser::make_VALUE_ATTRIB(tok.value);
                 case FROM_ATTRIB:
                     cout << "FROM_ATTRIB" << endl;
-                    break;
+                    //return yy::parser::make_FROM_ATTRIB(tok.value);
                 case ITEM_ATTRIB:
                     cout << "ITEM_ATTRIB" << endl;
                     break;
                 case KEY_ATTRIB:
                     cout << "KEY_ATTRIB" << endl;
-                    break;
+                    //return yy::parser::make_KEY_ATTRIB(tok.value);
                 case NAME_ATTRIB:
                     cout << "NAME_ATTRIB" << endl;
-                    break;
+                    ///return yy::parser::make_NAME_ATTRIB(tok.value);
             }
         }
         default: ;
