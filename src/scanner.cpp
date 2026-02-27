@@ -32,42 +32,21 @@ static string g_scan_file;
 static bool initialized = false;
 
 //yy::parser::symbol_type llex();
+// create parser & lexer
 static yy::parser parser;
 static Lexer lexer;
-
-/**
- * @brief
- * @param
- * @return
- */
-int lex_()
-{
-    if(!initialized)
-    {
-        lexer.init(g_scan_file, g_config_file);
-        initialized = true;
-    }
-    const unsigned int token_id = Lexer::get_token();
-    return static_cast<int>(token_id);
-}
 
 // return the next token
 sym_t lex()
 {
-    //char* TOKENS[6] = { "3", "+", "2", ";", "\n", "\0" };
-    static int i = 0;
-    switch(++i)
+    if(!initialized)
     {
-        case 1:
-            return yy::parser::make_DOLLAR_SIGN("$");
-        case 2:
-            return yy::parser::make_ID("abc");
-        case 3:
-            return yy::parser::make_END();
-        default: return 0;
+        lexer.init(g_scan_file, g_config_file, &parser);
+        initialized = true;
     }
+    const unsigned int token_id = lexer.get_token();
+    return static_cast<int>(token_id);
 }
-
 /**
  * @brief parse command line options
  * @param argc
@@ -110,7 +89,6 @@ int parse_options(const int argc, char* argv[])
     }
 
     // configure scanner ...
-    cout << "configure scanner ..." << endl;
     const string file = argv[optind + SRC_IDX_OFFSET];
     string config_file = file_flag ? g_config_file : ".config/default.txt";
     cout << FMT_FG_BLUE << "load configuration file=\"" << FMT_RESET
@@ -124,12 +102,6 @@ int parse_options(const int argc, char* argv[])
     if( argc > (optind + CONFIG_IDX_OFFSET) )
         config_file = argv[optind + CONFIG_IDX_OFFSET];
 
-    cout << "configuration loaded." << endl;
-    // create parser
-
-    // begin lexer ...
-    const Lexer lexer(file, config_file, &parser);
-    cout << "scanner configured." << endl;
     if(dump_flag)
     {
         cout << "dumping configuration ... " << endl;
@@ -137,18 +109,7 @@ int parse_options(const int argc, char* argv[])
         cout << lexer.get_expr() << endl;
         cout << "configuration dumped." << endl;
     }
-
-    // cout << "lexing ..." << endl;
-    // while(const int token_id = lex() )
-    // {
-    //     //lexer.print_token(token_id);
-    //     cout << "found token: " << token_id << endl;
-    // }
-    // testing
-    //lexer.tokenize();
-
-    cout << "parsing ..." << endl;
-    //yyparse();
+    cout << "start scan ..." << endl;
     parser.parse();
     cout << "finished scanning. " << endl;
     return 0;

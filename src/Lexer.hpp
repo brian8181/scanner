@@ -191,6 +191,11 @@ typedef struct token_def
 	string test_value;
 	int index;
 	string value;
+	yy::parser::symbol_type type;
+	// operator yy::parser::symbol_type()
+	// {
+	// 	return new yy::parser::symbol_type;
+	// }
 } token_def;
 
 typedef token_def token;
@@ -268,7 +273,7 @@ public:
 	 * @param config_file
 	 * @return bool
 	 */
-	bool init( const string& file, const string &config_file );
+	bool init( const string& file, const string &config_file, yy::parser* pp );
 
 	/**
 	 * @brief  load_config: load configuration from file
@@ -294,7 +299,7 @@ public:
 	 * @brief  get_token
 	 * @return int
 	 */
-	static int get_token();
+	int get_token();
 
 	/**
 	 * @brief reset to initial state
