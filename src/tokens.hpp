@@ -14,154 +14,173 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
+constexpr unsigned long UL_TILDE         = 0x100;
+constexpr unsigned long UL_TIC_MARK      = 0x200;
+constexpr unsigned long UL_EXCLAMATION   = 0x400;
+constexpr unsigned long UL_AT_SYMBOL     = 0x800;
+constexpr unsigned long UL_HASH_MARK     = 0x1000;
+constexpr unsigned long UL_DOLLAR_SIGN   = 0x2000;
+constexpr unsigned long UL_PERCENT_SIGN  = 0x4000;
+constexpr unsigned long UL_CARROT_SYMB   = 0x8000;
+constexpr unsigned long UL_AMPERSAND     = 0x10000;
+constexpr unsigned long UL_ASTERISK      = 0x10001;
+constexpr unsigned long UL_OPEN_PAREN    = 0x20000;
+constexpr unsigned long UL_CLOSE_PAREN   = 0x40000;
+constexpr unsigned long UL_DASH          = 0x80000;
+constexpr unsigned long UL_UNDERSCORE    = 0x100000;
+constexpr unsigned long UL_PLUS_SIGN     = 0x200000;
+constexpr unsigned long UL_EQUAL_SIGN    = 0x400000;
+constexpr unsigned long UL_OPEN_BRACE    = 0x800000;
+constexpr unsigned long UL_OPEN_BRACKET  = 0x1000000;
+constexpr unsigned long UL_CLOSE_BRACE   = 0x2000000;
+constexpr unsigned long UL_CLOSE_BRACKET = 0x4000000;
+constexpr unsigned long UL_VBAR          = 0x8000000;
+constexpr unsigned long UL_BACKSLASH     = 0x10000000;
+constexpr unsigned long UL_COLON         = 0x20000000;
+constexpr unsigned long UL_SEMI_COLON    = 0x40000000;
+constexpr unsigned long UL_DOUBLE_QUOTE  = 0x80000000;
+constexpr unsigned long UL_SINGLE_QUOTE  = 0x100000000;
+constexpr unsigned long UL_LESS_THAN     = 0x200000000;
+constexpr unsigned long UL_COMMA         = 0x400000000;
+constexpr unsigned long UL_GREATER_THAN  = 0x800000000;
+constexpr unsigned long UL_PERIOD        = 0x1000000000;
+constexpr unsigned long UL_QUESTION_MARK = 0x2000000000;
+constexpr unsigned long UL_SLASH         = 0x4000000000;
+constexpr unsigned long UL_NOT_EQUAL = 10;
+constexpr unsigned long UL_GREATER_THAN_EQUAL = 30;
+constexpr unsigned long UL_LESS_THAN_EQUAL = 31;
+constexpr unsigned long UL_NUMERIC_LITERAL   = 32;
+constexpr unsigned long UL_REQUIRE           = 33;
+constexpr unsigned long UL_CONFIG_LOAD       = 34;
+constexpr unsigned long UL_INSERT            = 35;
+constexpr unsigned long UL_INCLUDE           = 36;
+constexpr unsigned long UL_FILE_ATTRIB       = 37;
+constexpr unsigned long UL_ASSIGN            = 38;
+constexpr unsigned long UL_VAR_ATTRIB        = 39;
+constexpr unsigned long UL_VALUE_ATTRIB      = 40;
+constexpr unsigned long UL_FROM_ATTRIB       = 41;
+constexpr unsigned long UL_ITEM_ATTRIB       = 42;
+constexpr unsigned long UL_KEY_ATTRIB        = 43;
+constexpr unsigned long UL_NAME_ATTRIB       = 44;
+constexpr unsigned long UL_CAPITALIZE        = 45;
+constexpr unsigned long UL_CAT               = 46;
+constexpr unsigned long UL_COUNT_CHARACTERS  = 47;
+constexpr unsigned long UL_COUNT_PARAGRAPHS  = 48;
+constexpr unsigned long UL_COUNT_SENTENCES   = 49;
+constexpr unsigned long UL_COUNT_WORDS       = 50;
+constexpr unsigned long UL_DATE_FORMAT       = 51;
+constexpr unsigned long UL_DEFAULT           = 52;
+constexpr unsigned long UL_ESCAPE            = 53;
+constexpr unsigned long UL_INDENT            = 54;
+constexpr unsigned long UL_LOWER             = 55;
+constexpr unsigned long UL_UPPER             = 56;
+constexpr unsigned long UL_STRIP             = 57;
+constexpr unsigned long UL_NL2BR             = 58;
+constexpr unsigned long UL_REGX_REPLACE      = 59;
+constexpr unsigned long UL_REPLACE           = 60;
+constexpr unsigned long UL_SPACIFY           = 61;
+constexpr unsigned long UL_STRING_FORMAT     = 62;
+constexpr unsigned long UL_STRIP_TAGS        = 63;
+constexpr unsigned long UL_TRUNCATE          = 64;
+constexpr unsigned long UL_WORDWRAP          = 65;
+constexpr unsigned long UL_VALID_CHARS       = 66;
+constexpr unsigned long UL_FIRST_CHAR        = 67;
+constexpr unsigned long UL_ID                = 68;
+constexpr unsigned long UL_SYMBOL            = 69;
+constexpr unsigned long UL_CONST_SYMBOL      = 70;
+constexpr unsigned long UL_ARRAY             = 71;
+constexpr unsigned long UL_COMMENT           = 72;
+constexpr unsigned long UL_WHITESPACE        = 74;
+constexpr unsigned long UL_FILE_NAME         = 73;
+constexpr unsigned long UL_SKIP_TOKEN        = (-1);
+constexpr unsigned long UL_ERROR             = (-2);
+constexpr unsigned long UL_SCAN_EOF          =   0;
+constexpr unsigned long UL_ANYTHING          = (-3);
+
+
 static int index_ = 0;
 static int id = 0;
+inline static long g_index = 30;
 
-//const int TSIZE = 12;
-// token* tokens[TSIZE] =  {
-//                     new token{ ++id, "VBAR", "string", 0, 0,       "\\|",          "\\|",    ++index, string("null") },
-//                     new token{ ++id, "COLON", "string", 0, 0,       ":",          ":",    ++index, string("null") },
-//                     new token{ ++id, "LBRACKET", "string", 0, 0,       "\\[",          "\\[",    ++index, string("null") },
-//                     new token{ ++id, "RBRACKET", "string", 0, 0,       "\\]",          "\\]",    ++index, string("null") },
-//                     new token{ ++id, "LBRACE", "string", 0, 0,       "\\{",          "\\{",    ++index, string("null") },
-//                     new token{ ++id, "RBRACE", "string", 0, 0,       "\\}",          "\\}",    ++index, string("null") },
-//                     new token{ ++id, "ASTERISK",    "string", 0, 0,       "\\*",          "\\*",    ++index, string("null") },
-//                     new token{ ++id, "NOT_EQUAL",    "string", 0, 0,   "!=",         "!=",      ++index, string("null") },
-//                     new token{ ++id, "EQUAL",    "string", 0, 0,       "=",              "=",      ++index, string("null") },
-//                     new token{ ++id, "COMMA",    "string", 0, 0,       "\\,",          "\\,",    ++index, string("null") },
-//                     new token{ ++id, "MY_DOT",      "string", 0, 0,       "\\.",          "\\.",    ++index, string("null") },
-//                     new token{ ++id, "SYMBOL",   "string", 0, 0,       "\\$[a-zA-Z]+", "\\$abc", ++index, string("null") }
-//                 };
 
-inline vector tokens_ = {
-    new token{1, "VBAR", "string", 0, 0, "\\|", "\\|", 1, string("null")},
-    new token{2, "COLON", "string", 0, 0, ":", ":", 2, string("null")},
-    new token{3, "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"", 3, string("null")},
-    new token{4, "LBRACKET", "string", 0, 0, "\\[", "\\[", 4, string("null")},
-    new token{5, "RBRACKET", "string", 0, 0, "\\]", "\\]", 5, string("null")},
-    new token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
-    new token{7, "RBRACE", "string", 0, 0, "\\}", "\\}", 7, string("null")},
-    new token{8, "LPAREN", "string", 0, 0, "\\(", "\\(", 8, string("null")},
-    new token{9, "RPAREN", "string", 0, 0, "\\)", "\\)", 9, string("null")},
-    new token{10, "ASTERISK", "string", 0, 0, "\\*", "\\*", 10, string("null")},
-    new token{11, "NOT_EQUAL", "string", 0, 0, "!=", "!=", 11, string("null")},
-    new token{12, "EQUAL", "string", 0, 0, "=", "=", 12, string("null")},
-    new token{13, "COMMA", "string", 0, 0, "\\,", "\\,", 13, string("null")},
-    new token{14, "MY_DOT", "string", 0, 0, "\\.", "\\.", 14, string("null")},
-    new token{15, "CARROT", "string", 0, 0, "\\^", "\\^", 15, string("null")},
-    new token{16, "QUESTION_MARK", "string", 0, 0, "\\?", "\\?", 16, string("null")},
-    new token{17, "BACKSLASH", "string", 0, 0, "\\\\", "\\\\", 17, string("null")},
-    new token{18, "PLUS", "string", 0, 0, "\\+", "\\+", 18, string("null")},
-    new token{19, "MINUS", "string", 0, 0, "-", "-", 19, string("null")},
-    new token{20, "SYMBOL", "string", 0, 0, "\\$[a-zA-Z]+", "\\$abc", 20, string("null")},
-    new token{23, "DOLLAR_SIGN", "string", 0, 0, "\\$", "$", 21, string("null")},
-    new token{21, "WHITESPACE", "string", 0, 0, "[ \\t]", "\\t", 22, string("null")},
-    new token{22, "ANYTHING", "string", 0, 0, ".", "~#", 23, string("null")}
-};
-
-inline static int g_index = 0;
 /**
  * @brief g_tokens
  */
 inline vector g_tokens =
 {
-    /**
-    * All
-    */
-    //new token{++g_index, "DOLLAR_SIGN", "string", 0, 0, R"(\$)", "$",                                     g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "CARROT", "string", 0, 0, R"(\^)", "\\^",                                        g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "AMPERSAND", "string", 0, 0, R"(\*)", "\\*",                                     g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "ASTERISK", "string", 0, 0, R"(\*)", "\\*",                                      g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "LPAREN", "string", 0, 0, R"(\()", "\\(",                                        g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "RPAREN", "string", 0, 0, R"(\))", "\\)",                                        g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "MINUS", "string", 0, 0, "-", "-",                                               g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "PLUS", "string", 0, 0, R"(\+)", "\\+",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "EQUAL", "string", 0, 0, "=", "=",                                               g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "LBRACE", "string", 0, 0, R"(\{)", "\\{",                                        g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "RBRACE", "string", 0, 0, R"(\})", "\\}",                                        g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "LBRACKET", "string", 0, 0, R"(\[)", "\\[",                                      g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "RBRACKET", "string", 0, 0, R"(\])", "\\]",                                      g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "VBAR", "string", 0, 0, R"(\|)", "\\|",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "BACKSLASH", "string", 0, 0, R"(\\)", "\\\\",                                    g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "COLON", "string", 0, 0, ":", ":",                                               g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "SEMI_COLON", "string", 0, 0, ";", ";",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"",                                     g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "SINGLE_QUOTE", "string", 0, 0, "'", "'",                                       g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "LESS_THAN", "string", 0, 0, "<", "<",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "GREATER_THAN", "string", 0, 0, ">", ">",                                       g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "QUESTION_MARK", "string", 0, 0, R"(\?)", "\\?",                                 g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "COMMA", "string", 0, 0, R"(\,)", "\\,",                                         g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "DOT_", "string", 0, 0, R"(\.)", "\\.",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "SLASH", "string", 0, 0, "/", "/",                                               g_index, string("null"), yy::parser::make_YYUNDEF()},
-    /**
-     * @brief operators
-     */
-    new token{++g_index, "NOT_EQUAL", "string", 0, 0, "!=", "!=",                                         g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "GREATER_THAN_EQUAL", "string", 0, 0, ">=", ">=",                               g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "LESS_THAN_EQUAL", "string", 0, 0, "<=", "<=",                                  g_index, string("null"), yy::parser::make_YYUNDEF()},
-    /**
-     * @brief types
-     */
-    new token{++g_index,  "NUMERIC_LITERAL", "string", 0, 0, "[0-9]+", "12345",                           g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "ARRAY", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])", "/", g_index, string("null"), yy::parser::make_YYUNDEF()},
-    //new token{++g_index,  "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/",             g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "SYMBOL", "string", 0, 0, R"(\$[a-zA-Z]+)", "\\$abc",                            g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index, "COMMENT", "string", 0, 0, R"(\{[ ]*\*[^*}]*\*[ ]*\})",  R"(\* test *\)",        g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "CONST_SYMBOL", "string", 0, 0, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", g_index, string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "WHITESPACE", "string", 0, 0, R"([ \t])", "\\t",                                g_index, string("null"), yy::parser::make_YYUNDEF()},
-    //new token{++g_index,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    g_index, string("null"), yy::parser::make_YYUNDEF()},
-    //new token{++g_index,  "ANYTHING", "string", 0, 0, ".", "~#",                                          g_index, string("null"), yy::parser::make_YYUNDEF()},
-    /**
-     * @brief keywords
-     */
-    new token{++g_index,  "IF", "string", 0, 0, "if", "if", g_index,                                               string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "ELSE", "string", 0, 0, "else", "else", g_index,                                         string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "ELSEIF", "string", 0, 0, "elseif", "elseif", g_index,                                   string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "FOREACH", "string", 0, 0, "foreach", "forech", g_index,                                 string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "WHILE", "string", 0, 0, "while", "while", g_index,                                      string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "DO", "string", 0, 0, "do", "do", g_index,                                               string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "BREAK", "string", 0, 0, "break", "break", g_index,                                      string("null"), yy::parser::make_YYUNDEF()},
-    /**
-     * @brief pre proces
-     */
-    new token{++g_index,  "ASSIGN", "string", 0, 0, "assign", "assign", g_index,                                   string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "REQUIRE", "string",     0, 0, "require",     "require",     g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "INCLUDE", "string",     0, 0, "include",     "include",     g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "CONFIG_LOAD", "string", 0, 0, "config_load", "config_load", g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "INSERT", "string",      0, 0, "insert",      "insert",      g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    /**
-     * @brief attributes
-     */
-    new token{++g_index,  "VAR_ATTRIB", "string", 0, 0, "var_attrib", "var_attrib", g_index,                       string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "VALUE_ATTRIB", "string", 0, 0, "value_attrib", "value_attrib", g_index,                 string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "FROM_ATTRIB", "string", 0, 0, "from_attrib", "from_attrib", g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "ITEM_ATTRIB", "string", 0, 0, "item_attrib", "item_attrib", g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "KEY_ATTRIB", "string", 0, 0, "key_attrib", "key_attrib", g_index,                       string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "NAME_ATTRIB", "string", 0, 0, "name_attrib", "name_attrib", g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    /**
-     * @brief built-ins
-     */
-    new token{++g_index,  "CAPITALIZE", "string", 0, 0, "capitalize", "capitalize", g_index,                       string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "CAT", "string", 0, 0, "cat", "cat", g_index,                                            string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "COUNT_CHARACTERS", "string", 0, 0, "count_characters", "count_characters", g_index,     string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "COUNT_PARAGRAPHS", "string", 0, 0, "count_paragraphs", "count_paragraphs", g_index,     string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "COUNT_SENTENCES", "string", 0, 0, "count_sentences", "count_sentences", g_index,        string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "COUNT_WORDS", "string", 0, 0, "count_words", "count_words", g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "DATE_FORMAT", "string", 0, 0, "date_format", "date_format", g_index,                    string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "DEFAULT", "string", 0, 0, "default", "default", g_index,                                string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "ESCAPE", "string", 0, 0, "escape", "escape", g_index,                                   string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "INDENT", "string", 0, 0, "indent", "indent", g_index,                                   string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "LOWER", "string", 0, 0, "lower", "lower", g_index,                                      string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "UPPER", "string", 0, 0, "upper", "upper", g_index,                                      string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "STRIP", "string", 0, 0, "strip", "strip", g_index,                                      string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "NL2BR", "string", 0, 0, "nl2br", "nl2br", g_index,                                      string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "REGX_REPLACE", "string", 0, 0, "regx_replace", "regx_replace", g_index,                 string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "REPLACE", "string", 0, 0, "replace", "replace", g_index,                                string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "SPACIFY", "string", 0, 0, "spacify", "spacify", g_index,                                string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "STRING_FORMAT", "string", 0, 0, "string_format", "string_format", g_index,              string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "STRIP_TAGS", "string", 0, 0, "strip_tags", "strip_tags", g_index,                       string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "TRUNCATE", "string", 0, 0, "truncate", "truncate", g_index,                             string("null"), yy::parser::make_YYUNDEF()},
-    new token{++g_index,  "WORDWRAP", "string", 0, 0, "wordwrap", "wordwrap", g_index,                             string("null"), yy::parser::make_YYUNDEF()}
+    token {UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0, 0, R"(\$)", "$",                                0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CARROT_SYMB, "CARROT", "string", 0, 0, R"(\^)", "\\^",                                   0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_AMPERSAND, "AMPERSAND", "string", 0, 0, R"(\*)", "\\*",                                  0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_ASTERISK, "ASTERISK", "string", 0, 0, R"(\*)", "\\*",                                    0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_OPEN_PAREN, "LPAREN", "string", 0, 0, R"(\()", "\\(",                                    0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CLOSE_PAREN, "RPAREN", "string", 0, 0, R"(\))", "\\)",                                   0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_DASH, "MINUS", "string", 0, 0, "-", "-",                                                 0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_PLUS_SIGN, "PLUS", "string", 0, 0, R"(\+)", "\\+",                                       0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_EQUAL_SIGN, "EQUAL", "string", 0, 0, "=", "=",                                           0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_OPEN_BRACE, "LBRACE", "string", 0, 0, R"(\{)", "\\{",                                    0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CLOSE_BRACE, "RBRACE", "string", 0, 0, R"(\})", "\\}",                                   0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_OPEN_BRACKET, "LBRACKET", "string", 0, 0, R"(\[)", "\\[",                                0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CLOSE_BRACKET, "RBRACKET", "string", 0, 0, R"(\])", "\\]",                               0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_VBAR, "VBAR", "string", 0, 0, R"(\|)", "\\|",                                            0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_BACKSLASH, "BACKSLASH", "string", 0, 0, R"(\\)", "\\\\",                                 0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_COLON, "COLON", "string", 0, 0, ":", ":",                                                0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_SEMI_COLON, "SEMI_COLON", "string", 0, 0, ";", ";",                                      0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_SINGLE_QUOTE,  "SINGLE_QUOTE", "string", 0, 0, "'", "'",                                 0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_GREATER_THAN,  "GREATER_THAN", "string", 0, 0, ">", ">",                                 0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_QUESTION_MARK, "QUESTION_MARK", "string", 0, 0, R"(\?)", "\\?",                          0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_COMMA, "COMMA", "string", 0, 0, R"(\,)", "\\,",                                          0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_PERIOD, "DOT_", "string", 0, 0, R"(\.)", "\\.",                                          0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_SLASH, "SLASH", "string", 0, 0, "/", "/",                                                0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_NOT_EQUAL, "NOT_EQUAL", "string", 0, 0, "!=", "!=",                                         0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_GREATER_THAN_EQUAL,  "GREATER_THAN_EQUAL", "string", 0, 0, ">=", ">=",                               0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_LESS_THAN_EQUAL,  "LESS_THAN_EQUAL", "string", 0, 0, "<=", "<=",                                  0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_NUMERIC_LITERAL,  "NUMERIC_LITERAL", "string", 0, 0, "[0-9]+", "12345",                           0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_ARRAY,  "ARRAY", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])", "/", 0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_ID,  "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/",             0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_SYMBOL, "SYMBOL", "string", 0, 0, R"(\$[a-zA-Z]+)", "\\$abc",                            0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_COMMENT, "COMMENT", "string", 0, 0, R"(\{[ ]*\*[^*}]*\*[ ]*\})",  R"(\* test *\)",        0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CONST_SYMBOL,  "CONST_SYMBOL", "string", 0, 0, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", 0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_WHITESPACE,  "WHITESPACE", "string", 0, 0, R"([ \t])", "\\t",                                0, string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "IF", "string", 0, 0, "if", "if",                                               0,  string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "ELSEIF", "string", 0, 0, "elseif", "elseif",                                   0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "FOREACH", "string", 0, 0, "foreach", "forech",                                 0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "WHILE", "string", 0, 0, "while", "while",                                      0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "DO", "string", 0, 0, "do", "do",                                               0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_ASSIGN,  "ASSIGN", "string", 0, 0, "assign", "assign",                                   0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "BREAK", "string", 0, 0, "break", "break",                                      0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_REQUIRE,  "REQUIRE", "string",     0, 0, "require",     "require",                        0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_INCLUDE,  "INCLUDE", "string",     0, 0, "include",     "include",                        0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CONFIG_LOAD,  "CONFIG_LOAD", "string", 0, 0, "config_load", "config_load",                    0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_INSERT,  "INSERT", "string",      0, 0, "insert",      "insert",                         0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "VAR_ATTRIB", "string", 0, 0, "var_attrib", "var_attrib",                       0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "VALUE_ATTRIB", "string", 0, 0, "value_attrib", "value_attrib",                 0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "FROM_ATTRIB", "string", 0, 0, "from_attrib", "from_attrib",                    0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "ITEM_ATTRIB", "string", 0, 0, "item_attrib", "item_attrib",                    0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "KEY_ATTRIB", "string", 0, 0, "key_attrib", "key_attrib",                       0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {0,  "NAME_ATTRIB", "string", 0, 0, "name_attrib", "name_attrib",                    0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CAPITALIZE,  "CAPITALIZE", "string", 0, 0, "capitalize", "capitalize",                       0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_CAT,  "CAT", "string", 0, 0, "cat", "cat",                                            0,                                            string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_COUNT_CHARACTERS,  "COUNT_CHARACTERS", "string", 0, 0, "count_characters", "count_characters",     0,     string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_COUNT_PARAGRAPHS,  "COUNT_PARAGRAPHS", "string", 0, 0, "count_paragraphs", "count_paragraphs",     0,     string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_COUNT_SENTENCES,  "COUNT_SENTENCES", "string", 0, 0, "count_sentences", "count_sentences",        0,        string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_COUNT_WORDS,  "COUNT_WORDS", "string", 0, 0, "count_words", "count_words",                    0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_DATE_FORMAT,  "DATE_FORMAT", "string", 0, 0, "date_format", "date_format",                    0,                    string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_DEFAULT,  "DEFAULT", "string", 0, 0, "default", "default",                                0,                                string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_ESCAPE,  "ESCAPE", "string", 0, 0, "escape", "escape",                                   0,                                   string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_INDENT,  "INDENT", "string", 0, 0, "indent", "indent",                                   0,                                   string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_LOWER,  "LOWER", "string", 0, 0, "lower", "lower",                                      0,                                      string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_UPPER,  "UPPER", "string", 0, 0, "upper", "upper",                                      0,                                      string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_STRIP,  "STRIP", "string", 0, 0, "strip", "strip",                                      0,                                      string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_NL2BR,  "NL2BR", "string", 0, 0, "nl2br", "nl2br",                                      0,                                      string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_REGX_REPLACE,  "REGX_REPLACE", "string", 0, 0, "regx_replace", "regx_replace",                 0,                 string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_REPLACE,  "REPLACE", "string", 0, 0, "replace", "replace",                                0,                                string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_SPACIFY,  "SPACIFY", "string", 0, 0, "spacify", "spacify",                                0,                                string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_STRING_FORMAT,  "STRING_FORMAT", "string", 0, 0, "string_format", "string_format",              0,              string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_STRIP_TAGS,  "STRIP_TAGS", "string", 0, 0, "strip_tags", "strip_tags",                       0,                       string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_TRUNCATE,  "TRUNCATE", "string", 0, 0, "truncate", "truncate",                             0,                             string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_WORDWRAP,  "WORDWRAP", "string", 0, 0, "wordwrap", "wordwrap",                             0,                             string("null"), yy::parser::make_YYUNDEF()}
 };
 
 inline string e1 = R"((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
@@ -178,107 +197,17 @@ inline string expression = e1 + e2 + e3 + e4 + e5 + e6 + e8;
  * @brief lex states
 **/
 inline vector state_initial = {
-    token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
-    token{22, "COMMENT", "string", 0, 0, R"(\{[ \t]*\*[^*}]*\*[ \t]*\})", R"(\\\* test \\*\)", 23, string("null")},
-    token{22, "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "anything", 23, string("null")}
+    token{UL_OPEN_BRACE, "LBRACE", "string", 0, 0, R"(\{)", "\\{",                                        0, string("null"), yy::parser::make_YYUNDEF()},
+    token{UL_COMMENT, "COMMENT", "string", 0, 0, R"(\{[ ]*\*[^*}]*\*[ ]*\})",  R"(\* test *\)",        0, string("null"), yy::parser::make_YYUNDEF()},
+    token{0,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    0, string("null"), yy::parser::make_YYUNDEF()},
 };
 
 inline vector state_comment = {
-/**
- */
-new token{1, "VBAR", "string", 0, 0, "\\|", "\\|", 1, string("null")},
-new token{2, "COLON", "string", 0, 0, ":", ":", 2, string("null")},
-new token{10, "ASTERISK", "string", 0, 0, "\\*", "\\*", 10, string("null")},
-new token{13, "COMMA", "string", 0, 0, "\\,", "\\,", 13, string("null")},
-new token{14, "DOT_", "string", 0, 0, "\\.", "\\.", 14, string("null")},
-new token{15, "CARROT", "string", 0, 0, "\\^", "\\^", 15, string("null")},
-new token{16, "QUESTION_MARK", "string", 0, 0, "\\?", "\\?", 16, string("null")},
-new token{17, "BACKSLASH", "string", 0, 0, "\\\\", "\\\\", 17, string("null")},
-new token{18, "PLUS", "string", 0, 0, "\\+", "\\+", 18, string("null")},
-new token{19, "MINUS", "string", 0, 0, "-", "-", 19, string("null")},
-new token{20, "SYMBOL", "string", 0, 0, "\\$[a-zA-Z]+", "\\$abc", 20, string("null")},
-new token{23, "DOLLAR_SIGN", "string", 0, 0, "\\$", "$", 21, string("null")},
-/**
- */
-new token{4, "LBRACKET", "string", 0, 0, "\\[", "\\[", 4, string("null")},
-new token{5, "RBRACKET", "string", 0, 0, "\\]", "\\]", 5, string("null")},
-new token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
-new token{7, "RBRACE", "string", 0, 0, "\\}", "\\}", 7, string("null")},
-new token{8, "LPAREN", "string", 0, 0, "\\(", "\\(", 8, string("null")},
-new token{9, "RPAREN", "string", 0, 0, "\\)", "\\)", 9, string("null")},
-/**
- */
-new token{11, "NOT_EQUAL", "string", 0, 0, "!=", "!=", 11, string("null")},
-new token{12, "EQUAL", "string", 0, 0, "=", "=", 12, string("null")},
-new token{13, "GREATER_THAN", "string", 0, 0, ">", ">", 19, string("null")},
-new token{14, "LESS_THAN", "string", 0, 0, "<", "<", 19, string("null")},
-new token{15, "GREATER_THAN_EQUAL", "string", 0, 0, ">=", ">=", 19, string("null")},
-new token{16, "LESS_THAN_EQUAL", "string", 0, 0, "<=", "<=", 19, string("null")},
-new token{17, "GREATER_THAN", "string", 0, 0, ">", ">", 19, string("null")},
-new token{18, "SINGLE_QUOTE", "string", 0, 0, "'", "'", 19, string("null")},
-new token{19, "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"", 19, string("null")},
-new token{20, "SLASH", "string", 0, 0, "/", "/", 19, string("null")},
-new token{21, "BACK_SLASH", "string", 0, 0, "\\", "\\", 19, string("null")},
-/**
- */
-new token{22, "NUMERIC_LITERAL", "string", 0, 0, "[0-9]+", "12345", 19, string("null")},
-new token{23, "ARRAY", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])", "/", 19, string("null")},
-new token{24, "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/", 19, string("null")},
-new token{ 25, "SYMBOL", "string", 0, 0, R"(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/", 19, string("null")},
-new token{26, "CONST_SYMBOL", "string", 0, 0, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", 19, string("null")},
-//new token{27, "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...", 19, string("null")},
-new token{28, "WHITESPACE", "string", 0, 0, "[ \\t]", "\\t", 22, string("null")},
-new token{29, "ANYTHING", "string", 0, 0, ".", "~#", 23, string("null")},
-/**
- */
-new token{30, "REQUIRE", "string", 0, 0, "require", "require", 23, string("null")},
-new token{31, "INCLUDE", "string", 0, 0, "include", "include", 23, string("null")},
-new token{32, "CONFIG_LOAD", "string", 0, 0, "config_load", "config_load", 23, string("null")}
+    new token{UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()}
 };
 
 inline vector state_escaped = {
-    // new token{3, "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"", 3, string("null")},
-    // new token{3, "SINGLE_QUOTE", "string", 0, 0, "'", "'", 3, string("null")},
-    // new token{3, "AT", "string", 0, 0, "@", "@", 3, string("null")},
-    new token{1, "VBAR", "string", 0, 0, "\\|", "\\|", 1, string("null")},
-    new token{2, "COLON", "string", 0, 0, ":", ":", 2, string("null")},
-    new token{4, "LBRACKET", "string", 0, 0, "\\[", "\\[", 4, string("null")},
-    new token{5, "RBRACKET", "string", 0, 0, "\\]", "\\]", 5, string("null")},
-    new token{6, "LBRACE", "string", 0, 0, "\\{", "\\{", 6, string("null")},
-    new token{7, "RBRACE", "string", 0, 0, "\\}", "\\}", 7, string("null")},
-    new token{8, "LPAREN", "string", 0, 0, "\\(", "\\(", 8, string("null")},
-    new token{9, "RPAREN", "string", 0, 0, "\\)", "\\)", 9, string("null")},
-    new token{10, "ASTERISK", "string", 0, 0, "\\*", "\\*", 10, string("null")},
-    new token{11, "NOT_EQUAL", "string", 0, 0, "!=", "!=", 11, string("null")},
-    new token{12, "EQUAL", "string", 0, 0, "=", "=", 12, string("null")},
-    new token{13, "COMMA", "string", 0, 0, "\\,", "\\,", 13, string("null")},
-    new token{14, "DOT", "string", 0, 0, "\\.", "\\.", 14, string("null")},
-    // new token{15, "CARROT", "string", 0, 0, "\\^", "\\^", 15, string("null")},
-    // new token{16, "QUESTION_MARK", "string", 0, 0, "\\?", "\\?", 16, string("null")},
-    // new token{17, "BACKSLASH", "string", 0, 0, "\\\\", "\\\\", 17, string("null")},
-    // new token{18, "PLUS", "string", 0, 0, "\\+", "\\+", 18, string("null")},
-    // new token{19, "MINUS", "string", 0, 0, "-", "-", 19, string("null")},
-    // new token{23, "DOLLAR_SIGN", "string", 0, 0, "\\$", "$", 21, string("null")},
-    // new token{25, "GREATER_THAN", "string", 0, 0, ">", ">", 19, string("null")},
-    // new token{19, "LESS_THAN", "string", 0, 0, "<", "<", 19, string("null")},
-    // new token{19, "GREATER_THAN_EQUAL", "string", 0, 0, ">=", ">=", 19, string("null")},
-    // new token{19, "LESS_THAN_EQUAL", "string", 0, 0, "<=", "<=", 19, string("null")},
-    // new token{19, "GREATER_THAN", "string", 0, 0, ">", ">", 19, string("null")},
-    //
-    // new token{19, "SINGLE_QUOTE", "string", 0, 0, "'", "'", 19, string("null")},
-    // new token{19, "DOUBLE_QUOTE", "string", 0, 0, "\"", "\"", 19, string("null")},
-    // new token{19, "SLASH", "string", 0, 0, "/", "/", 19, string("null")},
-    // new token{19, "BACK_SLASH", "string", 0, 0, "\\", "\\", 19, string("null")},
-    //
-    // new token{19, "NUMERIC_LITERAL", "string", 0, 0, "[0-9]+", "12345", 19, string("null")},
-    // new token{19, "ARRAY", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])", "/", 19, string("null")},
-    // new token{19, "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/", 19, string("null")},
-    // new token{20, "SYMBOL", "string", 0, 0, "\\$[a-zA-Z]+", "\\$abc", 20, string("null")},
-    // //new token{19, "SYMBOL", "string", 0, 0, R"(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/", 19, string("null")},
-    // new token{19, "CONST_SYMBOL", "string", 0, 0, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", 19, string("null")},
-    // new token{19, "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...", 19, string("null")},
-    // new token{21, "WHITESPACE", "string", 0, 0, "[ \\t]", "\\t", 22, string("null")},
-    // new token{22, "ANYTHING", "string", 0, 0, ".", "~#", 23, string("null")}
+    new token{UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()}
 };
 
 // .[{()\*+?|^$
@@ -295,97 +224,21 @@ inline vector state_escaped = {
 #define IF_BLOCK 7
 #define IF_CONDITION 8
 
-inline map<int, vector<token_def *> > state_tokens_tab = {
+inline map<unsigned long, vector<token_def *> > state_tokens_tab = {
     {INITIAL_, {state_comment}}, {COMMENT_, {state_comment}}, {ESCAPED_, {state_escaped}}
 };
 
-// tokens
-#define VBAR                10
-#define COLON               20
-#define LBRACKET            30
-#define RBRACKET            40
-#define LBRACE              50
-#define RBRACE              60
-#define LPAREN              70
-#define RPAREN              80
-#define COMMA               90
-//#define SEMI_COLON         100
-#define DOUBLE_QUOTE       110
-#define SINGLE_QUOTE       120
-#define SLASH              130
-#define BACK_SLASH         140
-#define AT                 150
-//#define PLUS               160
-#define MINUS              170
-#define ASTERISK            180
-#define EQUAL              190
-#define NOT_EQUAL          200
-#define MY_DOT                210
-#define INDIRECT_MEMBER_OPER    220
-#define PERCENT            230
-#define AMPERSAND          240
-#define NOT                250
-#define AND                260
-#define OR                 270
-#define LESS_THAN          280
-#define LESS_THAN_EQUAL    290
-#define GREATER_THAN       300
-#define GREATER_THAN_EQUAL 400
-#define NUMERIC_LITERAL    410
-#define REQUIRE            420
-#define CONFIG_LOAD        430
-#define INSERT             440
-#define INCLUDE            450
-#define FILE_ATTRIB        460
-#define ASSIGN             470
-#define VAR_ATTRIB         480
-#define VALUE_ATTRIB       490
-#define FROM_ATTRIB        500
-#define ITEM_ATTRIB        510
-#define KEY_ATTRIB         520
-#define NAME_ATTRIB        530
-#define CAPITALIZE         540
-#define CAT                550
-#define COUNT_CHARACTERS   560
-#define COUNT_PARAGRAPHS   570
-#define COUNT_SENTENCES    580
-#define COUNT_WORDS        590
-#define DATE_FORMAT        600
-#define DEFAULT            610
-#define ESCAPE             620
-#define INDENT             630
-#define LOWER              640
-#define UPPER              650
-#define STRIP              660
-#define NL2BR              670
-#define REGX_REPLACE       680
-#define REPLACE            690
-#define SPACIFY            700
-#define STRING_FORMAT      710
-#define STRIP_TAGS         720
-#define TRUNCATE           730
-#define WORDWRAP           740
-#define VALID_CHARS        750
-#define FIRST_CHAR         760
-#define ID                 770
-#define SYMBOL             780
-#define CONST_SYMBOL       790
-#define ARRAY              800
-#define COMMENT            810
-#define FILE_NAME          820
-#define WHITESPACE         822
-#define SKIP_TOKEN           (-1)
-#define ERROR               (-2)
-#define SCAN_EOF             0
-#define ANYTHING            (-3)
+inline vector<unsigned long> INITIAL_STATE = { UL_OPEN_BRACE };
+inline vector<unsigned long> COMMENT_STATE = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 
-inline int Lexer::on_state(const state_t &s) {
+inline unsigned long Lexer::on_state(const state_t &s)
+{
     switch (s.id) {
         case INITIAL_:
             return INITIAL_;
         default: ;
     }
-    return ERROR;
+    return -1;
 }
 
 inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const token_def &tok)
@@ -396,19 +249,20 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
         {
             switch (tok.id)
             {
-                case LBRACKET:
+                case UL_OPEN_BRACE:
                     cout << "LBRACKET" << endl;
                     set_state(*_state_tab[ESCAPED_]);
+                    // todo stream the prefix
                     return yy::parser::make_LBRACE("{");
-                case COMMENT:
+                case UL_COMMENT:
                     return yy::parser::make_YYUNDEF();
-                case WHITESPACE:
+                case UL_WHITESPACE:
                     return yy::parser::make_YYUNDEF();
-                case SKIP_TOKEN:
+                case UL_SKIP_TOKEN:
                     return yy::parser::make_YYUNDEF();
-                case SCAN_EOF:
+                case UL_SCAN_EOF:
                     return EOF;
-                case ANYTHING:
+                case UL_ANYTHING:
                     return yy::parser::make_YYUNDEF();
                 default:
                     return yy::parser::make_YYUNDEF();
@@ -419,105 +273,76 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
         {
             switch (tok.id)
             {
-                case DOUBLE_QUOTE:
-                    cout << "DOUBLE_QUOTE" << endl;
+                case UL_DOUBLE_QUOTE:
                     return yy::parser::make_DOUBLE_QUOTE(tok.value);
-                case SINGLE_QUOTE:
-                    cout << "SINGLE_QUOTE" << endl;
+                case UL_SINGLE_QUOTE:
                     return yy::parser::make_SINGLE_QUOTE(tok.value);
-                case SLASH:
-                    cout << "SLASH" << endl;
+                case UL_SLASH:
                     return yy::parser::make_SLASH();
-                case BACK_SLASH:
-                    cout << "BACK_SLASH" << endl;
+                case UL_BACKSLASH:
                     return yy::parser::make_BACK_SLASH(tok.value);
-                case AT:
-                    cout << "AT" << endl;
+                case UL_AT_SYMBOL:
                     return yy::parser::make_AT(tok.value);
-                case MINUS:
-                    cout << "MINUS" << endl;
+                case UL_DASH:
                     return yy::parser::make_MINUS();
-                case ASTERISK:
-                    cout << "ASTERISK" << endl;
+                case UL_ASTERISK:
                     return yy::parser::make_ASTERISK();
-                case EQUAL:
-                    cout << "EQUAL" << endl;
+                case UL_EQUAL_SIGN:
                     return yy::parser::make_EQUAL();
-                case NOT_EQUAL:
-                    cout << "NOT_EQUAL" << endl;
+                case UL_NOT_EQUAL:
                     return yy::parser::make_NOT_EQUAL();
                     //case DOT             : break;
                     //case INDIRECT_MEMBER_SELECT: break;
-                case PERCENT:
-                    cout << "PERCENT" << endl;
+                case UL_PERCENT_SIGN:
                     return yy::parser::make_PERCENT();
-                case AMPERSAND:
-                    cout << "AMPERSAND" << endl;
+                case UL_AMPERSAND:
                     return yy::parser::make_AMPERSAND(tok.value);
-                case NOT:
-                    cout << "NOT" << endl;
-                    return yy::parser::make_NOT(tok.value);
-                case AND:
-                    cout << "AND" << endl;
-                    return yy::parser::make_AND(tok.value);
-                case OR:
-                    cout << "OR:" << endl;
-                    return yy::parser::make_OR(tok.value);
-                case LESS_THAN:
-                    cout << "LESS_THAN" << endl;
+                //case UL_NOT:
+                   // return yy::parser::make_NOT(tok.value);
+                //case OR:
+                   // return yy::parser::make_OR(tok.value);
+                //case AND:
+                   // return yy::parser::make_AND(tok.value);
+                case UL_LESS_THAN:
                     return yy::parser::make_LESS_THAN();
-                case LESS_THAN_EQUAL:
-                    cout << "LESS_THAN_EQUAL" << endl;
+                case UL_LESS_THAN_EQUAL:
                     return yy::parser::make_LESS_THAN_EQUAL();
-                case GREATER_THAN:
-                    cout << "GREATER_THAN" << endl;
+                case UL_GREATER_THAN:
                     return yy::parser::make_GREATER_THAN();
-                case GREATER_THAN_EQUAL:
-                    cout << "GREATER_THAN_EQUAL" << endl;
+                case UL_GREATER_THAN_EQUAL:
                     return yy::parser::make_GREATER_THAN_EQUAL();
-                case NUMERIC_LITERAL:
-                    cout << "NUMERIC_LITERAL" << endl;
+                case UL_NUMERIC_LITERAL:
                     return yy::parser::make_NUMERIC_LITERAL(tok.value);
-                case REQUIRE:
-                    cout << "REQUIRE" << endl;
+                case UL_REQUIRE:
                     return yy::parser::make_REQUIRE(tok.value);
-                case CONFIG_LOAD:
-                    cout << "CONFIG_LOAD" << endl;
+                case UL_CONFIG_LOAD:
                     return yy::parser::make_CONFIG_LOAD(tok.value);
-                case INSERT:
-                    cout << "INSERT" << endl;
+                case UL_INSERT:
                     return yy::parser::make_INSERT(tok.value);
-                case INCLUDE:
-                    cout << "INCLUDE" << endl;
+                case UL_INCLUDE:
                     return yy::parser::make_INCLUDE(tok.value);
-                case FILE_ATTRIB:
-                    cout << "FILE_ATTRIB" << endl;
-                    return yy::parser::make_FILE_ATTRIB(tok.value);
-                case ASSIGN:
-                    cout << "ASSIGN" << endl;
+                case UL_FILE_ATTRIB:
+                      return yy::parser::make_FILE_ATTRIB(tok.value);
+                case UL_ASSIGN:
                     return yy::parser::make_ASSIGN(tok.value);
-                case VAR_ATTRIB:
-                    cout << "VAR_ATTRIB" << endl;
+                case UL_VAR_ATTRIB:
                     return yy::parser::make_VAR_ATTRIB(tok.value);
-                case VALUE_ATTRIB:
-                    cout << "VALUE_ATTRIB" << endl;
+                case UL_VALUE_ATTRIB:
                     return yy::parser::make_VALUE_ATTRIB(tok.value);
-                case FROM_ATTRIB:
-                    cout << "FROM_ATTRIB" << endl;
+                case UL_FROM_ATTRIB:
                     return yy::parser::make_FROM_ATTRIB(tok.value);
-                case ITEM_ATTRIB:
-                    cout << "ITEM_ATTRIB" << endl;
+                case UL_ITEM_ATTRIB:
                     return yy::parser::make_ITEM_ATTRIB(tok.value);
-                case KEY_ATTRIB:
-                    cout << "KEY_ATTRIB" << endl;
+                case UL_KEY_ATTRIB:
                     return yy::parser::make_KEY_ATTRIB(tok.value);
-                case NAME_ATTRIB:
-                    cout << "NAME_ATTRIB" << endl;
+                case UL_NAME_ATTRIB:
                     return yy::parser::make_NAME_ATTRIB(tok.value);
+                default: ;
             }
         }
         default: ;
     }
+    print_token(tok.id);
     return yy::parser::make_END();
 }
 

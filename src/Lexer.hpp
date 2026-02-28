@@ -13,6 +13,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <sstream>
 #include "pparser.tab.hh"
 #include <regex>
 #include <boost/regex.hpp>
@@ -23,6 +24,7 @@ using std::list;
 using std::map;
 using std::pair;
 using std::regex;
+using std::stringstream;
 
 /* LEX TYPES */
 #define right_assoc 0x8
@@ -182,14 +184,14 @@ typedef struct token_match_t
 
 typedef struct token_def
 {
-	int id;
+	unsigned long id;
 	string name;
 	string stype;
 	int itype;
 	int lex_t;
 	string rexp;
 	string test_value;
-	int index;
+	unsigned long index;
 	string value;
 	yy::parser::symbol_type type;
 	// operator yy::parser::symbol_type()
@@ -315,7 +317,7 @@ public:
 
 	yy::parser::symbol_type on_token( const state_t& state, const token_def& token );
 	yy::parser::symbol_type on_token_action( const state_t& state, const token_def &token );
-	int on_state(const state_t &s);
+	unsigned long on_state(const state_t &s);
 
 	/**
 	 * @brief tokenize
@@ -345,11 +347,11 @@ public:
 protected:
 	yy::parser*                    _pparser;
 	string                        _config_file;
-	vector<token_def*>            _tokens;
+	vector<token_def>            _tokens;
 	vector<state_t*>              _states;
 	map<int, token_def*>          _idx_tab;  // idx -> token_def
 	map<int, token_def*>          _id_tab;   // id -> token_def
-	map<string, token*>           _name_tab; // name -> token_def
+	map<string, token_def*>         _name_tab; // name -> token_def
 	map<int, vector<token_def*>>  _state_tokens_tab;
 	map<int, state_t*>            _state_tab;
 	vector<token_def*>            _matches;
@@ -361,6 +363,7 @@ protected:
 	boost::sregex_iterator*      _p_iter;
 	state_t*                     _state;
 	string                       _expr;
+	stringstream                 _sout;
 };
 
 //}
