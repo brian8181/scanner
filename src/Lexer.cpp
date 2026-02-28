@@ -115,7 +115,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     #endif
 
     // bkp todo 1-3 ...
-    _state = new state_t{ 1, "INITIAL" };
+    _state = new state_t{ INITIAL_, "INITIAL" };
     _states.push_back(_state);
     _state_tab[_state->id] = _state;
     vector<token_def*> tokens; // bkp todo tokens for state
@@ -130,6 +130,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     // initialize expression ...
     init_expr();
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
+    _expr = R"((\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
     _rexp = boost::regex( _expr, boost::regex::extended );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
@@ -310,7 +311,6 @@ void Lexer::tokenize()
  */
 yy::parser::symbol_type Lexer::get_token()
 {
-    //SKIPPED_TOKEN:
     stringstream ss;
     token* ptoken = nullptr;
     if(*_p_iter != _end)
@@ -328,7 +328,7 @@ yy::parser::symbol_type Lexer::get_token()
                 if(!prefix.empty())
                     _sout << prefix;
 
-                ptoken = _idx_tab[i+1];
+                ptoken = _idx_tab[i];
                 ptoken->value = m[i].str(); // set match value
                 if(ptoken->id == UL_WHITESPACE)
                 {
@@ -375,7 +375,6 @@ const string& Lexer::get_expr() const
  */
 void Lexer::init_expr()
 {
-    // generate expression from sub expressions (1?)|(2?)|(3?)|...|(n?)
     stringstream ss;
     const size_t len = _tokens.size();
     for(int i = 0; i < len; ++i)
@@ -385,31 +384,6 @@ void Lexer::init_expr()
     }
     _expr = ss.str( );
     _expr.pop_back( );
-
-    // #ifndef LEX_TEST
-    // auto index using test_value
-    // const auto rgx = boost::regex( _expr );
-    // boost::smatch m;
-    // for(int i = 0; i < len; ++i)
-    // {
-    //     cout << "checking indexes ..." << endl;
-    //     token* ptoken = _tokens[i];
-    //     boost::regex_search( ptoken->test_value, m, rgx );
-    //     const size_t sz = m.size();
-    //     for(int j = 1; j < sz; ++j)
-    //     {
-    //         cout << j << ", ";
-    //         if(m[j].matched)
-    //         {
-    //             cout << endl;
-    //             cout << "found idx = " << j << endl;
-    //             ptoken->index = j;
-    //             _idx_tab[ptoken->index] = ptoken;
-    //             break;
-    //         }
-    //     }
-    // }
-    // #endif
 }
 
 /**
@@ -417,7 +391,7 @@ void Lexer::init_expr()
  */
 void Lexer::print_token( int id )
 {
-    const token* ptoken = &_tokens[id-1];
+    const token* ptoken = _id_tab[id];
     cout << "token:\n{"
             << setw(5) << left << "\n\tid: "         << setw(10) << right << ptoken->id
             << setw(5) << left << "\n\tname: "       << setw(10) << right << ptoken->name
@@ -430,11 +404,13 @@ void Lexer::print_token( int id )
     << endl;
 }
 
-state_t* Lexer::get_state() const {
+state_t* Lexer::get_state() const
+{
     return _state;
 }
 
-void Lexer::set_state(const state_t& s) const {
+void Lexer::set_state(const state_t& s) const
+{
     _state->id = s.id;
     _state->name = s.name;
 }

@@ -246,6 +246,7 @@ using yy::parser;
 
 inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const token_def &tok)
 {
+    print_token(tok.id);
     switch (s.id)
     {
         case INITIAL_:
@@ -349,7 +350,7 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
         }
         default: ;
     }
-    print_token(tok.id);
+
     return yy::parser::make_END();
 }
 #endif
