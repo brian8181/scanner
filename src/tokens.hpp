@@ -93,6 +93,7 @@ constexpr unsigned long UL_COMMENT           = 72;
 constexpr unsigned long UL_WHITESPACE        = 74;
 constexpr unsigned long UL_FILE_NAME         = 73;
 constexpr unsigned long UL_SKIP_TOKEN        = (-1);
+constexpr unsigned long UL_UNESCAPED_TEXT        = (-5);
 constexpr unsigned long UL_ERROR             = (-2);
 constexpr unsigned long UL_SCAN_EOF          =   0;
 constexpr unsigned long UL_ANYTHING          = (-3);
@@ -141,7 +142,7 @@ inline vector g_tokens =
     token {UL_COMMENT, "COMMENT", "string", 0, 0, R"(\{[ ]*\*[^*}]*\*[ ]*\})",  R"(\* test *\)",        0, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_CONST_SYMBOL,  "CONST_SYMBOL", "string", 0, 0, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", 0, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_WHITESPACE,  "WHITESPACE", "string", 0, 0, R"([ \t])", "\\t",                                0, string("null"), yy::parser::make_YYUNDEF()},
-    token {0,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_UNESCAPED_TEXT,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    0, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()},
     token {0,  "IF", "string", 0, 0, "if", "if",                                               0,  string("null"), yy::parser::make_YYUNDEF()},
     token {0,  "ELSEIF", "string", 0, 0, "elseif", "elseif",                                   0,                    string("null"), yy::parser::make_YYUNDEF()},
@@ -241,6 +242,8 @@ inline unsigned long Lexer::on_state(const state_t &s)
     return -1;
 }
 
+using yy::parser;
+
 inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const token_def &tok)
 {
     switch (s.id)
@@ -249,6 +252,10 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
         {
             switch (tok.id)
             {
+                case UL_DOLLAR_SIGN:
+                    return parser::make_DOLLAR_SIGN(tok.value);
+                case UL_ID:
+                    return parser::make_ID(tok.value);
                 case UL_OPEN_BRACE:
                     cout << "LBRACKET" << endl;
                     set_state(*_state_tab[ESCAPED_]);
@@ -257,7 +264,6 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                 case UL_COMMENT:
                     return yy::parser::make_YYUNDEF();
                 case UL_WHITESPACE:
-                    return yy::parser::make_YYUNDEF();
                 case UL_SKIP_TOKEN:
                     return yy::parser::make_YYUNDEF();
                 case UL_SCAN_EOF:
@@ -291,7 +297,8 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                     return yy::parser::make_EQUAL();
                 case UL_NOT_EQUAL:
                     return yy::parser::make_NOT_EQUAL();
-                    //case DOT             : break;
+                case UL_PERIOD:
+                    return yy::parser::make_DOT(tok.value);
                     //case INDIRECT_MEMBER_SELECT: break;
                 case UL_PERCENT_SIGN:
                     return yy::parser::make_PERCENT();
@@ -345,22 +352,4 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
     print_token(tok.id);
     return yy::parser::make_END();
 }
-
-//  enum yytokentype
-//  {
-//      YYEMPTY = -2,
-//      YYEOF = 0,                     /* "end of file"  */
-//      YYERROR = 256,                 /* error  */
-//      YYUNDEF = 257,                 /* "invalid token"  */
-//      INTEGER = 258,                 /* INTEGER  */
-//      //token_ = 259,                   /* token  */
-//      MY_SEMI_COLON = 260,              /* SEMI_COLON  */
-//      NEWLINE = 261,                 /* NEWLINE  */
-//      MY_PLUS = 262,                    /* PLUS  */
-//      // MINUS = 263,                   /* MINUS  */
-//      // MULT = 264,                    /* MULT  */
-//      // DIV = 265                      /* DIV  */
-// };
-//typedef yytokentype yytoken_kind_t;
-
 #endif

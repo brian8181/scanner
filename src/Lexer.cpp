@@ -106,6 +106,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     // init tables from tokens.hpp
     for(int i = 0; i < g_tokens.size(); ++i)
     {
+        g_tokens[i].index = i+1;
         _tokens.push_back(g_tokens[i]);
         _id_tab[g_tokens[i].id] = &g_tokens[i];
         _idx_tab[g_tokens[i].index] = &g_tokens[i];
@@ -287,9 +288,10 @@ void Lexer::tokenize()
                 {
                     cout << "error: invalid characters in sequence (" << prefix << ")" << endl;
                 }
-                //ptoken = _idx_tab[i]; // look up by index
-                ptoken = &_tokens[i-1];
-                ptoken->value = m[i].str();
+
+                ptoken = _idx_tab[i]; // look up by index
+                ptoken->value = m[i].str(); // set match value
+
                 cout << "matched index: " << i << endl;
                 print_token(ptoken->id);
                 // if(on_token( *_state, *ptoken ) != yy::parser::symbol_type( token::))
@@ -326,15 +328,12 @@ yy::parser::symbol_type Lexer::get_token()
                 if(!prefix.empty())
                     _sout << prefix;
 
-                ptoken = &_tokens[i-1]; // by index
-                ptoken->index = i;
+                ptoken = _idx_tab[i+1];
                 ptoken->value = m[i].str(); // set match value
-
                 if(ptoken->id == UL_WHITESPACE)
                 {
                     ++(*_p_iter);
-                    // recursive skipping logic
-                    return get_token();
+                    return get_token(); // recursive skipping logic
                 }
                 _matches.push_back(ptoken); // push matched
                 break; // end loop
