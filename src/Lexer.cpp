@@ -130,7 +130,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     // initialize expression ...
     init_expr();
     //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
-    _expr = R"((\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
+    _expr = R"((\$)|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\{)|([ \t]))";
     _rexp = boost::regex( _expr, boost::regex::extended );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
@@ -315,7 +315,6 @@ yy::parser::symbol_type Lexer::get_token()
     token* ptoken = nullptr;
     if(*_p_iter != _end)
     {
-        cout << "get_token " << endl;
         // need to look up by sub_match index
         boost::smatch m = *(*_p_iter);
         size_t len = m.size();
@@ -332,9 +331,11 @@ yy::parser::symbol_type Lexer::get_token()
                 ptoken->value = m[i].str(); // set match value
                 if(ptoken->id == UL_WHITESPACE)
                 {
+                    cout << "\\s";
                     ++(*_p_iter);
                     return get_token(); // recursive skipping logic
                 }
+                cout << endl;
                 _matches.push_back(ptoken); // push matched
                 break; // end loop
             }

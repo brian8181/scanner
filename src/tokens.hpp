@@ -103,11 +103,18 @@ static int index_ = 0;
 static int id = 0;
 inline static long g_index = 30;
 
+inline vector g_tokens =
+{
+    token {UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0, 0, R"(\$)", "$",                                0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_ID,  "ID", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/",             0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_OPEN_BRACE, "LBRACE", "string", 0, 0, R"(\{)", "\\{",                                    0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_WHITESPACE,  "WHITESPACE", "string", 0, 0, R"([ \t])", "\\t",                                0, string("null"), yy::parser::make_YYUNDEF()},
+};
 
 /**
  * @brief g_tokens
  */
-inline vector g_tokens =
+inline vector g_tokens__ =
 {
     token {UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0, 0, R"(\$)", "$",                                0, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_CARROT_SYMB, "CARROT", "string", 0, 0, R"(\^)", "\\^",                                   0, string("null"), yy::parser::make_YYUNDEF()},
