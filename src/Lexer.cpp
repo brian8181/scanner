@@ -133,7 +133,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
 
     // initialize expression ...
     init_expr();
-    //_rexp = boost::regex( EVERYTHING, boost::regex::ECMAScript );
+    // DEBUGGING OVERRIDE _expr
     _expr = R"((\$)|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\{)|([ \t]))";
     _rexp = boost::regex( _expr, boost::regex::extended );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
