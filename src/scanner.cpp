@@ -56,9 +56,9 @@ sym_t lex()
  */
 int parse_options(const int argc, char* argv[])
 {
-    int opt;
-    auto optstring = "hVdf:";
-    const struct option longopts[] = {
+    int option;
+    const auto options_string = "hVdf:";
+    const struct option long_options[] = {
         {"help",        no_argument, nullptr,   'h'},
         {"version",     no_argument, nullptr,   'V'},
         {"file",        0, nullptr,   'f'},
@@ -66,9 +66,9 @@ int parse_options(const int argc, char* argv[])
         {nullptr,          0, nullptr,    0 }
     };
 
-    while ((opt = getopt_long(argc, argv, optstring, longopts, nullptr)) != -1)
+    while ((option = getopt_long(argc, argv, options_string, long_options, nullptr)) != -1)
     {
-        switch (opt)
+        switch (option)
         {
             case 'h':
                 cout << "Help message" << endl;
@@ -84,7 +84,7 @@ int parse_options(const int argc, char* argv[])
                 dump_flag = true;
                 break;
             default:
-                cerr << "Unknown option: " << opt << endl;
+                cerr << "Unknown option: " << option << endl;
                 return 1;
         }
     }

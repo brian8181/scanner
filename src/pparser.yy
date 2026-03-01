@@ -79,7 +79,7 @@
 %token<std::string> AT VBAR AMPERSAND AND OR NOT DOLLAR_SIGN DOT PERIOD
 %token<std::string> INDIRECT_MEMBER
 %token<std::string> STRING_LITERAL NUMERIC_LITERAL
-%token<std::string> ID CONST_ID
+%token<std::string> IDENTIFIER ID CONST_ID
 %token<std::string> VAR_ATTRIB VALUE_ATTRIB FILE_ATTRIB FROM_ATTRIB KEY_ATTRIB NAME_ATTRIB ITEM_ATTRIB FILE_NAME
 %token COMMENT
 %token<int> NUMBER
@@ -191,8 +191,8 @@ params:
                                                                 ;
 
 symbol:
-    DOLLAR_SIGN ID                                              {
-                                                                    cout << FMT_FG_YELLOW << "PARSER symbol: | ID=\"" << $1 << "\"" << FMT_RESET << endl;;
+    DOLLAR_SIGN IDENTIFIER                                      {
+                                                                    cout << FMT_FG_YELLOW << "PARSER symbol: | IDENTIFIER=\"" << $1 << "\"" << FMT_RESET << endl;;
                                                                     $$=$2;
                                                                 }
     | CONST_ID                                                  {

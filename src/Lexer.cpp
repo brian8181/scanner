@@ -115,7 +115,6 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     #endif
 
     // bkp todo 1-3 ...
-    //_state = new state_t{ INITIAL_, "INITIAL" };
     _states.push_back(&sINITIAL);
     _state = &sINITIAL;
     _state_tab[_state->id] = _state;
@@ -317,12 +316,12 @@ void Lexer::tokenize()
 yy::parser::symbol_type Lexer::get_token()
 {
     stringstream ss;
-    token* ptoken = nullptr;
     if(*_p_iter != _end)
     {
-        // need to look up by sub_match index
+        token* ptoken = nullptr;
+        // find match & lookup by sub_match index
         boost::smatch m = *(*_p_iter);
-        size_t len = m.size();
+        const size_t len = m.size();
         // find matched
         for(int i = 1; i < len; ++i)
         {
@@ -332,8 +331,8 @@ yy::parser::symbol_type Lexer::get_token()
                 if(!prefix.empty())
                     _sout << prefix;
 
-                ptoken = _idx_tab[i];
-                ptoken->value = m[i].str(); // set match value
+                ptoken = _idx_tab[i];        // lookup by sub_match index!
+                ptoken->value = m[i].str();  // set match value
                 if(ptoken->id == UL_WHITESPACE)
                 {
                     cout << "\\s";
@@ -341,7 +340,7 @@ yy::parser::symbol_type Lexer::get_token()
                     return get_token(); // recursive skipping logic
                 }
                 cout << endl;
-                _matches.push_back(ptoken); // push matched
+                _matches.push_back(ptoken);
                 break; // end loop
             }
         }
@@ -385,11 +384,12 @@ void Lexer::init_expr()
     const size_t len = _tokens.size();
     for(int i = 0; i < len; ++i)
     {
-        token_def* ptoken = &_tokens[i];
-        ss << "(" << ptoken->rexp << ")|";
+        const token_def* ptoken = &_tokens[i];
+        ss << "(?<" << ptoken->name << ">" << ptoken->rexp << ")";
+        //ss << "(" << ptoken->rexp << ")|";
     }
-    _expr = ss.str( );
-    _expr.pop_back( );
+    _expr = ss.str();
+    _expr.pop_back(); // remove extra '|' i.e. "V-BAR"
 }
 
 /**

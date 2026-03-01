@@ -345,13 +345,13 @@ public:
 	void set_state(const state_t& s) const;
 
 protected:
-	yy::parser*                    _pparser;
+	yy::parser*                   _pparser;
 	string                        _config_file;
-	vector<token_def>            _tokens;
+	vector<token_def>             _tokens;
 	vector<state_t*>              _states;
 	map<int, token_def*>          _idx_tab;  // idx -> token_def
 	map<int, token_def*>          _id_tab;   // id -> token_def
-	map<string, token_def*>         _name_tab; // name -> token_def
+	map<string, token_def*>       _name_tab; // name -> token_def
 	map<int, vector<token_def*>>  _state_tokens_tab;
 	map<int, state_t*>            _state_tab;
 	vector<token_def*>            _matches;
@@ -360,10 +360,10 @@ protected:
 	boost::regex                  _rexp;
 	boost::sregex_iterator        _begin;
 	boost::sregex_iterator        _end;
-	boost::sregex_iterator*      _p_iter;
-	state_t*                     _state;
-	string                       _expr;
-	stringstream                 _sout;
+	boost::sregex_iterator*       _p_iter;
+	state_t*                      _state;
+	string                        _expr;
+	stringstream                  _sout;
 };
 
 //}
