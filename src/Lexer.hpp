@@ -25,6 +25,7 @@ using std::map;
 using std::pair;
 using std::regex;
 using std::stringstream;
+using yy::parser;
 
 /* LEX TYPES */
 #define right_assoc 0x8
@@ -193,7 +194,7 @@ typedef struct token_def
 	string test_value;
 	unsigned long index;
 	string value;
-	yy::parser::symbol_type type;
+	parser::symbol_type type;
 	// operator yy::parser::symbol_type()
 	// {
 	// 	return new yy::parser::symbol_type;
@@ -309,14 +310,21 @@ public:
 	void reset();
 
 	/**
-	 * @brief override virtual, on_token, for each token ...
+	 * @brief on_token, for each token ...
 	 * @param state
 	 * @param token
 	 */
-
-
-	yy::parser::symbol_type on_token( const state_t& state, const token_def& token );
-	yy::parser::symbol_type on_token_action( const state_t& state, const token_def &token );
+	parser::symbol_type on_token( const state_t& state, const token_def& token );
+	/**
+	 * @brief on_token_action, for each token ...
+	 * @param state
+	 * @param token
+	 */
+	parser::symbol_type on_token_action( const state_t& state, const token_def &token );
+	/**
+	 * @brief on_state, on_token, for each token ...
+	 * @param state
+	 */
 	unsigned long on_state(const state_t &s);
 
 	/**
@@ -345,7 +353,7 @@ public:
 	void set_state(const state_t& s) const;
 
 protected:
-	yy::parser*                   _pparser;
+	parser*                       _pparser;
 	string                        _config_file;
 	vector<token_def>             _tokens;
 	vector<state_t*>              _states;

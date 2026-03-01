@@ -332,7 +332,7 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                 case UL_ANYTHING:
                     return yy::parser::make_YYUNDEF();
                 default:
-                    return yy::parser::make_YYUNDEF();
+                    return yy::parser::make_SKIP_TOKEN();
             }
             //return yy::parser::make_END();
         }

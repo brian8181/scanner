@@ -37,6 +37,7 @@ using std::string;
 using std::vector;
 using std::map;
 using std::pair;
+using yy::parser;
 
 using namespace std;
 // bkp todo!
@@ -261,10 +262,8 @@ void Lexer::tokenize()
     stringstream ss;
     read_sstream( _scan_file, ss );
     string search_text = ss.str( );
-    // initialize expression ...
-    // testing ... todo ... use auto created expression
-    // _expr = "(!=)|(=)";
 
+    // initialize expression ...
     const auto rexp = boost::regex( _expr, boost::regex::ECMAScript );
     const auto begin = boost::sregex_iterator( search_text.begin( ), search_text.end( ), rexp, boost::match_not_bol | boost::match_not_eol );
     const auto end = boost::sregex_iterator();
@@ -285,14 +284,18 @@ void Lexer::tokenize()
                     cout << "error: invalid characters in sequence (" << prefix << ")" << endl;
                 }
 
-                ptoken = _idx_tab[i]; // look up by index
+                ptoken = _idx_tab[i];        // look up by index
                 ptoken->value = m[i].str(); // set match value
 
                 cout << "matched index: " << i << endl;
                 print_token(ptoken->id);
-                // if(on_token( *_state, *ptoken ) != yy::parser::symbol_type( token::))
-                //     continue;
-                break; // found
+                if(ptoken->id == UL_SKIP_TOKEN)
+                {
+                    cout << "\\s";
+                    ++(*_p_iter);
+                    continue; // skip back to top of for
+                }
+                break; // found : break for
             }
         }
         if(ptoken == nullptr)
@@ -309,6 +312,7 @@ yy::parser::symbol_type Lexer::get_token()
     stringstream ss;
     if(*_p_iter != _end)
     {
+        parser::symbol_type yytoken;
         token* ptoken = nullptr;
         // find match & lookup by sub_match index
         boost::smatch m = *(*_p_iter);
@@ -324,7 +328,8 @@ yy::parser::symbol_type Lexer::get_token()
 
                 ptoken = _idx_tab[i];        // lookup by sub_match index!
                 ptoken->value = m[i].str();  // set match value
-                if(ptoken->id == UL_WHITESPACE)
+                //yytoken = on_token( *_state, *ptoken );
+                if(ptoken->id == UL_WHITESPACE /*|| tok == parser::symbol_type(token::SKIP_TOKEN) */)
                 {
                     cout << "\\s";
                     ++(*_p_iter);
@@ -332,13 +337,13 @@ yy::parser::symbol_type Lexer::get_token()
                 }
                 cout << endl;
                 _matches.push_back(ptoken);
-                break; // end loop
+                break; // found : break for
             }
         }
         ++(*_p_iter); // increment iterator
-        return on_token( *_state, *ptoken ); // return token id
+        return yytoken; // return token id
     }
-    return (int)yy::parser::token::END; // error or eof
+    return parser::make_END(); // error or eof
 }
 
 /**

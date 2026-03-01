@@ -66,6 +66,7 @@
 
 }
 
+%token SKIP_TOKEN
 %token END 0 _("end of input")
 %type files file block blocks
 %type<std::pair< std::string, std::string >> attrib
