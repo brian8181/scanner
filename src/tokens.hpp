@@ -114,7 +114,7 @@ inline vector g_tokens =
 /**
  * @brief g_tokens
  */
-inline vector g_tokens__ =
+inline vector g_tokens_ =
 {
     token {UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0, 0, R"(\$)", "$",                                0, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_CARROT_SYMB, "CARROT", "string", 0, 0, R"(\^)", "\\^",                                   0, string("null"), yy::parser::make_YYUNDEF()},
@@ -209,14 +209,14 @@ inline vector state_initial = {
     token{UL_COMMENT, "COMMENT", "string", 0, 0, R"(\{[ ]*\*[^*}]*\*[ ]*\})",  R"(\* test *\)",        0, string("null"), yy::parser::make_YYUNDEF()},
     token{0,  "UNESCAPED_TEXT", "string", 0, 0, R"([^{]+)", "testing ...",                    0, string("null"), yy::parser::make_YYUNDEF()},
 };
-
-inline vector state_comment = {
-    new token{UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()}
-};
-
-inline vector state_escaped = {
-    new token{UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()}
-};
+//
+// inline vector state_comment = {
+//     new token{UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()}
+// };
+//
+// inline vector state_escaped = {
+//     new token{UL_ANYTHING,  "ANYTHING", "string", 0, 0, ".", "~#",                                          0, string("null"), yy::parser::make_YYUNDEF()}
+// };
 
 // .[{()\*+?|^$
 // [[.NUL.]] matches a NUL character.
@@ -232,12 +232,22 @@ inline vector state_escaped = {
 #define IF_BLOCK 7
 #define IF_CONDITION 8
 
-inline map<unsigned long, vector<token_def *> > state_tokens_tab = {
-    {INITIAL_, {state_comment}}, {COMMENT_, {state_comment}}, {ESCAPED_, {state_escaped}}
-};
+// inline map<unsigned long, vector<token_def *> > state_tokens_tab = {
+//     {INITIAL_, {state_comment}}, {COMMENT_, {state_comment}}, {ESCAPED_, {state_escaped}}
+// };
 
-inline vector<unsigned long> INITIAL_STATE = { UL_OPEN_BRACE };
+inline vector<unsigned long> INITIAL_STATE = { UL_DOLLAR_SIGN, UL_ID, UL_OPEN_BRACE, UL_WHITESPACE };
 inline vector<unsigned long> COMMENT_STATE = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+
+inline state_t sINITIAL = { INITIAL_, "INITIAL" };
+inline state_t sESCAPED = { ESCAPED_, "ESCAPED" };
+inline state_t sDOUBLE_QUOTED = { DOUBLE_QUOTED, "DOUBLE_QUOTED" };
+inline state_t sSINGLE_QUOTED = { SINGLE_QUOTED, "SINGLE_QUOTED" };
+inline state_t sINCLUDING = { INCLUDING, "INCLUDING" };
+inline state_t sIF_BLOCK = { IF_BLOCK, "IF_BLOCK" };
+inline state_t sIF_CONDITION = { IF_CONDITION, "IF_CONDITION" };
+
+inline map<int, state_t*>  g_state_tab = { { INITIAL_, &sINITIAL }, { ESCAPED_, &sESCAPED } };
 
 inline unsigned long Lexer::on_state(const state_t &s)
 {
@@ -253,6 +263,7 @@ using yy::parser;
 
 inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const token_def &tok)
 {
+    cout << "state = " << s.id << endl;
     print_token(tok.id);
     switch (s.id)
     {
@@ -265,8 +276,7 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                 case UL_ID:
                     return parser::make_ID(tok.value);
                 case UL_OPEN_BRACE:
-                    cout << "LBRACKET" << endl;
-                    set_state(*_state_tab[ESCAPED_]);
+                       set_state(sESCAPED);
                     // todo stream the prefix
                     return yy::parser::make_LBRACE("{");
                 case UL_COMMENT:
@@ -281,12 +291,20 @@ inline yy::parser::symbol_type Lexer::on_token_action(const state_t &s, const to
                 default:
                     return yy::parser::make_YYUNDEF();
             }
-            return yy::parser::make_END();
+            //return yy::parser::make_END();
         }
         case ESCAPED_:
         {
             switch (tok.id)
             {
+                case UL_CLOSE_BRACE:
+                    set_state(sINITIAL);
+                    // todo stream the prefix
+                    return yy::parser::make_RBRACE("}");
+                case UL_DOLLAR_SIGN:
+                    return parser::make_DOLLAR_SIGN(tok.value);
+                case UL_ID:
+                    return parser::make_ID(tok.value);
                 case UL_DOUBLE_QUOTE:
                     return yy::parser::make_DOUBLE_QUOTE(tok.value);
                 case UL_SINGLE_QUOTE:

@@ -168,7 +168,7 @@ struct symbol_type : basic_symbol<by_kind>
 // {
 //vector<pair<string,int>> str_to_int { { "INT", 1}, {"FLOAT", 2} };
 typedef struct token_t {
-	int id;
+	unsigned long id;
 	string name;
 	string type;
 	string rexpr;
@@ -204,7 +204,7 @@ typedef token_def token;
 
 typedef struct token_match
 {
-	int id;
+	unsigned long id;
 	int pos;
 	int line;
 	string value;
@@ -213,7 +213,7 @@ typedef struct token_match
 
 typedef struct state_t
 {
-	int id;
+	unsigned long id;
 	string name;
 } state_t;
 

@@ -115,11 +115,16 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     #endif
 
     // bkp todo 1-3 ...
-    _state = new state_t{ INITIAL_, "INITIAL" };
-    _states.push_back(_state);
+    //_state = new state_t{ INITIAL_, "INITIAL" };
+    _states.push_back(&sINITIAL);
+    _state = &sINITIAL;
     _state_tab[_state->id] = _state;
-    vector<token_def*> tokens; // bkp todo tokens for state
-    _state_tokens_tab[_state->id] = tokens;
+    //vector<token_def*> tokens; // bkp todo tokens for state
+    // for (int i = 1; i < INITIAL_STATE.size(); ++i) {
+    //     // _state_tab[sINITIAL]
+    //     // tokens.push_back();
+    // }
+   //** _state_tokens_tab[_state->id] = state_initial;
 
     //load_config( config_file );
     _scan_file = file;
@@ -204,8 +209,8 @@ void Lexer::load_config( const string &file )
         {
             string str_state = states_match["state"].str();  // new state to create
             string str_tokens = states_match["tokens"].str(); // csv tokens for that state
-            int i = 0;
-            int state_id = 0xFF | (++i*6); // generate id for new state
+            unsigned long i = 0ul;
+            unsigned long state_id = 0xFFul | (++i*6ul); // generate id for new state
             auto* pstate = new state_t{ state_id , str_state }; // create new state
             _states.push_back(pstate);
             _state_tab[pstate->id] = pstate; // insert new state into table
