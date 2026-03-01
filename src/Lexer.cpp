@@ -72,18 +72,6 @@ Lexer::Lexer( const Lexer& src ) : _p_iter(nullptr)
  */
 Lexer::~Lexer()
 {
-    //delete [] _tokens.data;
-    // const unsigned int tlen = _tokens.size();
-    // for(int i = 0; i < tlen; ++i)
-    // {
-    //     delete _tokens[i];
-    // }
-
-    // const unsigned int mlen = _matches.size();
-    // for(int i = 0; i < mlen; ++i)
-    // {
-    //     delete _matches[i];
-    // }
 }
 
 /**
@@ -94,7 +82,9 @@ Lexer::~Lexer()
  */
 bool Lexer::init( const string& file, const string &config_file, yy::parser* pp )
 {
+    // clear all tables
     _tokens.clear();
+    _states.clear();
 	_idx_tab.clear();
 	_id_tab.clear();
 	_name_tab.clear();
@@ -102,6 +92,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
 	_state_tab.clear();
 	_matches.clear();
 
+    // build tables
     #ifdef LEX_TEST
     // init tables from tokens.hpp
     for(int i = 0; i < g_tokens.size(); ++i)
