@@ -352,13 +352,15 @@ public:
 
 	void set_state(const state_t& s) const;
 
+	static bool is_id( const token_def& token, const int& id );
+
 protected:
 	parser*                       _pparser;
 	string                        _config_file;
 	vector<token_def>             _tokens;
 	vector<state_t*>              _states;
-	map<int, token_def*>          _idx_tab;  // idx -> token_def
-	map<int, token_def*>          _id_tab;   // id -> token_def
+	map<int, token_def*>          _idx_tab;  // idx  -> token_def
+	map<int, token_def*>          _id_tab;   // id   -> token_def
 	map<string, token_def*>       _name_tab; // name -> token_def
 	map<int, vector<token_def*>>  _state_tokens_tab;
 	map<int, state_t*>            _state_tab;
