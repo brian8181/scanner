@@ -121,27 +121,45 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     //}
     #endif
 
-    // bkp todo 1-3 ...
     _states.push_back(&sINITIAL);
+    _states.push_back(&sCOMMENT);
+    _states.push_back(&sESCAPED);
+    _states.push_back(&sDOUBLE_QUOTED);
+    _states.push_back(&sSINGLE_QUOTED);
+    _states.push_back(&sINCLUDING);
+    _states.push_back(&sIF_BLOCK);
+    _states.push_back(&sIF_CONDITION);
+
     _state = &sINITIAL;
     _state_tab[_state->id] = _state;
+    _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
+    _state_tokens_tab[cESCAPED] = ESCAPED_STATE_TOKENS;
+    _state_tokens_tab[cCOMMENT] = COMMENT_STATE_TOKENS;
+    _state_tokens_tab[cSINGLE_QUOTED] = SINGLE_QUOTED_STATE_TOKENS;
+    _state_tokens_tab[cDOUBLE_QUOTED] = DOUBLE_QUOTED_STATE_TOKENS;
+    _state_tokens_tab[cINCLUDING] = INCLUDING_STATE_TOKENS;
+    _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
+    _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
+
 
     //vector<token_def*> tokens; // bkp todo tokens for state
     // for (int i = 1; i < INITIAL_STATE.size(); ++i) {
     //     // _state_tab[sINITIAL]
     //     // tokens.push_back();
     // }
-   //** _state_tokens_tab[_state->id] = state_initial;
+    //** _state_tokens_tab[_state->id] = state_initial;
 
     //load_config( config_file );
     _scan_file = file;
     stringstream ss;
     const int r = read_sstream( file, ss );
     _search_text = ss.str( );
-
     // initialize expression ...
     init_expr();
+
     // DEBUGGING OVERRIDE _expr
+    cout << _expr << endl;
+    _expr = R"((?<DOLLAR_SIGN>\$)|(?<IDENTIFIER>[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(?<LBRACE>\{)|(?<WHITESPACE>[ \t]))";
     _expr = R"((\$)|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\{)|([ \t]))";
     _rexp = boost::regex( _expr, boost::regex::extended );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
@@ -395,7 +413,7 @@ void Lexer::init_expr()
     for(int i = 0; i < len; ++i)
     {
         const token_def* ptoken = &_tokens[i];
-        ss << "(?<" << ptoken->name << ">" << ptoken->rexp << ")";
+        ss << "(?<" << ptoken->name << ">" << ptoken->rexp << ")|";
         //ss << "(" << ptoken->rexp << ")|";
     }
     _expr = ss.str();
@@ -429,6 +447,7 @@ void Lexer::set_state(const state_t& s) const
 {
     _state->id = s.id;
     _state->name = s.name;
+    // todo! load state token list
 }
 
 bool Lexer::is_id( const token_def& token, const int& id )

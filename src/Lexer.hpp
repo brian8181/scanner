@@ -362,7 +362,7 @@ protected:
 	map<int, token_def*>          _idx_tab;  // idx  -> token_def
 	map<int, token_def*>          _id_tab;   // id   -> token_def
 	map<string, token_def*>       _name_tab; // name -> token_def
-	map<int, vector<token_def*>>  _state_tokens_tab;
+	map<int, vector<unsigned long>>  _state_tokens_tab;
 	map<int, state_t*>            _state_tab;
 	vector<token_def*>            _matches;
 	std::string                   _scan_file;

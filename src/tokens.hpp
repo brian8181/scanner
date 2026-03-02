@@ -271,14 +271,14 @@ inline vector state_initial = {
 // "(\\|)|(:)|(\\[)|(\\])|(\\{)|(\\})|(\\*)|(!=)|(=)|(\\,)|(\\.)|(\\$[a-zA-Z]+)|([ \\t]+)"
 
 // states
-#define INITIAL_ 0
-#define COMMENT_ 1
-#define ESCAPED_  3
-#define DOUBLE_QUOTED 4
-#define SINGLE_QUOTED 5
-#define INCLUDING 6
-#define IF_BLOCK 7
-#define IF_CONDITION 8
+constexpr unsigned long  cINITIAL = 0;
+constexpr unsigned long  cCOMMENT = 1;
+constexpr unsigned long  cESCAPED  = 3;
+constexpr unsigned long  cDOUBLE_QUOTED = 4;
+constexpr unsigned long  cSINGLE_QUOTED = 5;
+constexpr unsigned long  cINCLUDING = 6;
+constexpr unsigned long  cIF_BLOCK = 7;
+constexpr unsigned long  cIF_CONDITION = 8;
 
 inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_OPEN_BRACE, UL_WHITESPACE };
 inline vector<unsigned long> COMMENT_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
@@ -289,21 +289,42 @@ inline vector<unsigned long> INCLUDING_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMEN
 inline vector<unsigned long> IF_BLOCK_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> IF_CONDITION_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 
-inline state_t sINITIAL = { INITIAL_, "INITIAL" };
-inline state_t sESCAPED = { ESCAPED_, "ESCAPED" };
-inline state_t sDOUBLE_QUOTED = { DOUBLE_QUOTED, "DOUBLE_QUOTED" };
-inline state_t sSINGLE_QUOTED = { SINGLE_QUOTED, "SINGLE_QUOTED" };
-inline state_t sINCLUDING = { INCLUDING, "INCLUDING" };
-inline state_t sIF_BLOCK = { IF_BLOCK, "IF_BLOCK" };
-inline state_t sIF_CONDITION = { IF_CONDITION, "IF_CONDITION" };
+inline state_t sINITIAL = { cINITIAL, "INITIAL" };
+inline state_t sCOMMENT = { cCOMMENT, "COMMENT" };
+inline state_t sESCAPED = { cESCAPED, "ESCAPED" };
+inline state_t sDOUBLE_QUOTED = { cDOUBLE_QUOTED, "DOUBLE_QUOTED" };
+inline state_t sSINGLE_QUOTED = { cSINGLE_QUOTED, "SINGLE_QUOTED" };
+inline state_t sINCLUDING = { cINCLUDING, "INCLUDING" };
+inline state_t sIF_BLOCK = { cIF_BLOCK, "IF_BLOCK" };
+inline state_t sIF_CONDITION = { cIF_CONDITION, "IF_CONDITION" };
 
-inline map<int, state_t*>  g_state_tab = { { INITIAL_, &sINITIAL }, { ESCAPED_, &sESCAPED } };
+inline map<int, state_t*>  g_state_tab = { { cINITIAL, &sINITIAL }, { cESCAPED, &sESCAPED } };
+
+// _states.push_back(&sINITIAL);
+// _states.push_back(&sCOMMENT);
+// _states.push_back(&sESCAPED);
+// _states.push_back(&sDOUBLE_QUOTED);
+// _states.push_back(&sSINGLE_QUOTED);
+// _states.push_back(&sINCLUDING);
+// _states.push_back(&sIF_BLOCK);
+// _states.push_back(&sIF_CONDITION);
+//
+// _state = &sINITIAL;
+// _state_tab[_state->id] = _state;
+// _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
+// _state_tokens_tab[cESCAPED] = ESCAPED_STATE_TOKENS;
+// _state_tokens_tab[cCOMMENT] = COMMENT_STATE_TOKENS;
+// _state_tokens_tab[cSINGLE_QUOTED] = SINGLE_QUOTED_STATE_TOKENS;
+// _state_tokens_tab[cDOUBLE_QUOTED] = DOUBLE_QUOTED_STATE_TOKENS;
+// _state_tokens_tab[cINCLUDING] = INCLUDING_STATE_TOKENS;
+// _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
+// _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
 
 inline unsigned long Lexer::on_state(const state_t &s)
 {
     switch (s.id) {
-        case INITIAL_:
-            return INITIAL_;
+        case cINITIAL:
+            return cINITIAL;
         default: ;
     }
     return -1;
@@ -315,7 +336,7 @@ inline parser::symbol_type Lexer::on_token_action(const state_t &s, const token_
     print_token(tok.id);
     switch (s.id)
     {
-        case INITIAL_:
+        case cINITIAL:
         {
             switch (tok.id)
             {
@@ -338,7 +359,7 @@ inline parser::symbol_type Lexer::on_token_action(const state_t &s, const token_
             }
             break;
         }
-        case ESCAPED_:
+        case cESCAPED:
         {
             switch (tok.id)
             {
