@@ -280,7 +280,7 @@ inline vector state_initial = {
 #define IF_BLOCK 7
 #define IF_CONDITION 8
 
-inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_ID, UL_OPEN_BRACE, UL_WHITESPACE };
+inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_OPEN_BRACE, UL_WHITESPACE };
 inline vector<unsigned long> COMMENT_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> DOUBLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };

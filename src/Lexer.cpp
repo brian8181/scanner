@@ -97,27 +97,28 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     #ifdef LEX_TEST
     // init tables from tokens.hpp
     _tokens.clear();
-    // int len = INITIAL_STATE_TOKENS.size();
-    // for (int i = 0; i < len; i++)
-    // {
-    //     if (is_id(g_tokens[i], INITIAL_STATE_TOKENS[i]))
-    //     {
-    //         g_tokens[i].index = i+1;
-    //         _tokens.push_back(g_tokens[i]);
-    //         _id_tab[g_tokens[i].id] = &g_tokens[i];
-    //         _idx_tab[g_tokens[i].index] = &g_tokens[i];
-    //         _name_tab[g_tokens[i].name] = &g_tokens[i];
-    //     }
-    // }
-    //
-    for(int i = 0; i < g_tokens.size(); ++i)
+    const int len = g_tokens.size();
+    for (int i = 0; i < len; i++)
     {
         g_tokens[i].index = i+1;
-        _tokens.push_back(g_tokens[i]);
-        _id_tab[g_tokens[i].id] = &g_tokens[i];
-        _idx_tab[g_tokens[i].index] = &g_tokens[i];
-        _name_tab[g_tokens[i].name] = &g_tokens[i];
+        if (g_tokens[i].id == INITIAL_STATE_TOKENS[i])
+        {
+            _tokens.push_back(g_tokens[i]);
+            _id_tab[g_tokens[i].id] = &g_tokens[i];
+            _idx_tab[g_tokens[i].index] = &g_tokens[i];
+            _name_tab[g_tokens[i].name] = &g_tokens[i];
+        }
     }
+
+    // _tokens.clear();
+    // for(int i = 0; i < len; ++i)
+    // {
+    //     g_tokens[i].index = i+1;
+    //     _tokens.push_back(g_tokens[i]);
+    //     _id_tab[g_tokens[i].id] = &g_tokens[i];
+    //     _idx_tab[g_tokens[i].index] = &g_tokens[i];
+    //     _name_tab[g_tokens[i].name] = &g_tokens[i];
+    //}
     #endif
 
     // bkp todo 1-3 ...
@@ -408,13 +409,13 @@ void Lexer::print_token( int id )
 {
     const token* ptoken = _id_tab[id];
     cout << "token:\n{"
-            << setw(5) << left << "\n\tid: "         << setw(10) << right << ptoken->id
-            << setw(5) << left << "\n\tname: "       << setw(10) << right << ptoken->name
-            << setw(5) << left << "\n\tstype: "      << setw(10) << right << ptoken->stype
-            << setw(5) << left << "\n\tindex: "      << setw(10) << right << ptoken->index
-            << setw(5) << left << "\n\tvalue: "      << setw(10) << right << ptoken->value
-            << setw(5) << left << "\n\trexp: "       << setw(10) << right << ptoken->rexp
-            << setw(5) << left << "\n\ttest_value: " << setw(10) << right << ptoken->test_value
+            << setw(5) << left << "\n\t id: "         << setw(10) << right << ptoken->id
+            << setw(5) << left << "\n\t name: "       << setw(10) << right << ptoken->name
+            << setw(5) << left << "\n\t stype: "      << setw(10) << right << ptoken->stype
+            << setw(5) << left << "\n\t index: "      << setw(10) << right << ptoken->index
+            << setw(5) << left << "\n\t value: "      << setw(10) << right << ptoken->value
+            << setw(5) << left << "\n\t rexp: "       << setw(10) << right << ptoken->rexp
+            << setw(5) << left << "\n\t test_value: " << setw(10) << right << ptoken->test_value
         << "\n}"
     << endl;
 }
