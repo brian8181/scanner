@@ -132,14 +132,14 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
 
     _state = &sINITIAL;
     _state_tab[_state->id] = _state;
-    _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
-    _state_tokens_tab[cESCAPED] = ESCAPED_STATE_TOKENS;
-    _state_tokens_tab[cCOMMENT] = COMMENT_STATE_TOKENS;
-    _state_tokens_tab[cSINGLE_QUOTED] = SINGLE_QUOTED_STATE_TOKENS;
-    _state_tokens_tab[cDOUBLE_QUOTED] = DOUBLE_QUOTED_STATE_TOKENS;
-    _state_tokens_tab[cINCLUDING] = INCLUDING_STATE_TOKENS;
-    _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
-    _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
+    // _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
+    // _state_tokens_tab[cESCAPED] = ESCAPED_STATE_TOKENS;
+    // _state_tokens_tab[cCOMMENT] = COMMENT_STATE_TOKENS;
+    // _state_tokens_tab[cSINGLE_QUOTED] = SINGLE_QUOTED_STATE_TOKENS;
+    // _state_tokens_tab[cDOUBLE_QUOTED] = DOUBLE_QUOTED_STATE_TOKENS;
+    // _state_tokens_tab[cINCLUDING] = INCLUDING_STATE_TOKENS;
+    // _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
+    // _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
 
 
     //vector<token_def*> tokens; // bkp todo tokens for state
@@ -159,8 +159,8 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
 
     // DEBUGGING OVERRIDE _expr
     cout << _expr << endl;
-    _expr = R"((?<DOLLAR_SIGN>\$)|(?<IDENTIFIER>[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(?<LBRACE>\{)|(?<WHITESPACE>[ \t]))";
-    _expr = R"((\$)|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\{)|([ \t]))";
+    // _expr = R"((?<DOLLAR_SIGN>\$)|(?<IDENTIFIER>[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(?<LBRACE>\{)|(?<WHITESPACE>[ \t]))";
+    // _expr = R"((\$)|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\{)|([ \t]))";
     _rexp = boost::regex( _expr, boost::regex::extended );
     _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
     _p_iter = &_begin;
@@ -413,8 +413,8 @@ void Lexer::init_expr()
     for(int i = 0; i < len; ++i)
     {
         const token_def* ptoken = &_tokens[i];
-        ss << "(?<" << ptoken->name << ">" << ptoken->rexp << ")|";
-        //ss << "(" << ptoken->rexp << ")|";
+        // ss << "(?<" << ptoken->name << ">" << ptoken->rexp << ")|";
+        ss << "(" << ptoken->rexp << ")|";
     }
     _expr = ss.str();
     _expr.pop_back(); // remove extra '|' i.e. "V-BAR"

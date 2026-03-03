@@ -157,6 +157,7 @@ inline vector g_tokens =
     token {UL_IDENTIFIER,  "IDENTIFIER", "string", 0, 0, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/",             0, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_OPEN_BRACE, "LBRACE", "string", 0, 0, R"(\{)", "\\{",                                    0, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_WHITESPACE,  "WHITESPACE", "string", 0, 0, R"([ \t])", "\\t",                                0, string("null"), yy::parser::make_YYUNDEF()},
+    token {UL_QUESTION_MARK, "QUESTION_MARK", "string", 0, 0, R"(\?)", "\\?",                          0, string("null"), yy::parser::make_YYUNDEF()}
 };
 
 /**
@@ -280,7 +281,7 @@ constexpr unsigned long  cINCLUDING = 6;
 constexpr unsigned long  cIF_BLOCK = 7;
 constexpr unsigned long  cIF_CONDITION = 8;
 
-inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_OPEN_BRACE, UL_WHITESPACE };
+inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_OPEN_BRACE, UL_WHITESPACE, UL_QUESTION_MARK };
 inline vector<unsigned long> COMMENT_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> DOUBLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
@@ -298,27 +299,32 @@ inline state_t sINCLUDING = { cINCLUDING, "INCLUDING" };
 inline state_t sIF_BLOCK = { cIF_BLOCK, "IF_BLOCK" };
 inline state_t sIF_CONDITION = { cIF_CONDITION, "IF_CONDITION" };
 
-inline map<int, state_t*>  g_state_tab = { { cINITIAL, &sINITIAL }, { cESCAPED, &sESCAPED } };
+inline map<int, state_t*>  g_state_tab =
+{
+    {cINITIAL, &sINITIAL },
+    {cESCAPED, &sESCAPED },
+    {cCOMMENT, &sCOMMENT },
+    {cSINGLE_QUOTED, &sSINGLE_QUOTED },
+    {cDOUBLE_QUOTED, &sDOUBLE_QUOTED },
+    {cINCLUDING, &sINCLUDING },
+    {cIF_BLOCK, &sIF_BLOCK },
+    {cIF_CONDITION, &sIF_CONDITION }
 
-// _states.push_back(&sINITIAL);
-// _states.push_back(&sCOMMENT);
-// _states.push_back(&sESCAPED);
-// _states.push_back(&sDOUBLE_QUOTED);
-// _states.push_back(&sSINGLE_QUOTED);
-// _states.push_back(&sINCLUDING);
-// _states.push_back(&sIF_BLOCK);
-// _states.push_back(&sIF_CONDITION);
-//
-// _state = &sINITIAL;
-// _state_tab[_state->id] = _state;
-// _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
-// _state_tokens_tab[cESCAPED] = ESCAPED_STATE_TOKENS;
-// _state_tokens_tab[cCOMMENT] = COMMENT_STATE_TOKENS;
-// _state_tokens_tab[cSINGLE_QUOTED] = SINGLE_QUOTED_STATE_TOKENS;
-// _state_tokens_tab[cDOUBLE_QUOTED] = DOUBLE_QUOTED_STATE_TOKENS;
-// _state_tokens_tab[cINCLUDING] = INCLUDING_STATE_TOKENS;
-// _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
-// _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
+};
+
+inline map<int, vector<unsigned long>> g_state_tokens_tab
+{
+    {cINITIAL, INITIAL_STATE_TOKENS},
+    {cESCAPED, ESCAPED_STATE_TOKENS},
+    {cCOMMENT, COMMENT_STATE_TOKENS},
+    {cSINGLE_QUOTED, SINGLE_QUOTED_STATE_TOKENS},
+    {cDOUBLE_QUOTED, DOUBLE_QUOTED_STATE_TOKENS},
+    {cINCLUDING, INCLUDING_STATE_TOKENS},
+    {cIF_BLOCK, IF_BLOCK_STATE_TOKENS},
+    {cIF_CONDITION, IF_CONDITION_STATE_TOKENS},
+};
+
+inline state_t* g_state = &sINITIAL;
 
 inline unsigned long Lexer::on_state(const state_t &s)
 {
@@ -348,6 +354,8 @@ inline parser::symbol_type Lexer::on_token_action(const state_t &s, const token_
                        set_state(sESCAPED);
                     // todo stream the prefix
                     return parser::make_LBRACE("{");
+                case UL_QUESTION_MARK:
+                    return parser::make_QUESTION_MARK();
                 case UL_COMMENT:
                 case UL_WHITESPACE:
                 case UL_SCAN_EOF:
