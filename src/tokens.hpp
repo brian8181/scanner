@@ -145,6 +145,7 @@ constexpr unsigned long UL_UNESCAPED_TEXT    = (-5);
 constexpr unsigned long UL_ERROR             = (-2);
 constexpr unsigned long UL_SCAN_EOF          =   0;
 constexpr unsigned long UL_ANYTHING          = (-3);
+constexpr unsigned long UL_MATCH             = 81;
 
 
 static int index_ = 0;
@@ -165,6 +166,7 @@ inline vector g_tokens =
  */
 inline vector g_tokens_all =
 {
+    token {UL_MATCH,    "MATCH", "string",     0,                     66, "include",     "include",                               0,  string("null"), yy::parser::make_YYUNDEF()},
     token {UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0,                66, R"(\$)", "$",                                           42, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_CARROT_SYMB, "CARROT", "string", 0,                     66, R"(\^)", "\\^",                                         42, string("null"), yy::parser::make_YYUNDEF()},
     token {UL_AMPERSAND, "AMPERSAND", "string", 0,                    66, R"(\*)", "\\*",                                         42, string("null"), yy::parser::make_YYUNDEF()},
@@ -341,7 +343,7 @@ inline parser::symbol_type Lexer::on_token_action(const state_t &s, const token_
                 case UL_IDENTIFIER:
                     return parser::make_IDENTIFIER(tok.value);
                 case UL_OPEN_BRACE:
-                       set_state(sESCAPED);
+                    set_state(sESCAPED);
                     // todo stream the prefix
                     return parser::make_LBRACE("{");
                 case UL_QUESTION_MARK:

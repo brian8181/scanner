@@ -96,19 +96,24 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     // build tables
     #ifdef LEX_TEST
     // init tables from tokens.hpp
-    _tokens.clear();
-    const int len = g_tokens.size();
-    for (int i = 0; i < len; i++)
-    {
-        g_tokens[i].index = i+1;
-        if (g_tokens[i].id == INITIAL_STATE_TOKENS[i])
-        {
-            _tokens.push_back(g_tokens[i]);
-            _id_tab[g_tokens[i].id] = &g_tokens[i];
-            _idx_tab[g_tokens[i].index] = &g_tokens[i];
-            _name_tab[g_tokens[i].name] = &g_tokens[i];
-        }
-    }
+    //_tokens.clear();
+    // vector<unsigned long>* TOKENS = &g_state_tokens_tab[cINITIAL];
+    // const int len = TOKENS->size();
+    // for (int i = 0; i < len; i++)
+    // {
+    //     for (int j = 0; j < g_tokens.size(); j++)
+    //     {
+    //         g_tokens[j].index = i+1;
+    //         if (g_tokens[j].id == (*TOKENS)[i])
+    //         {
+    //             _tokens.push_back(g_tokens[j]);
+    //             _id_tab[g_tokens[j].id] = &g_tokens[j];
+    //             _idx_tab[g_tokens[j].index] = &g_tokens[j];
+    //             _name_tab[g_tokens[j].name] = &g_tokens[j];
+    //         }
+    //     }
+    // }
+
 
     // _tokens.clear();
     // for(int i = 0; i < len; ++i)
@@ -132,14 +137,14 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
 
     _state = &sINITIAL;
     _state_tab[_state->id] = _state;
-    // _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
-    // _state_tokens_tab[cESCAPED] = ESCAPED_STATE_TOKENS;
-    // _state_tokens_tab[cCOMMENT] = COMMENT_STATE_TOKENS;
-    // _state_tokens_tab[cSINGLE_QUOTED] = SINGLE_QUOTED_STATE_TOKENS;
-    // _state_tokens_tab[cDOUBLE_QUOTED] = DOUBLE_QUOTED_STATE_TOKENS;
-    // _state_tokens_tab[cINCLUDING] = INCLUDING_STATE_TOKENS;
-    // _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
-    // _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
+    _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
+    _state_tokens_tab[cESCAPED] = ESCAPED_STATE_TOKENS;
+    _state_tokens_tab[cCOMMENT] = COMMENT_STATE_TOKENS;
+    _state_tokens_tab[cSINGLE_QUOTED] = SINGLE_QUOTED_STATE_TOKENS;
+    _state_tokens_tab[cDOUBLE_QUOTED] = DOUBLE_QUOTED_STATE_TOKENS;
+    _state_tokens_tab[cINCLUDING] = INCLUDING_STATE_TOKENS;
+    _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
+    _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
 
 
     //vector<token_def*> tokens; // bkp todo tokens for state
@@ -155,7 +160,9 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     const int r = read_sstream( file, ss );
     _search_text = ss.str( );
     // initialize expression ...
+    set_state(sINITIAL);
     init_expr();
+
 
     // DEBUGGING OVERRIDE _expr
     cout << _expr << endl;
@@ -443,11 +450,29 @@ state_t* Lexer::get_state() const
     return _state;
 }
 
-void Lexer::set_state(const state_t& s) const
+void Lexer::set_state(const state_t& s)
 {
-    _state->id = s.id;
-    _state->name = s.name;
-    // todo! load state token list
+    _state = &sINITIAL;
+    // _state->id = s.id;
+    // _state->name = s.name;
+    vector<unsigned long>* TOKENS = &g_state_tokens_tab[s.id];
+    const int len_states = TOKENS->size();
+    for (int i = 0; i < len_states; i++)
+    {
+        int len_tokens = g_state_tokens_tab[i].size();
+        for (int j = 0; j < len_tokens; j++)
+        {
+            g_tokens_all[j].index = i+1;
+            if (g_tokens_all[j].id == (*TOKENS)[i])
+            {
+                _tokens.push_back(g_tokens_all[j]);
+                _id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
+                _idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
+                _name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
+            }
+        }
+    }
+
 }
 
 bool Lexer::is_id( const token_def& token, const int& id )

@@ -183,6 +183,17 @@ typedef struct token_match_t
 	token_t token;
 } token_match_t;
 
+
+template<typename T>
+class TTYPE
+{
+public:
+	inline void set(const T& v) { *_val = v; }
+	inline T& get() { return *_val; }
+private:
+	T* _val;
+};
+
 typedef struct token_def
 {
 	unsigned long id;
@@ -350,7 +361,7 @@ public:
 
 	state_t* get_state() const;
 
-	void set_state(const state_t& s) const;
+	void set_state(const state_t& s);
 
 	static bool is_id( const token_def& token, const int& id );
 
@@ -358,12 +369,13 @@ protected:
 	parser*                       _pparser;
 	string                        _config_file;
 	vector<token_def>             _tokens;
+	vector<token_def>             p_tokens;
 	vector<state_t*>              _states;
 	map<int, token_def*>          _idx_tab;  // idx  -> token_def
 	map<int, token_def*>          _id_tab;   // id   -> token_def
 	map<string, token_def*>       _name_tab; // name -> token_def
-	map<int, vector<unsigned long>>  _state_tokens_tab;
-	map<int, state_t*>            _state_tab;
+	map<unsigned long, vector<unsigned long>>  _state_tokens_tab;
+	map<unsigned long, state_t*>            _state_tab;
 	vector<token_def*>            _matches;
 	std::string                   _scan_file;
 	std::string                   _search_text;
