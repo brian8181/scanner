@@ -37,11 +37,12 @@ using std::string;
 using std::vector;
 using std::map;
 using std::pair;
+using std::setw;
+using std::left;
+using std::right;
 using yy::parser;
 
-using namespace std;
-// bkp todo!
-//using namespace bkp;
+//using namespace std;
 
 /**
  * @brief default ctor
@@ -93,39 +94,6 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
 	_state_tab.clear();
 	_matches.clear();
 
-    // build tables
-    #ifdef LEX_TEST
-    // init tables from tokens.hpp
-    //_tokens.clear();
-    // vector<unsigned long>* TOKENS = &g_state_tokens_tab[cINITIAL];
-    // const int len = TOKENS->size();
-    // for (int i = 0; i < len; i++)
-    // {
-    //     for (int j = 0; j < g_tokens.size(); j++)
-    //     {
-    //         g_tokens[j].index = i+1;
-    //         if (g_tokens[j].id == (*TOKENS)[i])
-    //         {
-    //             _tokens.push_back(g_tokens[j]);
-    //             _id_tab[g_tokens[j].id] = &g_tokens[j];
-    //             _idx_tab[g_tokens[j].index] = &g_tokens[j];
-    //             _name_tab[g_tokens[j].name] = &g_tokens[j];
-    //         }
-    //     }
-    // }
-
-
-    // _tokens.clear();
-    // for(int i = 0; i < len; ++i)
-    // {
-    //     g_tokens[i].index = i+1;
-    //     _tokens.push_back(g_tokens[i]);
-    //     _id_tab[g_tokens[i].id] = &g_tokens[i];
-    //     _idx_tab[g_tokens[i].index] = &g_tokens[i];
-    //     _name_tab[g_tokens[i].name] = &g_tokens[i];
-    //}
-    #endif
-
     _states.push_back(&sINITIAL);
     _states.push_back(&sCOMMENT);
     _states.push_back(&sESCAPED);
@@ -135,6 +103,10 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     _states.push_back(&sIF_BLOCK);
     _states.push_back(&sIF_CONDITION);
 
+    // globals ...
+    // g_state_tab
+    // g_state_tokens_tab
+    // g_state
     _state = &sINITIAL;
     _state_tab[_state->id] = _state;
     _state_tokens_tab[cINITIAL] = INITIAL_STATE_TOKENS;
@@ -146,23 +118,16 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
     _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
 
-
-    //vector<token_def*> tokens; // bkp todo tokens for state
-    // for (int i = 1; i < INITIAL_STATE.size(); ++i) {
-    //     // _state_tab[sINITIAL]
-    //     // tokens.push_back();
-    // }
-    //** _state_tokens_tab[_state->id] = state_initial;
-
     //load_config( config_file );
     _scan_file = file;
     stringstream ss;
     const int r = read_sstream( file, ss );
     _search_text = ss.str( );
-    // initialize expression ...
-    set_state(sINITIAL);
-    init_expr();
 
+    // set state
+    set_state(sINITIAL);
+    // initialize expression ...
+    init_expr();
 
     // DEBUGGING OVERRIDE _expr
     cout << _expr << endl;
@@ -178,7 +143,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
 /**
  * @brief  load_config: load configuration from file
  * @param  file
-  * @return void
+ * @return void
  */
 void Lexer::load_config( const string &file )
 {
@@ -380,7 +345,7 @@ parser::symbol_type Lexer::get_token()
             }
         }
         ++(*_p_iter); // increment iterator
-        return on_token( *_state, *ptoken );; // return token id
+        return on_token( *ptoken ); // return token id
     }
     return parser::make_END(); // error or eof
 }
@@ -395,15 +360,16 @@ void Lexer::reset()
 
 /**
  * @brief override virtual, on_token, for each token ...
- * @param token
+ * @param token_def
  */
-yy::parser::symbol_type Lexer::on_token( const state_t& state, const token_def& token )
-{
-    return on_token_action(state, token);
-}
+// yy::parser::symbol_type Lexer::on_token( const token_def& token )
+// {
+//     return on_token_action( token);
+// }
 
 /**
  * @brief get regex expression
+ * @return const string&
  */
 const string& Lexer::get_expr() const
 {
@@ -430,39 +396,46 @@ void Lexer::init_expr()
 /**
  * @brief print token to stdout
  */
-void Lexer::print_token( int id )
+void Lexer::print_token(int id)
 {
-    const token* ptoken = _id_tab[id];
-    cout << "token:\n{"
-            << setw(5) << left << "\n\t id: "         << setw(10) << right << ptoken->id
-            << setw(5) << left << "\n\t name: "       << setw(10) << right << ptoken->name
-            << setw(5) << left << "\n\t stype: "      << setw(10) << right << ptoken->stype
-            << setw(5) << left << "\n\t index: "      << setw(10) << right << ptoken->index
-            << setw(5) << left << "\n\t value: "      << setw(10) << right << ptoken->value
-            << setw(5) << left << "\n\t rexp: "       << setw(10) << right << ptoken->rexp
-            << setw(5) << left << "\n\t test_value: " << setw(10) << right << ptoken->test_value
-        << "\n}"
-    << endl;
+    const token *ptoken = _id_tab[id];
+    cout << "token:\n{" << setw(5) << left << "\n\t id: " << setw(10) << right << ptoken->id << setw(5) << left
+         << "\n\t name: " << setw(10) << right << ptoken->name << setw(5) << left << "\n\t stype: " << setw(10) << right
+         << ptoken->stype << setw(5) << left << "\n\t index: " << setw(10) << right << ptoken->index << setw(5) << left
+         << "\n\t value: " << setw(10) << right << ptoken->value << setw(5) << left << "\n\t rexp: " << setw(10)
+         << right << ptoken->rexp << setw(5) << left << "\n\t test_value: " << setw(10) << right << ptoken->test_value
+         << "\n}" << endl;
 }
 
-state_t* Lexer::get_state() const
+
+/**
+* @brief get_state
+* @return state_t
+*/
+state_t *Lexer::get_state() const
 {
     return _state;
 }
 
-void Lexer::set_state(const state_t& s)
+/**
+ * @brief set_state
+ * @param s
+ * @return void
+ */
+void Lexer::set_state(const state_t &s)
 {
-    _state = &sINITIAL;
-    // _state->id = s.id;
-    // _state->name = s.name;
-    vector<unsigned long>* TOKENS = &g_state_tokens_tab[s.id];
+    g_state->id = s.id;
+    g_state->name = s.name;
+    _state = g_state;
+
+    vector<unsigned long> *TOKENS = &g_state_tokens_tab[g_state->id];
     const int len_states = TOKENS->size();
     for (int i = 0; i < len_states; i++)
     {
-        int len_tokens = g_state_tokens_tab[i].size();
+        const int len_tokens = g_tokens_all.size();
         for (int j = 0; j < len_tokens; j++)
         {
-            g_tokens_all[j].index = i+1;
+            g_tokens_all[j].index = i + 1;
             if (g_tokens_all[j].id == (*TOKENS)[i])
             {
                 _tokens.push_back(g_tokens_all[j]);
@@ -472,8 +445,8 @@ void Lexer::set_state(const state_t& s)
             }
         }
     }
-
 }
+
 
 bool Lexer::is_id( const token_def& token, const int& id )
 {

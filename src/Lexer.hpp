@@ -325,13 +325,14 @@ public:
 	 * @param state
 	 * @param token
 	 */
-	parser::symbol_type on_token( const state_t& state, const token_def& token );
+	parser::symbol_type on_token( const token_def& token );
+
 	/**
 	 * @brief on_token_action, for each token ...
 	 * @param state
 	 * @param token
 	 */
-	parser::symbol_type on_token_action( const state_t& state, const token_def &token );
+	//parser::symbol_type on_token_action( const state_t& state, const token_def &token );
 	/**
 	 * @brief on_state, on_token, for each token ...
 	 * @param state
