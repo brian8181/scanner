@@ -20,142 +20,255 @@ using std::cout;
 using std::endl;
 using yy::parser;
 
-/**
- * @brief tokens / punctuation
- */
-constexpr unsigned long UL_TILDE         = 0x100;
-constexpr unsigned long UL_TIC_MARK      = 0x200;
-constexpr unsigned long UL_EXCLAMATION   = 0x400;
-constexpr unsigned long UL_AT_SYMBOL     = 0x800;
-constexpr unsigned long UL_HASH_MARK     = 0x1000;
-constexpr unsigned long UL_DOLLAR_SIGN   = 0x2000;
-constexpr unsigned long UL_PERCENT_SIGN  = 0x4000;
-constexpr unsigned long UL_CARROT_SYMB   = 0x8000;
-constexpr unsigned long UL_AMPERSAND     = 0x10000;
-constexpr unsigned long UL_ASTERISK      = 0x10001;
-constexpr unsigned long UL_OPEN_PAREN    = 0x20000;
-constexpr unsigned long UL_CLOSE_PAREN   = 0x40000;
-constexpr unsigned long UL_DASH          = 0x80000;
-constexpr unsigned long UL_UNDERSCORE    = 0x100000;
-constexpr unsigned long UL_PLUS_SIGN     = 0x200000;
-constexpr unsigned long UL_EQUAL_SIGN    = 0x400000;
-constexpr unsigned long UL_OPEN_BRACE    = 0x800000;
-constexpr unsigned long UL_OPEN_BRACKET  = 0x1000000;
-constexpr unsigned long UL_CLOSE_BRACE   = 0x2000000;
-constexpr unsigned long UL_CLOSE_BRACKET = 0x4000000;
-constexpr unsigned long UL_VBAR          = 0x8000000;
-constexpr unsigned long UL_BACKSLASH     = 0x10000000;
-constexpr unsigned long UL_COLON         = 0x20000000;
-constexpr unsigned long UL_SEMI_COLON    = 0x40000000;
-constexpr unsigned long UL_DOUBLE_QUOTE  = 0x80000000;
-constexpr unsigned long UL_SINGLE_QUOTE  = 0x100000000;
-constexpr unsigned long UL_LESS_THAN     = 0x200000000;
-constexpr unsigned long UL_COMMA         = 0x400000000;
-constexpr unsigned long UL_GREATER_THAN  = 0x800000000;
-constexpr unsigned long UL_PERIOD        = 0x1000000000;
-constexpr unsigned long UL_QUESTION_MARK = 0x2000000000;
-constexpr unsigned long UL_SLASH         = 0x4000000000;
+// int INDEX = 100;
+// /**
+//  * @brief tokens / punctuation
+//  */
+// unsigned long UL_TILDE         = INDEX++;
+// unsigned long UL_TIC_MARK      = INDEX++;
+// unsigned long UL_EXCLAMATION   = INDEX++;
+// unsigned long UL_AT_SYMBOL     = INDEX++;
+// unsigned long UL_HASH_MARK     = INDEX++;
+// unsigned long UL_DOLLAR_SIGN   = INDEX++;
+// unsigned long UL_PERCENT_SIGN  = INDEX++;
+// unsigned long UL_CARROT_SYMB   = INDEX++;
+// unsigned long UL_AMPERSAND     = INDEX++;
+// unsigned long UL_ASTERISK      = INDEX++;
+// unsigned long UL_OPEN_PAREN    = INDEX++;
+// unsigned long UL_CLOSE_PAREN   = INDEX++;
+// unsigned long UL_DASH          = INDEX++;
+// unsigned long UL_UNDERSCORE    = INDEX++;
+// unsigned long UL_PLUS_SIGN     = INDEX++;
+// unsigned long UL_EQUAL_SIGN    = INDEX++;
+// unsigned long UL_OPEN_BRACE    = INDEX++;
+// unsigned long UL_OPEN_BRACKET  = INDEX++;
+// unsigned long UL_CLOSE_BRACE   = INDEX++;
+// unsigned long UL_CLOSE_BRACKET = INDEX++;
+// unsigned long UL_VBAR          = INDEX++;
+// unsigned long UL_BACKSLASH     = INDEX++;
+// unsigned long UL_COLON         = INDEX++;
+// unsigned long UL_SEMI_COLON    = INDEX++;
+// unsigned long UL_DOUBLE_QUOTE  = INDEX++;
+// unsigned long UL_SINGLE_QUOTE  = INDEX++;
+// unsigned long UL_LESS_THAN     = INDEX++;
+// unsigned long UL_COMMA         = INDEX++;
+// unsigned long UL_GREATER_THAN  = INDEX++;
+// unsigned long UL_PERIOD        = INDEX++;
+// unsigned long UL_QUESTION_MARK = INDEX++;
+// unsigned long UL_SLASH         = INDEX++;
+// /**
+//  * @brief tokens / programming / logical
+//  */
+// unsigned long UL_NOT                   = INDEX++;
+// unsigned long UL_AND                   = INDEX++;
+// unsigned long UL_OR                    = INDEX++;
+// unsigned long UL_XOR                   = INDEX++;
+// unsigned long UL_LEFT_SHIFT            = INDEX++;
+// unsigned long UL_RIGHT_SHIFT           = INDEX++;
+// unsigned long UL_LOGICAL_AND           = INDEX++;
+// unsigned long UL_LOGICAL_OR            = INDEX++;
+// unsigned long UL_LOGICAL_NOT           = INDEX++;
+// unsigned long UL_LOGICAL_EQUAL         = INDEX++;
+// unsigned long UL_GREATER_THAN_EQUAL    = INDEX++;
+// unsigned long UL_LESS_THAN_EQUAL       = INDEX++;
+// unsigned long UL_NUMERIC_LITERAL       = INDEX++;
+// unsigned long UL_STRING_LITERAL        = INDEX++;
+// unsigned long UL_DECIMAL_LITERAL       = INDEX++;
+// unsigned long UL_HEXADECIMAL_LITERAL   = INDEX++;
+// unsigned long UL_OCTAL_DECIMAL_LITERAL = INDEX++;
 
-/**
- * @brief tokens / programming / logical
- */
-constexpr unsigned long UL_NOT                   = 10;
-constexpr unsigned long UL_AND                   = 10;
-constexpr unsigned long UL_OR                    = 10;
-constexpr unsigned long UL_XOR                   = 10;
-constexpr unsigned long UL_LEFT_SHIFT            = 10;
-constexpr unsigned long UL_RIGHT_SHIFT           = 10;
-constexpr unsigned long UL_LOGICAL_AND           = 10;
-constexpr unsigned long UL_LOGICAL_OR            = 10;
-constexpr unsigned long UL_LOGICAL_NOT           = 10;
-constexpr unsigned long UL_LOGICAL_EQUAL         = 10;
-constexpr unsigned long UL_GREATER_THAN_EQUAL    = 30;
-constexpr unsigned long UL_LESS_THAN_EQUAL       = 31;
-constexpr unsigned long UL_NUMERIC_LITERAL       = 32;
-constexpr unsigned long UL_STRING_LITERAL        = 32;
-constexpr unsigned long UL_DECIMAL_LITERAL       = 33;
-constexpr unsigned long UL_HEXADECIMAL_LITERAL   = 34;
-constexpr unsigned long UL_OCTAL_DECIMAL_LITERAL = 35;
+// /**
+//  * @brief tokens / keywords
+//  */
+// unsigned long UL_IF       = INDEX++;
+// unsigned long UL_ELSE     = INDEX++;
+// unsigned long UL_ELSEIF   = INDEX++;
+// unsigned long UL_FOREACH  = INDEX++;
+// unsigned long UL_DO       = INDEX++;
+// unsigned long UL_WHILE    = INDEX++;
+// unsigned long UL_SWITCH   = INDEX++;
+// unsigned long UL_CASE     = INDEX++;
+// unsigned long UL_DEFAULT  = INDEX++;
+// unsigned long UL_BREAK    = INDEX++;
+// unsigned long UL_CONTINUE = INDEX++;
+// unsigned long UL_TRY      = INDEX++;
+// unsigned long UL_CATCH    = INDEX++;
 
-/**
- * @brief tokens / keywords
- */
-constexpr unsigned long UL_IF       = 36;
-constexpr unsigned long UL_ELSE     = 36;
-constexpr unsigned long UL_ELSEIF   = 36;
-constexpr unsigned long UL_FOREACH  = 36;
-constexpr unsigned long UL_DO       = 36;
-constexpr unsigned long UL_WHILE    = 36;
-constexpr unsigned long UL_SWITCH   = 36;
-constexpr unsigned long UL_CASE     = 36;
-constexpr unsigned long UL_DEFAULT  = 36;
-constexpr unsigned long UL_BREAK    = 36;
-constexpr unsigned long UL_CONTINUE = 36;
-constexpr unsigned long UL_TRY      = 36;
-constexpr unsigned long UL_CATCH    = 36;
+// /**
+//  * @brief built-ins - streamy functions
+//  */
+// unsigned long UL_REQUIRE           = INDEX++;
+// unsigned long UL_CONFIG_LOAD       = INDEX++;
+// unsigned long UL_INSERT            = INDEX++;
+// unsigned long UL_INCLUDE           = INDEX++;
+// unsigned long UL_FILE_ATTRIB       = INDEX++;
+// unsigned long UL_ASSIGN            = INDEX++;
+// unsigned long UL_VAR_ATTRIB        = INDEX++;
+// unsigned long UL_VALUE_ATTRIB      = INDEX++;
+// unsigned long UL_FROM_ATTRIB       = INDEX++;
+// unsigned long UL_ITEM_ATTRIB       = INDEX++;
+// unsigned long UL_KEY_ATTRIB        = INDEX++;
+// unsigned long UL_NAME_ATTRIB       = INDEX++;
+// unsigned long UL_CAPITALIZE        = INDEX++;
+// unsigned long UL_CAT               = INDEX++;
+// unsigned long UL_COUNT_CHARACTERS  = INDEX++;
+// unsigned long UL_COUNT_PARAGRAPHS  = INDEX++;
+// unsigned long UL_COUNT_SENTENCES   = INDEX++;
+// unsigned long UL_COUNT_WORDS       = INDEX++;
+// unsigned long UL_DATE_FORMAT       = INDEX++;
+// unsigned long UL_ESCAPE            = INDEX++;
+// unsigned long UL_INDENT            = INDEX++;
+// unsigned long UL_LOWER             = INDEX++;
+// unsigned long UL_UPPER             = INDEX++;
+// unsigned long UL_STRIP             = INDEX++;
+// unsigned long UL_NL2BR             = INDEX++;
+// unsigned long UL_REGX_REPLACE      = INDEX++;
+// unsigned long UL_REPLACE           = INDEX++;
+// unsigned long UL_SPACIFY           = INDEX++;
+// unsigned long UL_STRING_FORMAT     = INDEX++;
+// unsigned long UL_STRIP_TAGS        = INDEX++;
+// unsigned long UL_TRUNCATE          = INDEX++;
+// unsigned long UL_WORDWRAP          = INDEX++;
 
-/**
- * @brief built-ins - streamy functions
- */
-constexpr unsigned long UL_REQUIRE           = 33;
-constexpr unsigned long UL_CONFIG_LOAD       = 34;
-constexpr unsigned long UL_INSERT            = 35;
-constexpr unsigned long UL_INCLUDE           = 36;
-constexpr unsigned long UL_FILE_ATTRIB       = 37;
-constexpr unsigned long UL_ASSIGN            = 38;
-constexpr unsigned long UL_VAR_ATTRIB        = 39;
-constexpr unsigned long UL_VALUE_ATTRIB      = 40;
-constexpr unsigned long UL_FROM_ATTRIB       = 41;
-constexpr unsigned long UL_ITEM_ATTRIB       = 42;
-constexpr unsigned long UL_KEY_ATTRIB        = 43;
-constexpr unsigned long UL_NAME_ATTRIB       = 44;
-constexpr unsigned long UL_CAPITALIZE        = 45;
-constexpr unsigned long UL_CAT               = 46;
-constexpr unsigned long UL_COUNT_CHARACTERS  = 47;
-constexpr unsigned long UL_COUNT_PARAGRAPHS  = 48;
-constexpr unsigned long UL_COUNT_SENTENCES   = 49;
-constexpr unsigned long UL_COUNT_WORDS       = 50;
-constexpr unsigned long UL_DATE_FORMAT       = 51;
-constexpr unsigned long UL_ESCAPE            = 53;
-constexpr unsigned long UL_INDENT            = 54;
-constexpr unsigned long UL_LOWER             = 55;
-constexpr unsigned long UL_UPPER             = 56;
-constexpr unsigned long UL_STRIP             = 57;
-constexpr unsigned long UL_NL2BR             = 58;
-constexpr unsigned long UL_REGX_REPLACE      = 59;
-constexpr unsigned long UL_REPLACE           = 60;
-constexpr unsigned long UL_SPACIFY           = 61;
-constexpr unsigned long UL_STRING_FORMAT     = 62;
-constexpr unsigned long UL_STRIP_TAGS        = 63;
-constexpr unsigned long UL_TRUNCATE          = 64;
-constexpr unsigned long UL_WORDWRAP          = 65;
+// /**
+//  * @brief tokens / types
+//  */
+// unsigned long UL_VALID_CHARS       = INDEX++;
+// unsigned long UL_FIRST_CHAR        = INDEX++;
+// unsigned long UL_ID                = INDEX++;
+// unsigned long UL_IDENTIFIER        = INDEX++;
+// unsigned long UL_SYMBOL            = INDEX++;
+// unsigned long UL_CONST_SYMBOL      = INDEX++;
+// unsigned long UL_ARRAY             = INDEX++;
+// unsigned long UL_COMMENT           = INDEX++;
+// unsigned long UL_WHITESPACE        = INDEX++;
+// unsigned long UL_FILE_NAME         = INDEX++;
+// unsigned long UL_SKIP_TOKEN        = (-1);
+// unsigned long UL_UNESCAPED_TEXT    = (-5);
+// unsigned long UL_ERROR             = (-2);
+// unsigned long UL_SCAN_EOF          =   0;
+// unsigned long UL_ANYTHING          = (-3);
+// unsigned long UL_MATCH             = INDEX++;
 
-/**
- * @brief tokens / types
- */
-constexpr unsigned long UL_VALID_CHARS       = 66;
-constexpr unsigned long UL_FIRST_CHAR        = 67;
-constexpr unsigned long UL_ID                = 90;
-constexpr unsigned long UL_IDENTIFIER        = 99;
-constexpr unsigned long UL_SYMBOL            = 69;
-constexpr unsigned long UL_CONST_SYMBOL      = 70;
-constexpr unsigned long UL_ARRAY             = 71;
-constexpr unsigned long UL_COMMENT           = 72;
-constexpr unsigned long UL_WHITESPACE        = 74;
-constexpr unsigned long UL_FILE_NAME         = 73;
-constexpr unsigned long UL_SKIP_TOKEN        = (-1);
-constexpr unsigned long UL_UNESCAPED_TEXT    = (-5);
-constexpr unsigned long UL_ERROR             = (-2);
-constexpr unsigned long UL_SCAN_EOF          =   0;
-constexpr unsigned long UL_ANYTHING          = (-3);
-constexpr unsigned long UL_MATCH             = 81;
+#define UL_TILDE                   4ul
+#define UL_TIC_MARK                5ul
+#define UL_EXCLAMATION             6ul
+#define UL_AT_SYMBOL               7ul
+#define UL_HASH_MARK               8ul
+#define UL_DOLLAR_SIGN             9ul
+#define UL_PERCENT_SIGN            10ul
+#define UL_CARROT_SYMB             11ul
+#define UL_AMPERSAND               12ul
+#define UL_ASTERISK                13ul
+#define UL_OPEN_PAREN              14ul
+#define UL_CLOSE_PAREN             15ul
+#define UL_DASH                    16ul
+#define UL_UNDERSCORE              17ul
+#define UL_PLUS_SIGN               18ul
+#define UL_EQUAL_SIGN              19ul
+#define UL_OPEN_BRACE              20ul
+#define UL_OPEN_BRACKET            21ul
+#define UL_CLOSE_BRACE             22ul
+#define UL_CLOSE_BRACKET           23ul
+#define UL_VBAR                    24ul
+#define UL_BACKSLASH               25ul
+#define UL_COLON                   26ul
+#define UL_SEMI_COLON              27ul
+#define UL_DOUBLE_QUOTE            28ul
+#define UL_SINGLE_QUOTE            29ul
+#define UL_LESS_THAN               30ul
+#define UL_COMMA                   31ul
+#define UL_GREATER_THAN            32ul
+#define UL_PERIOD                  33ul
+#define UL_QUESTION_MARK           34ul
+#define UL_SLASH                   35ul
+#define UL_NOT                     39ul
+#define UL_AND                     40ul
+#define UL_OR                      41ul
+#define UL_XOR                     42ul
+#define UL_LEFT_SHIFT              43ul
+#define UL_RIGHT_SHIFT             44ul
+#define UL_LOGICAL_AND             45ul
+#define UL_LOGICAL_OR              46ul
+#define UL_LOGICAL_NOT             47ul
+#define UL_LOGICAL_EQUAL           48ul
+#define UL_GREATER_THAN_EQUAL      49ul
+#define UL_LESS_THAN_EQUAL         50ul
+#define UL_NUMERIC_LITERAL         51ul
+#define UL_STRING_LITERAL          52ul
+#define UL_DECIMAL_LITERAL         53ul
+#define UL_HEXADECIMAL_LITERAL     54ul
+#define UL_OCTAL_DECIMAL_LITERAL   55ul
+#define UL_IF                      60ul
+#define UL_ELSE                    61ul
+#define UL_ELSEIF                  62ul
+#define UL_FOREACH                 63ul
+#define UL_DO                      64ul
+#define UL_WHILE                   65ul
+#define UL_SWITCH                  66ul
+#define UL_CASE                    67ul
+#define UL_DEFAULT                 68ul
+#define UL_BREAK                   69ul
+#define UL_CONTINUE                70ul
+#define UL_TRY                     71ul
+#define UL_CATCH                   72ul
+#define UL_REQUIRE                 77ul
+#define UL_CONFIG_LOAD             78ul
+#define UL_INSERT                  79ul
+#define UL_INCLUDE                 80ul
+#define UL_FILE_ATTRIB             81ul
+#define UL_ASSIGN                  82ul
+#define UL_VAR_ATTRIB              83ul
+#define UL_VALUE_ATTRIB            84ul
+#define UL_FROM_ATTRIB             85ul
+#define UL_ITEM_ATTRIB             86ul
+#define UL_KEY_ATTRIB              87ul
+#define UL_NAME_ATTRIB             88ul
+#define UL_CAPITALIZE              89ul
+#define UL_CAT                     90ul
+#define UL_COUNT_CHARACTERS        91ul
+#define UL_COUNT_PARAGRAPHS        92ul
+#define UL_COUNT_SENTENCES         93ul
+#define UL_COUNT_WORDS             94ul
+#define UL_DATE_FORMAT             95ul
+#define UL_ESCAPE                  96ul
+#define UL_INDENT                  97ul
+#define UL_LOWER                   98ul
+#define UL_UPPER                   99ul
+#define UL_STRIP                   100ul
+#define UL_NL2BR                   101ul
+#define UL_REGX_REPLACE            102ul
+#define UL_REPLACE                 103ul
+#define UL_SPACIFY                 104ul
+#define UL_STRING_FORMAT           105ul
+#define UL_STRIP_TAGS              106ul
+#define UL_TRUNCATE                107ul
+#define UL_WORDWRAP                108ul
+#define UL_VALID_CHARS             113ul
+#define UL_FIRST_CHAR              114ul
+#define UL_ID                      115ul
+#define UL_IDENTIFIER              116ul
+#define UL_SYMBOL                  117ul
+#define UL_CONST_SYMBOL            118ul
+#define UL_ARRAY                   119ul
+#define UL_COMMENT                 120ul
+#define UL_WHITESPACE              121ul
+#define UL_FILE_NAME               122ul
+#define UL_SKIP_TOKEN              0xFF0000ul
+#define UL_UNESCAPED_TEXT          0x00FF00ul
+#define UL_ERROR                   0x0000FFul
+#define UL_SCAN_EOF                0x0ul
+#define UL_ANYTHING                0xFFFFFFul
+#define UL_MATCH                   128ul
+
 
 inline static long g_index = 30;
 /**
  * @brief g_tokens
  */
 inline vector g_tokens_all = {
-    token{UL_MATCH, "MATCH", "string", 0, 66, "include", "include", 0, string("null"), yy::parser::make_YYUNDEF()},
+    token{UL_MATCH, "MATCH", "string", 0, 66, "match", "match", 0, string("null"), yy::parser::make_YYUNDEF()},
+    token{UL_WHITESPACE, "WHITESPACE", "string", 0, 66, R"([ \t\n]*)", "\\t\\n", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0, 66, R"(\$)", "$", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_CARROT_SYMB, "CARROT", "string", 0, 66, R"(\^)", "\\^", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_AMPERSAND, "AMPERSAND", "string", 0, 66, R"(\*)", "\\*", 42, string("null"), yy::parser::make_YYUNDEF()},
@@ -184,12 +297,11 @@ inline vector g_tokens_all = {
     token{UL_NUMERIC_LITERAL, "NUMERIC_LITERAL", "string", 0, 66, "[0-9]+", "12345", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_ARRAY, "ARRAY", "string", 0, 66, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])", "/", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_IDENTIFIER, "IDENTIFIER", "string", 0, 66, R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", "/", 42, string("null"), yy::parser::make_YYUNDEF()},
-    token{UL_SYMBOL, "SYMBOL", "string", 0, 66, R"(\$[a-zA-Z]+)", "\\$abc", 42, string("null"), yy::parser::make_YYUNDEF()},
+    //token{UL_SYMBOL, "SYMBOL", "string", 0, 66, R"(\$[a-zA-Z]+)", "\\$abc", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_COMMENT, "COMMENT", "string", 0, 66, R"(\{[ ]*\*[^*}]*\*[ ]*\})", R"(\* test *\)", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_CONST_SYMBOL, "CONST_SYMBOL", "string", 0, 66, R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", "/", 42, string("null"), yy::parser::make_YYUNDEF()},
-    token{UL_WHITESPACE, "WHITESPACE", "string", 0, 66, R"([ \t])", "\\t", 42, string("null"), yy::parser::make_YYUNDEF()},
-    token{UL_UNESCAPED_TEXT, "UNESCAPED_TEXT", "string", 0, 66, R"([^{]+)", "testing ...", 42, string("null"), yy::parser::make_YYUNDEF()},
-    token{UL_ANYTHING, "ANYTHING", "string", 0, 66, ".", "~#", 42, string("null"), yy::parser::make_YYUNDEF()},
+    // token{UL_UNESCAPED_TEXT, "UNESCAPED_TEXT", "string", 0, 66, R"([^{]+)", "testing ...", 42, string("null"), yy::parser::make_YYUNDEF()},
+    // token{UL_ANYTHING, "ANYTHING", "string", 0, 66, ".", "~#", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_IF, "IF", "string", 0, 66, "if", "if", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_ELSEIF, "ELSEIF", "string", 0, 66, "elseif", "elseif", 42, string("null"), yy::parser::make_YYUNDEF()},
     token{UL_WHILE, "WHILE", "string", 0, 66, "while", "while", 42, string("null"), yy::parser::make_YYUNDEF()},
@@ -247,9 +359,9 @@ constexpr unsigned long  cINCLUDING = 6;
 constexpr unsigned long  cIF_BLOCK = 7;
 constexpr unsigned long  cIF_CONDITION = 8;
 
-inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_OPEN_BRACE, UL_QUESTION_MARK };
+inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_OPEN_BRACE };
 inline vector<unsigned long> COMMENT_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_CLOSE_BRACE  };
 inline vector<unsigned long> DOUBLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> SINGLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> INCLUDING_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
@@ -310,30 +422,24 @@ inline unsigned long Lexer::on_state(const state_t &s)
 inline parser::symbol_type Lexer::on_token( const token_def& token )
 {
     cout << "state = " << g_state->id << endl;
-    print_token(token.id);
+
     switch (g_state->id)
     {
         case cINITIAL:
         {
             switch (token.id)
             {
-                case UL_DOLLAR_SIGN:
-                    return parser::make_DOLLAR_SIGN(token.value);
-                case UL_IDENTIFIER:
-                    return parser::make_IDENTIFIER(token.value);
-                case UL_OPEN_BRACE:
-                    set_state(sESCAPED);
+               case UL_OPEN_BRACE:
+                    print_token(token.id);
+                    set_state(&sESCAPED);
+                    cout << "state = " << _state->name << "(" << _state->id << ")" << endl;
                     // todo stream the prefix
                     return parser::make_LBRACE("{");
-                case UL_QUESTION_MARK:
-                    return parser::make_QUESTION_MARK();
-                case UL_COMMENT:
                 case UL_WHITESPACE:
-                case UL_SCAN_EOF:
-                case UL_ANYTHING:
-                    return parser::make_YYUNDEF();
+                    cout << "WHITESPACE" << endl;
                 case UL_SKIP_TOKEN:
                 default:
+                    print_token(token.id);
                     return parser::make_SKIP_TOKEN();
             }
             break;
@@ -343,13 +449,21 @@ inline parser::symbol_type Lexer::on_token( const token_def& token )
             switch (token.id)
             {
                 case UL_CLOSE_BRACE:
-                    set_state(sINITIAL);
+                    set_state(&sINITIAL);
+                    print_token(token.id);
+                    cout << "state = " << _state->name << "(" << _state->id << ")" << endl;
                     // todo stream the prefix
-                    return parser::make_RBRACE("}");
+                    return parser::make_RBRACE( token.value);
                 case UL_DOLLAR_SIGN:
+                    print_token(token.id);
                     return parser::make_DOLLAR_SIGN(token.value);
-                case UL_ID:
-                    return parser::make_ID(token.value);
+                case UL_IDENTIFIER:
+                    print_token(token.id);
+                    return parser::make_IDENTIFIER(token.value);
+                case UL_PLUS_SIGN:
+                    return parser::make_PLUS();
+                case UL_NUMERIC_LITERAL:
+                    return parser::make_NUMERIC_LITERAL(token.value);
                 case UL_DOUBLE_QUOTE:
                     return parser::make_DOUBLE_QUOTE(token.value);
                 case UL_SINGLE_QUOTE:
@@ -389,8 +503,6 @@ inline parser::symbol_type Lexer::on_token( const token_def& token )
                     return parser::make_GREATER_THAN();
                 case UL_GREATER_THAN_EQUAL:
                     return parser::make_GREATER_THAN_EQUAL();
-                case UL_NUMERIC_LITERAL:
-                    return parser::make_NUMERIC_LITERAL(token.value);
                 case UL_REQUIRE:
                     return parser::make_REQUIRE(token.value);
                 case UL_CONFIG_LOAD:
@@ -415,11 +527,18 @@ inline parser::symbol_type Lexer::on_token( const token_def& token )
                     return parser::make_KEY_ATTRIB(token.value);
                 case UL_NAME_ATTRIB:
                     return parser::make_NAME_ATTRIB(token.value);
-                default: ;
+                case UL_WHITESPACE:
+                    cout << "WHITESPACE" << endl;
+                case UL_SKIP_TOKEN:
+                    return parser::make_SKIP_TOKEN();
+                default:
+                    cout << "Error: " << token.id << endl;
+
             }
             break;
         }
         default:
+            cout << "ERROR:" << token.id << endl;
             break;
     }
 

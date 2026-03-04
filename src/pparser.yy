@@ -150,11 +150,19 @@ block:
                                                                     cout << FMT_FG_RED
                                                                             << "block: NUMBER = " << $1
                                                                         << FMT_RESET << endl;   }
-    | symbol                                                    {
-                                                                    cout << FMT_FG_RED
-                                                                            << "block: symbol = " << $1
-                                                                        << FMT_RESET << endl;   }
-                                                                ;
+                                                                  ;
+/*assign_stmt:
+    symbol EQUAL NUMERIC_LITERAL
+    ;
+*/
+
+literal:
+    NUMERIC_LITERAL                                            {
+                                                                cout << FMT_FG_YELLOW
+                                                                << "PARSER literal: | NUMERIC_LITERAL"
+                                                                << FMT_RESET << endl;
+                                                               }
+    ;
 
 qualafied_id:
     symbol DOT ID                                               {
@@ -193,7 +201,7 @@ params:
 
 symbol:
     DOLLAR_SIGN IDENTIFIER                                      {
-                                                                    cout << FMT_FG_YELLOW << "PARSER symbol: | IDENTIFIER=\"" << $1 << "\"" << FMT_RESET << endl;;
+                                                                    cout << FMT_FG_YELLOW << "PARSER symbol: | IDENTIFIER=\"" << $2 << "\"" << FMT_RESET << endl;;
                                                                     $$=$2;
                                                                 }
     | CONST_ID                                                  {

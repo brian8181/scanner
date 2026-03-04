@@ -1,2 +1,3 @@
-$abc  $xyz ?
-$aaa
+{ $anc }
+{ $abc } { $wwww }
+{ 55 }

@@ -118,6 +118,17 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     _state_tokens_tab[cIF_BLOCK] = IF_BLOCK_STATE_TOKENS;
     _state_tokens_tab[cIF_CONDITION] = IF_CONDITION_STATE_TOKENS;
 
+    // init from global
+    const int len_states = g_tokens_all.size();
+    for (int i = 0; i < len_states; i++)
+    {
+        g_tokens_all[i].index = i + 1;
+        _tokens.push_back(g_tokens_all[i]);
+        _id_tab[g_tokens_all[i].id] = &g_tokens_all[i];
+        _idx_tab[g_tokens_all[i].index] = &g_tokens_all[i];
+        _name_tab[g_tokens_all[i].name] = &g_tokens_all[i];
+    }
+
     //load_config( config_file );
     _scan_file = file;
     stringstream ss;
@@ -125,7 +136,7 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     _search_text = ss.str( );
 
     // set state
-    set_state(sINITIAL);
+    set_state(&sINITIAL);
     // initialize expression ...
     init_expr();
 
@@ -297,7 +308,6 @@ void Lexer::tokenize()
                 print_token(ptoken->id);
                 if(ptoken->id == UL_SKIP_TOKEN)
                 {
-                    cout << "\\s";
                     ++(*_p_iter);
                     continue; // skip back to top of for
                 }
@@ -333,6 +343,8 @@ parser::symbol_type Lexer::get_token()
 
                 ptoken = _idx_tab[i];        // lookup by sub_match index!
                 ptoken->value = m[i].str();  // set match value
+                //_pos = m.position(i);
+                //_len = m.length(i);
                 if(ptoken->id == UL_WHITESPACE || ptoken->id == UL_SKIP_TOKEN)
                 {
                     cout << "\\s";
@@ -381,6 +393,7 @@ const string& Lexer::get_expr() const
  */
 void Lexer::init_expr()
 {
+    _expr.clear();
     stringstream ss;
     const size_t len = _tokens.size();
     for(int i = 0; i < len; ++i)
@@ -391,6 +404,7 @@ void Lexer::init_expr()
     }
     _expr = ss.str();
     _expr.pop_back(); // remove extra '|' i.e. "V-BAR"
+    _rexp = boost::regex( _expr, boost::regex::extended );
 }
 
 /**
@@ -422,29 +436,58 @@ state_t *Lexer::get_state() const
  * @param s
  * @return void
  */
-void Lexer::set_state(const state_t &s)
+void Lexer::set_state(state_t* pstate)
 {
-    g_state->id = s.id;
-    g_state->name = s.name;
+    // _tokens.clear();
+    // _idx_tab.clear();
+    // _idx_tab.clear();
+    // _name_tab.clear();
+
+    g_state = pstate;
     _state = g_state;
 
-    vector<unsigned long> *TOKENS = &g_state_tokens_tab[g_state->id];
-    const int len_states = TOKENS->size();
-    for (int i = 0; i < len_states; i++)
-    {
-        const int len_tokens = g_tokens_all.size();
-        for (int j = 0; j < len_tokens; j++)
-        {
-            g_tokens_all[j].index = i + 1;
-            if (g_tokens_all[j].id == (*TOKENS)[i])
-            {
-                _tokens.push_back(g_tokens_all[j]);
-                _id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
-                _idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
-                _name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
-            }
-        }
-    }
+    // vector<unsigned long> *TOKENS = &g_state_tokens_tab[g_state->id];
+    // const int len_states = TOKENS->size();
+    // for (int i = 0; i < len_states; i++)
+    // {
+    //     const int len_tokens = g_tokens_all.size();
+    //     for (int j = 0; j < len_tokens; j++)
+    //     {
+    //         g_tokens_all[j].index = i + 1;
+    //         if (g_tokens_all[j].id == (*TOKENS)[i])
+    //         {
+    //             _tokens.push_back(g_tokens_all[j]);
+    //             _id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
+    //             _idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
+    //             _name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
+    //         }
+    //     }
+    // }
+
+    //vector<unsigned long> *g_tokens_all = &g_state_tokens_tab[g_state->id];
+    // const int len_states = g_tokens_all.size();
+    // for (int i = 0; i < len_states; i++)
+    // {
+    //     const int len_tokens = g_tokens_all.size();
+    //     for (int j = 0; j < len_tokens; j++)
+    //     {
+    //         g_tokens_all[j].index = i + 1;
+    //         _tokens.push_back(g_tokens_all[j]);
+    //         _id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
+    //         _idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
+    //         _name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
+    //     }
+    // }
+    // //init_expr();
+    // cout << _expr << endl;
+    //
+    //
+    // // // todo just begin !!
+    // // _matches[_matches.size()-1];
+    // // _search_text = _search_text.substr(_pos, _len);
+    // _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
+    // _p_iter = &_begin;
+    //_end = boost::sregex_iterator();
 }
 
 

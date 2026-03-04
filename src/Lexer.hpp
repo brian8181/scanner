@@ -362,7 +362,7 @@ public:
 
 	state_t* get_state() const;
 
-	void set_state(const state_t& s);
+	void set_state(state_t* pstate);
 
 	static bool is_id( const token_def& token, const int& id );
 
@@ -384,6 +384,8 @@ protected:
 	boost::sregex_iterator        _begin;
 	boost::sregex_iterator        _end;
 	boost::sregex_iterator*       _p_iter;
+	int _pos;
+	int _len;
 	state_t*                      _state;
 	string                        _expr;
 	stringstream                  _sout;
