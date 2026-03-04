@@ -189,8 +189,7 @@ void Lexer::load_config( const string &file )
             string stype = token_match["type"].str();
             string test_val = token_match["test"].str();
 
-            auto* ptoken = new token_def{ 0xFFul + j*0x06ul, string(name), stype, 0, 0,
-                string(expr), string(test_val), 0, string("null") };
+            auto* ptoken = new token_def{ 0xFFul + j*0x06ul, string(name), stype, 0, string(expr), 0, string("null"), nullptr };
 
             // copy to term to vector
             _tokens.push_back(*ptoken);
@@ -265,8 +264,7 @@ void Lexer::dump_config( ) const
               " type: "       << left << setw(10) << ptoken->stype      <<
               " value: "      << left << setw(10) << ptoken->value      <<
               " rexp: "       << left << setw(10) << ptoken->rexp       <<
-              " index: "      << left << setw(10) << ptoken->index      <<
-              " test_value: " << left << setw(10) << ptoken->test_value << endl;
+              " index: "      << left << setw(10) << ptoken->index      << endl;
     }
     cout << ss.str();
 }
@@ -337,27 +335,29 @@ parser::symbol_type Lexer::get_token()
         {
             if(m[i].matched)
             {
+                ++(*_p_iter); // increment iterator
+
                 string prefix = m.prefix();
                 if(!prefix.empty())
                     _sout << prefix;
 
                 ptoken = _idx_tab[i];        // lookup by sub_match index!
                 ptoken->value = m[i].str();  // set match value
+                //ptoken->type = parser::symbol_type( parser::token::SKIP_TOKEN );
+
                 //_pos = m.position(i);
                 //_len = m.length(i);
-                if(ptoken->id == UL_WHITESPACE || ptoken->id == UL_SKIP_TOKEN)
+                auto ret = parser::symbol_type( on_token(ptoken) );
+                if ( ptoken->type->kind_ == parser::symbol_kind_type::S_SKIP_TOKEN )
                 {
-                    cout << "\\s";
-                    ++(*_p_iter);
+                    cout << ptoken->name << endl;
                     return get_token(); // recursive skipping logic
                 }
                 cout << endl;
                 _matches.push_back(ptoken);
-                break; // found, break 'for' loop
+                return ret;
             }
         }
-        ++(*_p_iter); // increment iterator
-        return on_token( *ptoken ); // return token id
     }
     return parser::make_END(); // error or eof
 }
@@ -417,7 +417,7 @@ void Lexer::print_token(int id)
          << "\n\t name: " << setw(10) << right << ptoken->name << setw(5) << left << "\n\t stype: " << setw(10) << right
          << ptoken->stype << setw(5) << left << "\n\t index: " << setw(10) << right << ptoken->index << setw(5) << left
          << "\n\t value: " << setw(10) << right << ptoken->value << setw(5) << left << "\n\t rexp: " << setw(10)
-         << right << ptoken->rexp << setw(5) << left << "\n\t test_value: " << setw(10) << right << ptoken->test_value
+         << right << ptoken->rexp << setw(5) << left << "\n\t test_value: " << setw(10) << right
          << "\n}" << endl;
 }
 

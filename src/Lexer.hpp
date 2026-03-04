@@ -200,12 +200,10 @@ typedef struct token_def
 	string name;
 	string stype;
 	int itype;
-	int lex_t;
 	string rexp;
-	string test_value;
 	unsigned long index;
 	string value;
-	parser::symbol_type type;
+	parser::symbol_type* type;
 	// operator yy::parser::symbol_type()
 	// {
 	// 	return new yy::parser::symbol_type;
@@ -325,7 +323,7 @@ public:
 	 * @param state
 	 * @param token
 	 */
-	parser::symbol_type on_token( const token_def& token );
+	parser::symbol_type on_token( token_def* ptoken );
 
 	/**
 	 * @brief on_token_action, for each token ...
@@ -337,7 +335,7 @@ public:
 	 * @brief on_state, on_token, for each token ...
 	 * @param state
 	 */
-	unsigned long on_state(const state_t &s);
+	unsigned long on_state(state_t* pstate);
 
 	/**
 	 * @brief tokenize
