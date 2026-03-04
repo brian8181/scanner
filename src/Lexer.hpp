@@ -348,9 +348,9 @@ public:
 	const string& get_expr() const;
 
 	/**
-	 * @brief init_expr
+	 * @brief build_expr
 	 */
-	void init_expr();
+	void build_expr();
 
 	/**
      * @brief print token to stdout
@@ -369,12 +369,12 @@ protected:
 	string                        _config_file;
 	vector<token_def>             _tokens;
 	vector<token_def>             p_tokens;
-	vector<state_t*>              _states;
-	map<int, token_def*>          _idx_tab;  // idx  -> token_def
-	map<int, token_def*>          _id_tab;   // id   -> token_def
+	map<unsigned long, token_def*>          _idx_tab;  // idx  -> token_def
+	map<unsigned long, token_def*>          _id_tab;   // id   -> token_def
 	map<string, token_def*>       _name_tab; // name -> token_def
-	map<unsigned long, vector<unsigned long>>  _state_tokens_tab;
-	map<unsigned long, state_t*>            _state_tab;
+	vector<state_t*>*                           p_states;
+	map<unsigned long, vector<unsigned long>>*  p_state_tokens_tab;
+	map<unsigned long, state_t*>*               p_state_tab;
 	vector<token_def*>            _matches;
 	std::string                   _scan_file;
 	std::string                   _search_text;
@@ -382,9 +382,9 @@ protected:
 	boost::sregex_iterator        _begin;
 	boost::sregex_iterator        _end;
 	boost::sregex_iterator*       _p_iter;
-	int _pos;
-	int _len;
-	state_t*                      _state;
+	int                           _pos;
+	int                           _len;
+	state_t*                      p_state;
 	string                        _expr;
 	stringstream                  _sout;
 };

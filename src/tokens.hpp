@@ -150,6 +150,20 @@ using yy::parser;
 // unsigned long UL_ANYTHING          = (-3);
 // unsigned long UL_MATCH             = INDEX++;
 
+// inline string e1 = R"((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
+// inline string e2 = R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+))";
+// inline string e3 = R"(|([ \t])|(.)|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
+// inline string e4 = R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify))";
+// inline string e5 = R"(|(string_format)|(strip_tags)|(truncate)|(wordwrap)|((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
+// inline string e6 = R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+)|([ \t])|(.))";
+// inline string e7 = R"(|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
+// inline string e8 = R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify)|(string_format)|(strip_tags)|(truncate)|(wordwrap))";
+// inline string expression = e1 + e2 + e3 + e4 + e5 + e6 + e8;
+
+
+/**
+ * @brief token definitions : unsigned long integers
+ */
 #define UL_TILDE                   4ul
 #define UL_TIC_MARK                5ul
 #define UL_EXCLAMATION             6ul
@@ -262,9 +276,9 @@ using yy::parser;
 #define UL_MATCH                   128ul
 
 
-inline static long g_index = 30;
 /**
- * @brief g_tokens
+ * @name g_tokens_all
+ * @brief global token vector - all tokens
  */
 inline vector g_tokens_all = {
     token{UL_MATCH, "MATCH", "string", 0,  "match", 42, string("null"), nullptr},
@@ -297,7 +311,6 @@ inline vector g_tokens_all = {
     token{UL_NUMERIC_LITERAL, "NUMERIC_LITERAL", "string", 0,  "[0-9]+", 42, string("null"), nullptr},
     token{UL_ARRAY, "ARRAY", "string", 0,  R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])", 42, string("null"), nullptr},
     token{UL_IDENTIFIER, "IDENTIFIER", "string", 0,  R"([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)", 42, string("null"), nullptr},
-    //token{UL_SYMBOL, "SYMBOL", "string", 0,  R"(\$[a-zA-Z]+)", 42, string("null"), nullptr},
     token{UL_COMMENT, "COMMENT", "string", 0,  R"(\{[ ]*\*[^*}]*\*[ ]*\})", 42, string("null"), nullptr},
     token{UL_CONST_SYMBOL, "CONST_SYMBOL", "string", 0,  R"(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)", 42, string("null"), nullptr},
     token{UL_UNESCAPED_TEXT, "UNESCAPED_TEXT", "string", 0,  R"([^{]+)", 42, string("null"), nullptr},
@@ -339,17 +352,9 @@ inline vector g_tokens_all = {
     token{UL_WORDWRAP, "WORDWRAP", "string", 0,  "wordwrap", 42, string("null"),  nullptr}
 };
 
-inline string e1 = R"((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
-inline string e2 = R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+))";
-inline string e3 = R"(|([ \t])|(.)|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
-inline string e4 = R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify))";
-inline string e5 = R"(|(string_format)|(strip_tags)|(truncate)|(wordwrap)|((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
-inline string e6 = R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+)|([ \t])|(.))";
-inline string e7 = R"(|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
-inline string e8 = R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify)|(string_format)|(strip_tags)|(truncate)|(wordwrap))";
-inline string expression = e1 + e2 + e3 + e4 + e5 + e6 + e8;
-
-// states
+/**
+ * @brief unsigned long states
+ */
 constexpr unsigned long  cINITIAL = 0;
 constexpr unsigned long  cCOMMENT = 1;
 constexpr unsigned long  cESCAPED  = 3;
@@ -359,15 +364,9 @@ constexpr unsigned long  cINCLUDING = 6;
 constexpr unsigned long  cIF_BLOCK = 7;
 constexpr unsigned long  cIF_CONDITION = 8;
 
-inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_OPEN_BRACE };
-inline vector<unsigned long> COMMENT_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_CLOSE_BRACE  };
-inline vector<unsigned long> DOUBLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> SINGLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> INCLUDING_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> IF_BLOCK_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> IF_CONDITION_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-
+/**
+ * @brief state_t states
+ */
 inline state_t sINITIAL = { cINITIAL, "INITIAL" };
 inline state_t sCOMMENT = { cCOMMENT, "COMMENT" };
 inline state_t sESCAPED = { cESCAPED, "ESCAPED" };
@@ -377,7 +376,39 @@ inline state_t sINCLUDING = { cINCLUDING, "INCLUDING" };
 inline state_t sIF_BLOCK = { cIF_BLOCK, "IF_BLOCK" };
 inline state_t sIF_CONDITION = { cIF_CONDITION, "IF_CONDITION" };
 
-inline map<int, state_t*>  g_state_tab =
+/**
+ * @brief token list -> by state
+  */
+inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_OPEN_BRACE };
+inline vector<unsigned long> COMMENT_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_CLOSE_BRACE  };
+inline vector<unsigned long> DOUBLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+inline vector<unsigned long> SINGLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+inline vector<unsigned long> INCLUDING_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+inline vector<unsigned long> IF_BLOCK_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+inline vector<unsigned long> IF_CONDITION_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+
+/**
+ * @brief state_t states vector
+ * @name g_states
+ */
+inline vector<state_t*> g_states
+{
+    &sINITIAL,
+    &sCOMMENT,
+    &sESCAPED,
+    &sDOUBLE_QUOTED,
+    &sSINGLE_QUOTED,
+    &sINCLUDING,
+    &sIF_BLOCK,
+    &sIF_CONDITION
+};
+
+/**
+ * @brief state table : unsigned long -> state_t
+ * @name g_state_tab
+ */
+inline map<unsigned long, state_t*>  g_state_tab =
 {
     { cINITIAL, &sINITIAL },
     { cESCAPED, &sESCAPED },
@@ -390,7 +421,11 @@ inline map<int, state_t*>  g_state_tab =
 
 };
 
-inline map<int, vector<unsigned long>> g_state_tokens_tab
+/**
+ * @brief global state -> token table
+ * @name g_state_tokens_tab
+ */
+inline map<unsigned long, vector<unsigned long>> g_state_tokens_tab
 {
     {cINITIAL, INITIAL_STATE_TOKENS},
     {cESCAPED, ESCAPED_STATE_TOKENS},
@@ -402,8 +437,17 @@ inline map<int, vector<unsigned long>> g_state_tokens_tab
     {cIF_CONDITION, IF_CONDITION_STATE_TOKENS},
 };
 
-inline state_t* g_state = &sINITIAL;
+/**
+ * @brief global state_t state
+ * @name gp_state
+ */
+inline state_t* gp_state = &sINITIAL;
 
+/**
+ * @name Lexer::on_state
+ * @param pstate
+ * @return
+ */
 inline unsigned long Lexer::on_state(state_t* pstate)
 {
     switch (pstate->id) {
@@ -416,72 +460,73 @@ inline unsigned long Lexer::on_state(state_t* pstate)
 
 
 /**
+ * @name Lexer::on_token
  * @brief override virtual, on_token, for each token ...
- * @param token
+ * @param token_def* token
  */
-inline parser::symbol_type Lexer::on_token( token_def* token )
+inline parser::symbol_type Lexer::on_token( token_def* ptoken )
 {
-    cout << "state = " << g_state->id << endl;
+    cout << "state = " << gp_state->id << endl;
 
-    switch (g_state->id)
+    switch (gp_state->id)
     {
         case cINITIAL:
         {
-            switch (token->id)
+            switch (ptoken->id)
             {
 
 
                case UL_OPEN_BRACE:
-                    print_token(token->id);
+                    print_token(ptoken->id);
                     set_state(&sESCAPED);
-                    cout << "state = " << _state->name << "(" << _state->id << ")" << endl;
+                    cout << "state = " << p_state->name << "(" << p_state->id << ")" << endl;
                     // todo stream the prefix
                     return parser::make_LBRACE("{");
                 case UL_WHITESPACE:
                     cout << "WHITESPACE" << endl;
                 case UL_UNESCAPED_TEXT:
                     cout << "UNESCAPED_TEXT" << endl;
-                    cout << "ascii: " << token->value  << endl;
+                    cout << "ascii: " << ptoken->value  << endl;
                 case UL_SKIP_TOKEN:
                 default:
                     cout << "default: SKIP_TOKEN" << endl;
-                    print_token(token->id);
-                    token->type = new parser::symbol_type(parser::token::SKIP_TOKEN);
-                    return *token->type;
+                    print_token(ptoken->id);
+                    ptoken->type = new parser::symbol_type(parser::token::SKIP_TOKEN);
+                    return *ptoken->type;
             }
             break;
         }
         break;
         case cESCAPED:
         {
-            switch ((*token).id)
+            switch ((*ptoken).id)
             {
                 case UL_CLOSE_BRACE:
                     set_state(&sINITIAL);
-                    print_token(token->id);
-                    cout << "state = " << _state->name << "(" << _state->id << ")" << endl;
+                    print_token(ptoken->id);
+                    cout << "state = " << p_state->name << "(" << p_state->id << ")" << endl;
                     // todo stream the prefix
-                    return parser::make_RBRACE( token->value);
+                    return parser::make_RBRACE( ptoken->value);
                 case UL_DOLLAR_SIGN:
-                    print_token(token->id);
-                    return parser::make_DOLLAR_SIGN(token->value);
+                    print_token(ptoken->id);
+                    return parser::make_DOLLAR_SIGN(ptoken->value);
                 case UL_IDENTIFIER:
-                    print_token(token->id);
-                    return parser::make_IDENTIFIER(token->value);
+                    print_token(ptoken->id);
+                    return parser::make_IDENTIFIER(ptoken->value);
                 case UL_PLUS_SIGN:
                     return parser::make_PLUS();
                 case UL_NUMERIC_LITERAL:
-                    return parser::make_NUMERIC_LITERAL(token->value);
+                    return parser::make_NUMERIC_LITERAL(ptoken->value);
                 case UL_DOUBLE_QUOTE:
-                    return parser::make_DOUBLE_QUOTE(token->value);
+                    return parser::make_DOUBLE_QUOTE(ptoken->value);
                 case UL_SINGLE_QUOTE:
-                    return parser::make_SINGLE_QUOTE(token->value);
+                    return parser::make_SINGLE_QUOTE(ptoken->value);
                 case UL_SLASH:
                     return parser::make_SLASH();
                 case UL_BACKSLASH:
-                    return parser::make_BACK_SLASH(token->value);
+                    return parser::make_BACK_SLASH(ptoken->value);
                 case UL_AT_SYMBOL:
-                    return parser::make_AT(token->value);
+                    return parser::make_AT(ptoken->value);
                 case UL_DASH:
                     return parser::make_MINUS();
                 case UL_ASTERISK:
@@ -491,18 +536,18 @@ inline parser::symbol_type Lexer::on_token( token_def* token )
                 case 0:
                     return parser::make_NOT_EQUAL();
                 case UL_PERIOD:
-                    return parser::make_DOT(token->value);
+                    return parser::make_DOT(ptoken->value);
                 //case INDIRECT_MEMBER_SELECT: break;
                 case UL_PERCENT_SIGN:
                     return parser::make_PERCENT();
                 case UL_AMPERSAND:
-                    return parser::make_AMPERSAND(token->value);
+                    return parser::make_AMPERSAND(ptoken->value);
                 //case UL_NOT:
-                   // return parser::make_NOT(token->value);
+                   // return parser::make_NOT(ptoken->value);
                 //case OR:
-                   // return parser::make_OR(token->value);
+                   // return parser::make_OR(ptoken->value);
                 //case AND:
-                   // return parser::make_AND(token->value);
+                   // return parser::make_AND(ptoken->value);
                 case UL_LESS_THAN:
                     return parser::make_LESS_THAN();
                 case UL_LESS_THAN_EQUAL:
@@ -512,41 +557,41 @@ inline parser::symbol_type Lexer::on_token( token_def* token )
                 case UL_GREATER_THAN_EQUAL:
                     return parser::make_GREATER_THAN_EQUAL();
                 case UL_REQUIRE:
-                    return parser::make_REQUIRE(token->value);
+                    return parser::make_REQUIRE(ptoken->value);
                 case UL_CONFIG_LOAD:
-                    return parser::make_CONFIG_LOAD(token->value);
+                    return parser::make_CONFIG_LOAD(ptoken->value);
                 case UL_INSERT:
-                    return parser::make_INSERT(token->value);
+                    return parser::make_INSERT(ptoken->value);
                 case UL_INCLUDE:
-                    return parser::make_INCLUDE(token->value);
+                    return parser::make_INCLUDE(ptoken->value);
                 case UL_FILE_ATTRIB:
-                      return parser::make_FILE_ATTRIB(token->value);
+                      return parser::make_FILE_ATTRIB(ptoken->value);
                 case UL_ASSIGN:
-                    return parser::make_ASSIGN(token->value);
+                    return parser::make_ASSIGN(ptoken->value);
                 case UL_VAR_ATTRIB:
-                    return parser::make_VAR_ATTRIB(token->value);
+                    return parser::make_VAR_ATTRIB(ptoken->value);
                 case UL_VALUE_ATTRIB:
-                    return parser::make_VALUE_ATTRIB(token->value);
+                    return parser::make_VALUE_ATTRIB(ptoken->value);
                 case UL_FROM_ATTRIB:
-                    return parser::make_FROM_ATTRIB(token->value);
+                    return parser::make_FROM_ATTRIB(ptoken->value);
                 case UL_ITEM_ATTRIB:
-                    return parser::make_ITEM_ATTRIB(token->value);
+                    return parser::make_ITEM_ATTRIB(ptoken->value);
                 case UL_KEY_ATTRIB:
-                    return parser::make_KEY_ATTRIB(token->value);
+                    return parser::make_KEY_ATTRIB(ptoken->value);
                 case UL_NAME_ATTRIB:
-                    return parser::make_NAME_ATTRIB(token->value);
+                    return parser::make_NAME_ATTRIB(ptoken->value);
                 case UL_WHITESPACE:
                     cout << "WHITESPACE" << endl;
                 case UL_SKIP_TOKEN:
                     return parser::make_SKIP_TOKEN();
                 default:
-                    cout << "Error: " << token->id << endl;
+                    cout << "Error: " << ptoken->id << endl;
 
             }
             break;
         }
         default:
-            cout << "ERROR:" << token->id << endl;
+            cout << "ERROR:" << ptoken->id << endl;
             break;
     }
 
