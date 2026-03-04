@@ -6,9 +6,11 @@
 #ifndef TOKENS_HPP_
 #define TOKENS_HPP_
 
-#include <iostream>
 #include "Lexer.hpp"
 #include "pparser.tab.hh"
+#include <iostream>
+
+#include <pparser.tab.hh>
 
 // .[{()\*+?|^$
 // [[.NUL.]] matches a NUL character.
@@ -150,16 +152,23 @@ using yy::parser;
 // unsigned long UL_ANYTHING          = (-3);
 // unsigned long UL_MATCH             = INDEX++;
 
-// inline string e1 = R"((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
-// inline string e2 = R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+))";
-// inline string e3 = R"(|([ \t])|(.)|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
-// inline string e4 = R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify))";
-// inline string e5 = R"(|(string_format)|(strip_tags)|(truncate)|(wordwrap)|((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
-// inline string e6 = R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+)|([ \t])|(.))";
-// inline string e7 = R"(|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
-// inline string e8 = R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify)|(string_format)|(strip_tags)|(truncate)|(wordwrap))";
+// inline string e1 =
+// R"((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
+// inline string e2 =
+// R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+))";
+// inline string e3 = R"(|([
+// \t])|(.)|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
+// inline string e4 =
+// R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify))";
+// inline string e5 =
+// R"(|(string_format)|(strip_tags)|(truncate)|(wordwrap)|((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
+// inline string e6 =
+// R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+)|([
+// \t])|(.))"; inline string e7 =
+// R"(|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
+// inline string e8 =
+// R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify)|(string_format)|(strip_tags)|(truncate)|(wordwrap))";
 // inline string expression = e1 + e2 + e3 + e4 + e5 + e6 + e8;
-
 
 /**
  * @brief token definitions : unsigned long integers
@@ -283,7 +292,7 @@ using yy::parser;
 inline vector g_tokens_all = {
     token{UL_MATCH, "MATCH", "string", 0,  "match", 42, string("null"), nullptr},
     token{UL_WHITESPACE, "WHITESPACE", "string", 0,  R"([ \t\n]*)", 42, string("null"), nullptr},
-    token{UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0,  R"(\$)", 42, string("null"), nullptr},
+    token{UL_DOLLAR_SIGN, "DOLLAR_SIGN", "string", 0,  R"(\$)", 42, string("null"), new yy::parser::symbol_type( parser::make_DOLLAR_SIGN("$")) },
     token{UL_CARROT_SYMB, "CARROT", "string", 0,  R"(\^)", 42, string("null"), nullptr},
     token{UL_AMPERSAND, "AMPERSAND", "string", 0,  R"(\*)", 42, string("null"), nullptr},
     token{UL_ASTERISK, "ASTERISK", "string", 0,  R"(\*)", 42, string("null"), nullptr},
@@ -293,7 +302,7 @@ inline vector g_tokens_all = {
     token{UL_PLUS_SIGN, "PLUS", "string", 0,  R"(\+)", 42, string("null"), nullptr},
     token{UL_EQUAL_SIGN, "EQUAL", "string", 0,  "=", 42, string("null"), nullptr},
     token{UL_CLOSE_BRACKET, "RBRACKET", "string",  0, R"(\])", 42, string("null"), nullptr},
-    token{UL_OPEN_BRACE, "LBRACE", "string", 0,  R"(\{)", 42, string("null"), nullptr},
+    token{UL_OPEN_BRACE, "LBRACE", "string", 0,  R"(\{)", 42, string("null"), new yy::parser::symbol_type( parser::make_LBRACE("{")) },
     token{UL_CLOSE_BRACE, "RBRACE", "string", 0,  R"(\})", 42, string("null"), nullptr},
     token{UL_OPEN_BRACKET, "LBRACKET", "string",  0, R"(\[)", 42, string("null"), nullptr},
     token{UL_VBAR, "VBAR", "string", 0,  R"(\|)", 42, string("null"), nullptr},

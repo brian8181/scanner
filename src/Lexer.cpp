@@ -346,7 +346,7 @@ parser::symbol_type Lexer::get_token()
                 }
                 cout << endl;
                 _matches.push_back(ptoken);
-                return ret;
+                return *ptoken->type;
             }
         }
     }
