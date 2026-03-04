@@ -1,0 +1,128 @@
+/**
+ * @brief tokens / punctuation
+ */
+#define UL_TILDE         = 00
+#define UL_TIC_MARK      = 00
+#define UL_EXCLAMATION   = 00
+#define UL_AT_SYMBOL     = 00
+#define UL_HASH_MARK     = 00
+#define UL_DOLLAR_SIGN   = 00
+#define UL_PERCENT_SIGN  = 00
+#define UL_CARROT_SYMB   = 00
+#define UL_AMPERSAND     = 00
+#define UL_ASTERISK      = 00
+#define UL_OPEN_PAREN    = 00
+#define UL_CLOSE_PAREN   = 00
+#define UL_DASH          = 00
+#define UL_UNDERSCORE    = 00
+#define UL_PLUS_SIGN     = 00
+#define UL_EQUAL_SIGN    = 00
+#define UL_OPEN_BRACE    = 00
+#define UL_OPEN_BRACKET  = 00
+#define UL_CLOSE_BRACE   = 00
+#define UL_CLOSE_BRACKET = 00
+#define UL_VBAR          = 00
+#define UL_BACKSLASH     = 00
+#define UL_COLON         = 00
+#define UL_SEMI_COLON    = 00
+#define UL_DOUBLE_QUOTE  = 00
+#define UL_SINGLE_QUOTE  = 00
+#define UL_LESS_THAN     = 00
+#define UL_COMMA         = 00
+#define UL_GREATER_THAN  = 00
+#define UL_PERIOD        = 00
+#define UL_QUESTION_MARK = 00
+#define UL_SLASH         = 00
+/**
+ * @brief tokens / programming / logical
+ */
+#define UL_NOT                   = 00
+#define UL_AND                   = 00
+#define UL_OR                    = 00
+#define UL_XOR                   = 00
+#define UL_LEFT_SHIFT            = 00
+#define UL_RIGHT_SHIFT           = 00
+#define UL_LOGICAL_AND           = 00
+#define UL_LOGICAL_OR            = 00
+#define UL_LOGICAL_NOT           = 00
+#define UL_LOGICAL_EQUAL         = 00
+#define UL_GREATER_THAN_EQUAL    = 00
+#define UL_LESS_THAN_EQUAL       = 00
+#define UL_NUMERIC_LITERAL       = 00
+#define UL_STRING_LITERAL        = 00
+#define UL_DECIMAL_LITERAL       = 00
+#define UL_HEXADECIMAL_LITERAL   = 00
+#define UL_OCTAL_DECIMAL_LITERAL = 00
+
+/**
+ * @brief tokens / keywords
+ */
+#define UL_IF       = 00
+#define UL_ELSE     = 00
+#define UL_ELSEIF   = 00
+#define UL_FOREACH  = 00
+#define UL_DO       = 00
+#define UL_WHILE    = 00
+#define UL_SWITCH   = 00
+#define UL_CASE     = 00
+#define UL_DEFAULT  = 00
+#define UL_BREAK    = 00
+#define UL_CONTINUE = 00
+#define UL_TRY      = 00
+#define UL_CATCH    = 00
+
+/**
+ * @brief built-ins - streamy functions
+ */
+#define UL_REQUIRE           = 00
+#define UL_CONFIG_LOAD       = 00
+#define UL_INSERT            = 00
+#define UL_INCLUDE           = 00
+#define UL_FILE_ATTRIB       = 00
+#define UL_ASSIGN            = 00
+#define UL_VAR_ATTRIB        = 00
+#define UL_VALUE_ATTRIB      = 00
+#define UL_FROM_ATTRIB       = 00
+#define UL_ITEM_ATTRIB       = 00
+#define UL_KEY_ATTRIB        = 00
+#define UL_NAME_ATTRIB       = 00
+#define UL_CAPITALIZE        = 00
+#define UL_CAT               = 00
+#define UL_COUNT_CHARACTERS  = 00
+#define UL_COUNT_PARAGRAPHS  = 00
+#define UL_COUNT_SENTENCES   = 00
+#define UL_COUNT_WORDS       = 00
+#define UL_DATE_FORMAT       = 00
+#define UL_ESCAPE            = 00
+#define UL_INDENT            = 00
+#define UL_LOWER             = 00
+#define UL_UPPER             = 00
+#define UL_STRIP             = 00
+#define UL_NL2BR             = 00
+#define UL_REGX_REPLACE      = 00
+#define UL_REPLACE           = 00
+#define UL_SPACIFY           = 00
+#define UL_STRING_FORMAT     = 00
+#define UL_STRIP_TAGS        = 00
+#define UL_TRUNCATE          = 00
+#define UL_WORDWRAP          = 00
+
+/**
+ * @brief tokens / types
+ */
+#define UL_VALID_CHARS       = 00
+#define UL_FIRST_CHAR        = 00
+#define UL_ID                = 00
+#define UL_IDENTIFIER        = 00
+#define UL_SYMBOL            = 00
+#define UL_CONST_SYMBOL      = 00
+#define UL_ARRAY             = 00
+#define UL_COMMENT           = 00
+#define UL_WHITESPACE        = 00
+#define UL_FILE_NAME         = 00
+#define UL_SKIP_TOKEN        = (-1);
+#define UL_UNESCAPED_TEXT    = (-5);
+#define UL_ERROR             = (-2);
+#define UL_SCAN_EOF          =   0;
+#define UL_ANYTHING          = (-3);
+#define UL_MATCH             = 00

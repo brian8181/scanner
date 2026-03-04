@@ -1,0 +1,128 @@
+/**
+ * @brief tokens / punctuation
+ */
+#define UL_TILDE         = INDEX++;
+#define UL_TIC_MARK      = INDEX++;
+#define UL_EXCLAMATION   = INDEX++;
+#define UL_AT_SYMBOL     = INDEX++;
+#define UL_HASH_MARK     = INDEX++;
+#define UL_DOLLAR_SIGN   = INDEX++;
+#define UL_PERCENT_SIGN  = INDEX++;
+#define UL_CARROT_SYMB   = INDEX++;
+#define UL_AMPERSAND     = INDEX++;
+#define UL_ASTERISK      = INDEX++;
+#define UL_OPEN_PAREN    = INDEX++;
+#define UL_CLOSE_PAREN   = INDEX++;
+#define UL_DASH          = INDEX++;
+#define UL_UNDERSCORE    = INDEX++;
+#define UL_PLUS_SIGN     = INDEX++;
+#define UL_EQUAL_SIGN    = INDEX++;
+#define UL_OPEN_BRACE    = INDEX++;
+#define UL_OPEN_BRACKET  = INDEX++;
+#define UL_CLOSE_BRACE   = INDEX++;
+#define UL_CLOSE_BRACKET = INDEX++;
+#define UL_VBAR          = INDEX++;
+#define UL_BACKSLASH     = INDEX++;
+#define UL_COLON         = INDEX++;
+#define UL_SEMI_COLON    = INDEX++;
+#define UL_DOUBLE_QUOTE  = INDEX++;
+#define UL_SINGLE_QUOTE  = INDEX++;
+#define UL_LESS_THAN     = INDEX++;
+#define UL_COMMA         = INDEX++;
+#define UL_GREATER_THAN  = INDEX++;
+#define UL_PERIOD        = INDEX++;
+#define UL_QUESTION_MARK = INDEX++;
+#define UL_SLASH         = INDEX++;
+/**
+ * @brief tokens / programming / logical
+ */
+#define UL_NOT                   = INDEX++;
+#define UL_AND                   = INDEX++;
+#define UL_OR                    = INDEX++;
+#define UL_XOR                   = INDEX++;
+#define UL_LEFT_SHIFT            = INDEX++;
+#define UL_RIGHT_SHIFT           = INDEX++;
+#define UL_LOGICAL_AND           = INDEX++;
+#define UL_LOGICAL_OR            = INDEX++;
+#define UL_LOGICAL_NOT           = INDEX++;
+#define UL_LOGICAL_EQUAL         = INDEX++;
+#define UL_GREATER_THAN_EQUAL    = INDEX++;
+#define UL_LESS_THAN_EQUAL       = INDEX++;
+#define UL_NUMERIC_LITERAL       = INDEX++;
+#define UL_STRING_LITERAL        = INDEX++;
+#define UL_DECIMAL_LITERAL       = INDEX++;
+#define UL_HEXADECIMAL_LITERAL   = INDEX++;
+#define UL_OCTAL_DECIMAL_LITERAL = INDEX++;
+
+/**
+ * @brief tokens / keywords
+ */
+#define UL_IF       = INDEX++;
+#define UL_ELSE     = INDEX++;
+#define UL_ELSEIF   = INDEX++;
+#define UL_FOREACH  = INDEX++;
+#define UL_DO       = INDEX++;
+#define UL_WHILE    = INDEX++;
+#define UL_SWITCH   = INDEX++;
+#define UL_CASE     = INDEX++;
+#define UL_DEFAULT  = INDEX++;
+#define UL_BREAK    = INDEX++;
+#define UL_CONTINUE = INDEX++;
+#define UL_TRY      = INDEX++;
+#define UL_CATCH    = INDEX++;
+
+/**
+ * @brief built-ins - streamy functions
+ */
+#define UL_REQUIRE           = INDEX++;
+#define UL_CONFIG_LOAD       = INDEX++;
+#define UL_INSERT            = INDEX++;
+#define UL_INCLUDE           = INDEX++;
+#define UL_FILE_ATTRIB       = INDEX++;
+#define UL_ASSIGN            = INDEX++;
+#define UL_VAR_ATTRIB        = INDEX++;
+#define UL_VALUE_ATTRIB      = INDEX++;
+#define UL_FROM_ATTRIB       = INDEX++;
+#define UL_ITEM_ATTRIB       = INDEX++;
+#define UL_KEY_ATTRIB        = INDEX++;
+#define UL_NAME_ATTRIB       = INDEX++;
+#define UL_CAPITALIZE        = INDEX++;
+#define UL_CAT               = INDEX++;
+#define UL_COUNT_CHARACTERS  = INDEX++;
+#define UL_COUNT_PARAGRAPHS  = INDEX++;
+#define UL_COUNT_SENTENCES   = INDEX++;
+#define UL_COUNT_WORDS       = INDEX++;
+#define UL_DATE_FORMAT       = INDEX++;
+#define UL_ESCAPE            = INDEX++;
+#define UL_INDENT            = INDEX++;
+#define UL_LOWER             = INDEX++;
+#define UL_UPPER             = INDEX++;
+#define UL_STRIP             = INDEX++;
+#define UL_NL2BR             = INDEX++;
+#define UL_REGX_REPLACE      = INDEX++;
+#define UL_REPLACE           = INDEX++;
+#define UL_SPACIFY           = INDEX++;
+#define UL_STRING_FORMAT     = INDEX++;
+#define UL_STRIP_TAGS        = INDEX++;
+#define UL_TRUNCATE          = INDEX++;
+#define UL_WORDWRAP          = INDEX++;
+
+/**
+ * @brief tokens / types
+ */
+#define UL_VALID_CHARS       = INDEX++;
+#define UL_FIRST_CHAR        = INDEX++;
+#define UL_ID                = INDEX++;
+#define UL_IDENTIFIER        = INDEX++;
+#define UL_SYMBOL            = INDEX++;
+#define UL_CONST_SYMBOL      = INDEX++;
+#define UL_ARRAY             = INDEX++;
+#define UL_COMMENT           = INDEX++;
+#define UL_WHITESPACE        = INDEX++;
+#define UL_FILE_NAME         = INDEX++;
+#define UL_SKIP_TOKEN        = (-1);
+#define UL_UNESCAPED_TEXT    = (-5);
+#define UL_ERROR             = (-2);
+#define UL_SCAN_EOF          =   0;
+#define UL_ANYTHING          = (-3);
+#define UL_MATCH             = INDEX++;

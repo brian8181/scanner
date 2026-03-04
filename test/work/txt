@@ -1,0 +1,128 @@
+/**
+ * @brief tokens / punctuation
+ */
+unsigned long UL_TILDE         = INDEX++;
+unsigned long UL_TIC_MARK      = INDEX++;
+unsigned long UL_EXCLAMATION   = INDEX++;
+unsigned long UL_AT_SYMBOL     = INDEX++;
+unsigned long UL_HASH_MARK     = INDEX++;
+unsigned long UL_DOLLAR_SIGN   = INDEX++;
+unsigned long UL_PERCENT_SIGN  = INDEX++;
+unsigned long UL_CARROT_SYMB   = INDEX++;
+unsigned long UL_AMPERSAND     = INDEX++;
+unsigned long UL_ASTERISK      = INDEX++;
+unsigned long UL_OPEN_PAREN    = INDEX++;
+unsigned long UL_CLOSE_PAREN   = INDEX++;
+unsigned long UL_DASH          = INDEX++;
+unsigned long UL_UNDERSCORE    = INDEX++;
+unsigned long UL_PLUS_SIGN     = INDEX++;
+unsigned long UL_EQUAL_SIGN    = INDEX++;
+unsigned long UL_OPEN_BRACE    = INDEX++;
+unsigned long UL_OPEN_BRACKET  = INDEX++;
+unsigned long UL_CLOSE_BRACE   = INDEX++;
+unsigned long UL_CLOSE_BRACKET = INDEX++;
+unsigned long UL_VBAR          = INDEX++;
+unsigned long UL_BACKSLASH     = INDEX++;
+unsigned long UL_COLON         = INDEX++;
+unsigned long UL_SEMI_COLON    = INDEX++;
+unsigned long UL_DOUBLE_QUOTE  = INDEX++;
+unsigned long UL_SINGLE_QUOTE  = INDEX++;
+unsigned long UL_LESS_THAN     = INDEX++;
+unsigned long UL_COMMA         = INDEX++;
+unsigned long UL_GREATER_THAN  = INDEX++;
+unsigned long UL_PERIOD        = INDEX++;
+unsigned long UL_QUESTION_MARK = INDEX++;
+unsigned long UL_SLASH         = INDEX++;
+/**
+ * @brief tokens / programming / logical
+ */
+unsigned long UL_NOT                   = INDEX++;
+unsigned long UL_AND                   = INDEX++;
+unsigned long UL_OR                    = INDEX++;
+unsigned long UL_XOR                   = INDEX++;
+unsigned long UL_LEFT_SHIFT            = INDEX++;
+unsigned long UL_RIGHT_SHIFT           = INDEX++;
+unsigned long UL_LOGICAL_AND           = INDEX++;
+unsigned long UL_LOGICAL_OR            = INDEX++;
+unsigned long UL_LOGICAL_NOT           = INDEX++;
+unsigned long UL_LOGICAL_EQUAL         = INDEX++;
+unsigned long UL_GREATER_THAN_EQUAL    = INDEX++;
+unsigned long UL_LESS_THAN_EQUAL       = INDEX++;
+unsigned long UL_NUMERIC_LITERAL       = INDEX++;
+unsigned long UL_STRING_LITERAL        = INDEX++;
+unsigned long UL_DECIMAL_LITERAL       = INDEX++;
+unsigned long UL_HEXADECIMAL_LITERAL   = INDEX++;
+unsigned long UL_OCTAL_DECIMAL_LITERAL = INDEX++;
+
+/**
+ * @brief tokens / keywords
+ */
+unsigned long UL_IF       = INDEX++;
+unsigned long UL_ELSE     = INDEX++;
+unsigned long UL_ELSEIF   = INDEX++;
+unsigned long UL_FOREACH  = INDEX++;
+unsigned long UL_DO       = INDEX++;
+unsigned long UL_WHILE    = INDEX++;
+unsigned long UL_SWITCH   = INDEX++;
+unsigned long UL_CASE     = INDEX++;
+unsigned long UL_DEFAULT  = INDEX++;
+unsigned long UL_BREAK    = INDEX++;
+unsigned long UL_CONTINUE = INDEX++;
+unsigned long UL_TRY      = INDEX++;
+unsigned long UL_CATCH    = INDEX++;
+
+/**
+ * @brief built-ins - streamy functions
+ */
+unsigned long UL_REQUIRE           = INDEX++;
+unsigned long UL_CONFIG_LOAD       = INDEX++;
+unsigned long UL_INSERT            = INDEX++;
+unsigned long UL_INCLUDE           = INDEX++;
+unsigned long UL_FILE_ATTRIB       = INDEX++;
+unsigned long UL_ASSIGN            = INDEX++;
+unsigned long UL_VAR_ATTRIB        = INDEX++;
+unsigned long UL_VALUE_ATTRIB      = INDEX++;
+unsigned long UL_FROM_ATTRIB       = INDEX++;
+unsigned long UL_ITEM_ATTRIB       = INDEX++;
+unsigned long UL_KEY_ATTRIB        = INDEX++;
+unsigned long UL_NAME_ATTRIB       = INDEX++;
+unsigned long UL_CAPITALIZE        = INDEX++;
+unsigned long UL_CAT               = INDEX++;
+unsigned long UL_COUNT_CHARACTERS  = INDEX++;
+unsigned long UL_COUNT_PARAGRAPHS  = INDEX++;
+unsigned long UL_COUNT_SENTENCES   = INDEX++;
+unsigned long UL_COUNT_WORDS       = INDEX++;
+unsigned long UL_DATE_FORMAT       = INDEX++;
+unsigned long UL_ESCAPE            = INDEX++;
+unsigned long UL_INDENT            = INDEX++;
+unsigned long UL_LOWER             = INDEX++;
+unsigned long UL_UPPER             = INDEX++;
+unsigned long UL_STRIP             = INDEX++;
+unsigned long UL_NL2BR             = INDEX++;
+unsigned long UL_REGX_REPLACE      = INDEX++;
+unsigned long UL_REPLACE           = INDEX++;
+unsigned long UL_SPACIFY           = INDEX++;
+unsigned long UL_STRING_FORMAT     = INDEX++;
+unsigned long UL_STRIP_TAGS        = INDEX++;
+unsigned long UL_TRUNCATE          = INDEX++;
+unsigned long UL_WORDWRAP          = INDEX++;
+
+/**
+ * @brief tokens / types
+ */
+unsigned long UL_VALID_CHARS       = INDEX++;
+unsigned long UL_FIRST_CHAR        = INDEX++;
+unsigned long UL_ID                = INDEX++;
+unsigned long UL_IDENTIFIER        = INDEX++;
+unsigned long UL_SYMBOL            = INDEX++;
+unsigned long UL_CONST_SYMBOL      = INDEX++;
+unsigned long UL_ARRAY             = INDEX++;
+unsigned long UL_COMMENT           = INDEX++;
+unsigned long UL_WHITESPACE        = INDEX++;
+unsigned long UL_FILE_NAME         = INDEX++;
+unsigned long UL_SKIP_TOKEN        = (-1);
+unsigned long UL_UNESCAPED_TEXT    = (-5);
+unsigned long UL_ERROR             = (-2);
+unsigned long UL_SCAN_EOF          =   0;
+unsigned long UL_ANYTHING          = (-3);
+unsigned long UL_MATCH             = INDEX++;
