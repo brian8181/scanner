@@ -377,7 +377,8 @@ protected:
 	map<unsigned long, state_t*>*               p_state_tab;
 	vector<token_def*>            _matches;
 	std::string                   _scan_file;
-	std::string                   _search_text;
+	std::string                   _all_search_text;
+    std::string                   _current_search_text;
 	boost::regex                  _rexp;
 	boost::sregex_iterator        _begin;
 	boost::sregex_iterator        _end;

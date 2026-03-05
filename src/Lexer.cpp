@@ -116,9 +116,11 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     _scan_file = file;
     stringstream ss;
     const int r = read_sstream( file, ss );
-    _search_text = ss.str( );
+    _all_search_text = ss.str( );
+    _current_search_text = _all_search_text;
 
     // set state
+    _pos = 0;
     set_state(p_state);
     // initialize expression ...
     // init_expr();
@@ -127,10 +129,10 @@ bool Lexer::init( const string& file, const string &config_file, yy::parser* pp 
     cout << _expr << endl;
     // _expr = R"((?<DOLLAR_SIGN>\$)|(?<IDENTIFIER>[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(?<LBRACE>\{)|(?<WHITESPACE>[ \t]))";
     // _expr = R"((\$)|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\{)|([ \t]))";
-    _rexp = boost::regex( _expr, boost::regex::extended );
-    _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
-    _p_iter = &_begin;
-    _end = boost::sregex_iterator();
+    //_rexp = boost::regex( _expr, boost::regex::extended );
+    // _begin = boost::sregex_iterator( _current_search_text.begin( ), _current_search_text.end( ), _rexp );
+    // _p_iter = &_begin;
+    // _end = boost::sregex_iterator();
     return r;
 }
 
@@ -239,7 +241,7 @@ void Lexer::dump_config( ) const
 {
     cout << "config_file: " << _config_file << endl;
     cout << "scan file: " << _scan_file << endl;
-    cout << "search text: " << _search_text << endl;
+    cout << "search text: " << _all_search_text << endl;
     cout << "regexp: " << _expr << endl;
     cout << "state: " << p_state->name << endl;
 
@@ -427,25 +429,25 @@ void Lexer::set_state(state_t* pstate)
 
     gp_state = pstate;
     p_state = gp_state;
-    build_expr();
 
-    // vector<unsigned long> *TOKENS = &g_state_tokens_tab[g_state->id];
-    // const int len_states = TOKENS->size();
-    // for (int i = 0; i < len_states; i++)
-    // {
-    //     const int len_tokens = g_tokens_all.size();
-    //     for (int j = 0; j < len_tokens; j++)
-    //     {
-    //         g_tokens_all[j].index = i + 1;
-    //         if (g_tokens_all[j].id == (*TOKENS)[i])
-    //         {
-    //             _tokens.push_back(g_tokens_all[j]);
-    //             _id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
-    //             _idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
-    //             _name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
-    //         }
-    //     }
-    // }
+    _tokens.clear();
+    vector<unsigned long> *TOKENS = &g_state_tokens_tab[gp_state->id];
+    const unsigned long len_states = TOKENS->size();
+    for (unsigned long i = 0; i < len_states; i++)
+    {
+        const unsigned long len_tokens = g_tokens_all.size();
+        for (unsigned long j = 0; j < len_tokens; j++)
+        {
+            g_tokens_all[j].index = i + 1;
+            if (g_tokens_all[j].id == (*TOKENS)[i])
+            {
+                _tokens.push_back(g_tokens_all[j]);
+                _id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
+                _idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
+                _name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
+            }
+        }
+    }
 
     //vector<unsigned long> *g_tokens_all = &g_state_tokens_tab[g_state->id];
     // const int len_states = g_tokens_all.size();
@@ -461,16 +463,19 @@ void Lexer::set_state(state_t* pstate)
     //         _name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
     //     }
     // }
-    // //
-    // cout << _expr << endl;
-    //
-    //
-    // // // todo just begin !!
-    // // _matches[_matches.size()-1];
-    // // _search_text = _search_text.substr(_pos, _len);
-    // _begin = boost::sregex_iterator( _search_text.begin( ), _search_text.end( ), _rexp );
-    // _p_iter = &_begin;
-    //_end = boost::sregex_iterator();
+
+    // todo just begin !!
+    //_matches[_matches.size()-1];
+
+    build_expr();
+    // debug!
+    cout << _expr << endl;
+    _current_search_text = _current_search_text.substr(_pos);
+    cout << _current_search_text << endl;
+    _rexp = boost::regex( _expr, boost::regex::extended );
+    _begin = boost::sregex_iterator( _current_search_text.begin( ), _current_search_text.end( ), _rexp );
+    _p_iter = &_begin;
+    _end = boost::sregex_iterator();
 }
 
 

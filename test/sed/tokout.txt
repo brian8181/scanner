@@ -1,6 +1,7 @@
 token{15,  "VBAR", "string", 0, 0, "\\|", "\\|", 1, string("null")},
 token{19,  "COLON", "string", 0, 0, ":", ":", 2, string("null")},
-token{23,  "ASTERISK", "string", 0, 0, "\\*", "\\*", 10, string("null")},
+token{23,  "ASTERISK", "string", 0, 0, "\\*", "\\*", 11
+},
 token{27,  "SLASH", "string", 0, 0, "/", "/", 19, string("null")},
 token{31,  "BACK_SLASH", "string", 0, 0, "\\", "\\", 19, string("null")},
 token{35,  "COMMA", "string", 0, 0, "\\,", "\\,", 13, string("null")},

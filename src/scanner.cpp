@@ -33,7 +33,7 @@ static bool initialized = false;
 
 //yy::parser::symbol_type llex();
 // create parser & lexer
-static yy::parser parser;
+static yy::parser yyparser;
 static Lexer lexer;
 
 // return the next token
@@ -41,7 +41,7 @@ sym_t lex()
 {
     if(!initialized)
     {
-        lexer.init(g_scan_file, g_config_file, &parser);
+        lexer.init(g_scan_file, g_config_file, &yyparser);
         initialized = true;
     }
     return lexer.get_token();
@@ -111,7 +111,7 @@ int parse_options(const int argc, char* argv[])
         cout << "configuration dumped." << endl;
     }
     cout << "start scan ..." << endl;
-    parser.parse();
+    yyparser.parse();
     cout << "finished scanning. " << endl;
     return 0;
 }
