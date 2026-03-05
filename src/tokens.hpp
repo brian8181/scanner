@@ -509,7 +509,7 @@ inline parser::symbol_type Lexer::on_token( token_def* ptoken )
         break;
         case cESCAPED:
         {
-            switch ((*ptoken).id)
+            switch (ptoken->id)
             {
                 case UL_CLOSE_BRACE:
                     set_state(&sINITIAL);

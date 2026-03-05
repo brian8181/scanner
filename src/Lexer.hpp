@@ -365,29 +365,29 @@ public:
 	static bool is_id( const token_def& token, const int& id );
 
 protected:
-	parser*                       _pparser;
-	string                        _config_file;
-	vector<token_def>             _tokens;
-	vector<token_def>             p_tokens;
-	map<unsigned long, token_def*>          _idx_tab;  // idx  -> token_def
-	map<unsigned long, token_def*>          _id_tab;   // id   -> token_def
-	map<string, token_def*>       _name_tab; // name -> token_def
+	parser*                                     m_pparser;
+	string                                      m_config_file;
+	vector<token_def>                           m_tokens;
+	vector<token_def>                           p_tokens;
+	map<unsigned long, token_def*>              m_idx_tab;  // idx  -> token_def
+	map<unsigned long, token_def*>              m_id_tab;   // id   -> token_def
+	map<string, token_def*>                     m_name_tab; // name -> token_def
 	vector<state_t*>*                           p_states;
 	map<unsigned long, vector<unsigned long>>*  p_state_tokens_tab;
 	map<unsigned long, state_t*>*               p_state_tab;
-	vector<token_def*>            _matches;
-	std::string                   _scan_file;
-	std::string                   _all_search_text;
-    std::string                   _current_search_text;
-	boost::regex                  _rexp;
-	boost::sregex_iterator        _begin;
-	boost::sregex_iterator        _end;
-	boost::sregex_iterator*       _p_iter;
-	int                           _pos;
-	int                           _len;
-	state_t*                      p_state;
-	string                        _expr;
-	stringstream                  _sout;
+	vector<token_def*>                          m_matches;
+	std::string                                 m_scan_file;
+	std::string                                 m_all_search_text;
+    std::string                                 m_current_search_text;
+	boost::regex                                m_rexp;
+	boost::sregex_iterator                      m_begin;
+	boost::sregex_iterator                      m_end;
+	boost::sregex_iterator*                     _p_iter;
+	int                                         m_pos;
+	int                                         m_len;
+	state_t*                                    p_state;
+	string                                      m_expr;
+	stringstream                                m_sout;
 };
 
 //}
