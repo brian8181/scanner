@@ -262,6 +262,28 @@ public:
 	 */
 	Lexer();
 
+    /**
+     * @name load_config
+     * @brief  load_config: load configuration from file
+     * @param  const string& file
+     * @return void
+     */
+    void load_config( const string& file );
+
+    /**
+     * @name dump_config
+     * @brief  dump current config
+     * @return void
+     */
+    void dump_config( ) const;
+
+    /**
+     * @name  dump_config
+     * @param  const string& file
+     * @return void
+     */
+    void dump_config( const string& file ) const;
+
 	/**
 	 * @name init
 	 * @brief  initialize state
@@ -269,28 +291,6 @@ public:
      * @param config_file
 	 */
 	void init(const string &config_file, parser* pparser, const string& input_file, const string& output_file);
-
-	/**
-	 * @name load_config
-	 * @brief  load_config: load configuration from file
-	 * @param  const string& file
-	 * @return void
-	 */
-	void load_config( const string& file );
-
-	/**
-	 * @name dump_config
-	 * @brief  dump current config
-	 * @return void
-	 */
-	void dump_config( ) const;
-
-	/**
-	 * @name  dump_config
-	 * @param  const string& file
-	 * @return void
-	 */
-	void dump_config( const string& file ) const;
 
 	/**
 	 * @name get_token

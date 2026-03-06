@@ -28,7 +28,6 @@
 #include "tokens.hpp"
 
 #include "scanner.h"
-//#include "pars.h"
 
 using std::cerr;
 using std::cout;
@@ -42,98 +41,23 @@ using std::left;
 using std::right;
 using yy::parser;
 
-//using namespace std;
-
 /**
+ * @name Lexer
+ * @def Lexer::Lexer()
  * @brief default ctor
  */
 Lexer::Lexer()
 {
-
 }
 
 /**
- * @brief  initialize state
- * @return bool
- */
-void Lexer::init(const string &config_file, parser* pparser, const string& input_file, const string& output_file)
-{
-    m_config_file = config_file;
-    m_input_file = input_file;
-    m_output_file = output_file;
-    m_pparser = pparser;
-
-    p_state = gp_state;
-    p_states = &g_states;
-    p_state_tab = &g_state_tab;
-    p_state_tokens_tab = &g_state_tokens_tab;
-
-    //load_config( m_config_file );
-    stringstream ss;
-    read_sstream( m_input_file, ss );
-    m_all_search_text = ss.str( );
-    m_current_search_text = m_all_search_text;
-    // set state
-    set_state(p_state);
-}
-
-/**
-* @brief get_state
-* @return state_t
-*/
-state_t *Lexer::get_state() const
-{
-    return p_state;
-}
-
-/**
- * @brief set_state
- * @param pstate
- * @return void
- */
-void Lexer::set_state(state_t* pstate)
-{
-    m_tokens.clear();
-    m_idx_tab.clear();
-    m_idx_tab.clear();
-    m_name_tab.clear();
-
-    gp_state = pstate;
-    p_state = gp_state;
-
-    m_tokens.clear();
-    vector<unsigned long>* TOKENS = &g_state_tokens_tab[gp_state->id];
-    const unsigned long len_states = TOKENS->size();
-    for (unsigned long i = 0; i < len_states; i++)
-    {
-        const unsigned long len_tokens = g_tokens_all.size();
-        for (unsigned long j = 0; j < len_tokens; j++)
-        {
-            g_tokens_all[j].index = i + 1;
-            if (g_tokens_all[j].id == (*TOKENS)[i])
-            {
-                m_tokens.push_back(g_tokens_all[j]);
-                m_id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
-                m_idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
-                m_name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
-            }
-        }
-    }
-
-    build_expr();
-    // reinit get_token iterators
-    m_rexp = boost::regex( m_expr, boost::regex::extended );
-    m_begin = boost::sregex_iterator( m_current_search_text.begin( ), m_current_search_text.end( ), m_rexp );
-    m_piter = &m_begin;
-    m_end = boost::sregex_iterator();
-}
-
-/**
+ * @name load_config
+ * @def void Lexer::load_config( const string &file )
  * @brief  load_config: load configuration from file
- * @param  file
+ * @param  const string& file
  * @return void
  */
-void Lexer::load_config( const string &file )
+void Lexer::load_config( const string& file )
 {
     m_config_file = file;
     string section = "none";
@@ -216,8 +140,9 @@ void Lexer::load_config( const string &file )
 }
 
 /**
- * @brief  dump config
- * @param file
+ * @name dump_config
+ * @brief void Lexer::dump_config( const string& file ) const
+ * @param const string& file
  * @return void
  */
 void Lexer::dump_config( const string& file ) const
@@ -226,6 +151,8 @@ void Lexer::dump_config( const string& file ) const
 }
 
 /**
+ * @name dump_config
+ * @def void Lexer::dump_config( ) const
  * @brief  dump current config
  * @return void
  */
@@ -255,7 +182,88 @@ void Lexer::dump_config( ) const
 }
 
 /**
- * @brief tokenize
+ * @name init
+ * @def void Lexer::init(const string &config_file, parser* pparser, const string& input_file, const string& output_file)
+ * @brief  initialize state
+ * @return bool
+ */
+void Lexer::init(const string &config_file, parser* pparser, const string& input_file, const string& output_file)
+{
+    m_config_file = config_file;
+    m_input_file = input_file;
+    m_output_file = output_file;
+    m_pparser = pparser;
+
+    p_state = gp_state;
+    p_states = &g_states;
+    p_state_tab = &g_state_tab;
+    p_state_tokens_tab = &g_state_tokens_tab;
+
+    //load_config( m_config_file );
+    stringstream ss;
+    read_sstream( m_input_file, ss );
+    m_all_search_text = ss.str( );
+    m_current_search_text = m_all_search_text;
+    // set state
+    set_state(p_state);
+}
+
+/**
+* @name get_state
+* @brief state_t *Lexer::get_state() const
+* @return state_t
+*/
+state_t *Lexer::get_state() const
+{
+    return p_state;
+}
+
+/**
+ * @name set_state
+ * @brief void Lexer::set_state(state_t* pstate)
+ * @param state_t* pstate
+ * @return void
+ */
+void Lexer::set_state(state_t* pstate)
+{
+    m_tokens.clear();
+    m_idx_tab.clear();
+    m_idx_tab.clear();
+    m_name_tab.clear();
+
+    gp_state = pstate;
+    p_state = gp_state;
+
+    m_tokens.clear();
+    vector<unsigned long>* TOKENS = &g_state_tokens_tab[gp_state->id];
+    const unsigned long len_states = TOKENS->size();
+    for (unsigned long i = 0; i < len_states; i++)
+    {
+        const unsigned long len_tokens = g_tokens_all.size();
+        for (unsigned long j = 0; j < len_tokens; j++)
+        {
+            g_tokens_all[j].index = i + 1;
+            if (g_tokens_all[j].id == (*TOKENS)[i])
+            {
+                m_tokens.push_back(g_tokens_all[j]);
+                m_id_tab[g_tokens_all[j].id] = &g_tokens_all[j];
+                m_idx_tab[g_tokens_all[j].index] = &g_tokens_all[j];
+                m_name_tab[g_tokens_all[j].name] = &g_tokens_all[j];
+            }
+        }
+    }
+
+    build_expr();
+    // reinit get_token iterators
+    m_rexp = boost::regex( m_expr, boost::regex::extended /*|  boost::match_not_bol | boost::match_not_eol*/ );
+    m_begin = boost::sregex_iterator( m_current_search_text.begin( ), m_current_search_text.end( ), m_rexp );
+    m_piter = &m_begin;
+    m_end = boost::sregex_iterator();
+}
+
+/**
+ * @name tokenize
+ * @def void Lexer::tokenize()
 */
 void Lexer::tokenize()
 {
@@ -303,7 +311,8 @@ void Lexer::tokenize()
 }
 
 /**
- * @brief  get_token
+ * @name  get_token
+ * @def parser::symbol_type Lexer::get_token()
  * @return int
  */
 parser::symbol_type Lexer::get_token()
@@ -368,14 +377,17 @@ parser::symbol_type Lexer::get_token()
 }
 
 /**
- * @brief reset
+ * @name reset
+ * @def void Lexer::reset()
  */
 void Lexer::reset()
 {
     init(m_config_file, m_pparser, m_input_file, m_output_file);
 }
 
-/**,
+/**
+ * @name get_expr
+ * @def const string& Lexer::get_expr() const
  * @brief get regex expression
  * @return const string&
  */
@@ -385,7 +397,8 @@ const string& Lexer::get_expr() const
 }
 
 /**
- * @brief init_expr
+ * @name build_expr
+ * @def void Lexer::build_expr()
  */
 void Lexer::build_expr()
 {
@@ -404,6 +417,8 @@ void Lexer::build_expr()
 }
 
 /**
+ * @name print_token
+ * @def void Lexer::print_token(int id)
  * @brief print token to stdout
  */
 void Lexer::print_token(int id)
@@ -418,6 +433,13 @@ void Lexer::print_token(int id)
          << "\n}" << endl;
 }
 
+/**
+ * @name is_id
+ * @def bool Lexer::is_id( const token_def& token, const int& id )
+ * @param token
+ * @param id
+ * @return
+ */
 bool Lexer::is_id( const token_def& token, const int& id )
 {
         return (token.id == id);
