@@ -240,15 +240,15 @@ typedef struct context_t
 	vector<token_def*>*        matches;
 } context_t;
 
-const string TOKEN_TYPE           = "[A-Za-z][A-Za-z_]*((::)[A-Za-z_]*)?";
-const string TOKEN_TYPE_           = "[A-Za-z][A-Za-z_]*";
-const string VALID_SYMBOL_CHARS   = "[A-Za-z0-9_]"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
-const string VALID_CHARS          = "[[:punct:][:alnum:]]"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`
+const string TOKEN_TYPE           = R"([A-Za-z][A-Za-z_]*((::)[A-Za-z_]*)?)";
+const string TOKEN_TYPE_          = R"([A-Za-z][A-Za-z_]*)";
+const string VALID_SYMBOL_CHARS   = R"([A-Za-z0-9_])"; /** @note_to_self: ~~> \w == [A-Za-z0-9_] **/
+const string VALID_CHARS          = R"([[:punct:][:alnum:]])"; // [:punct:] = !"#$%&'()*+,-./:;<=>?@[\]^_{|}~`);
 const string CONFIG_STATES        = R"((?<states>^\s*(?<state>[A-Za-z][A-Za-z0-9_]*)\s*=\s*\s*\{(?<tokens>[A-Za-z][A-Za-z0-9_]*(, [A-Za-z][A-Za-z0-9_]*)*)\}\s*\s*$))";
 const string CONFIG_SECTIONS      = R"(^\s*\[\s*(?<tokens>tokens)|(?<groups>groups)|(?<states>states)\s*\]\s*$)";
-const string CONFIG_PAIR          = "\\s*(?<type>" + TOKEN_TYPE_ + ")\\s+(?<name>[A-Za-z]" + VALID_SYMBOL_CHARS + "*)\\s*=\\s*(?<rexp>" + VALID_CHARS + "*)\\s*\"(?<test>.*)\"\\s*";
-const string CONFIG_COMMENT       = "^\\s*#.*$";
-const string CONFIG               = "(?<pairs>" + CONFIG_PAIR + ")|(?<comments>" + CONFIG_COMMENT + ")";
+const string CONFIG_PAIR          = R"(\s*(?<type>" + TOKEN_TYPE_ + ")\\s+(?<name>[A-Za-z])" + VALID_SYMBOL_CHARS + R"("*)\\s*=\\s*(?<rexp>)" + VALID_CHARS + R"(*)\s*\"(?<test>.*)\"\s*)";
+const string CONFIG_COMMENT       = R"(^\s*#.*$)";
+const string CONFIG               = R"((?<pairs>)" + CONFIG_PAIR + R"()|(?<comments>)" + CONFIG_COMMENT + R"())";
 
 /**
   * @brief class Lexer
@@ -257,118 +257,122 @@ class Lexer final
 {
 public:
 	/**
+	 * @name Lexer
 	 * @brief default ctor
 	 */
 	Lexer();
 
 	/**
-	 * @brief ctor
-	 * @param file
-	 * @param config_file
-	 */
-	Lexer(const string& file, const string &config_file, yy::parser* pp );
-
-	/**
-	 * @brief copy ctor
-	 * @param src
-	 */
-	Lexer( const Lexer& src );
-
-	/**
-	 * @brief virtual dtor
-	 */
-	virtual ~Lexer();
-
-	/**
+	 * @name init
 	 * @brief  initialize state
-	 * @param file
-	 * @param config_file
-	 * @return bool
+     * @param file
+     * @param config_file
 	 */
-	bool init( const string& file, const string &config_file, yy::parser* pp );
+	void init(const string &config_file, parser* pparser, const string& input_file, const string& output_file);
 
 	/**
+	 * @name load_config
 	 * @brief  load_config: load configuration from file
-	 * @param  file
+	 * @param  const string& file
 	 * @return void
 	 */
-	void load_config( const string &file );
+	void load_config( const string& file );
 
 	/**
+	 * @name dump_config
 	 * @brief  dump current config
 	 * @return void
 	 */
 	void dump_config( ) const;
 
 	/**
-	 * @brief  dump config
-	 * @param  file
+	 * @name  dump_config
+	 * @param  const string& file
 	 * @return void
 	 */
-	void dump_config( const string &file ) const;
+	void dump_config( const string& file ) const;
 
 	/**
-	 * @brief  get_token
-	 * @return int
+	 * @name get_token
+	 * @return yy::parser::symbol_type
 	 */
 	yy::parser::symbol_type get_token();
 
 	/**
+	 * @name reset
 	 * @brief reset to initial state
 	 */
 	void reset();
 
 	/**
+	 * @name on_token
 	 * @brief on_token, for each token ...
-	 * @param state
-	 * @param token
+	 * @param token_def* ptoken
 	 */
 	parser::symbol_type on_token( token_def* ptoken );
 
 	/**
 	 * @brief on_token_action, for each token ...
-	 * @param state
-	 * @param token
+	 * @param const state_t& state
+	 * @param const token_def& token
 	 */
-	//parser::symbol_type on_token_action( const state_t& state, const token_def &token );
-	/**
+	//parser::symbol_type on_token_action( const state_t& state, const token_def& token );
+
+    /**
+     * @name on_state
 	 * @brief on_state, on_token, for each token ...
-	 * @param state
+	 * @param state_t* pstate
 	 */
 	unsigned long on_state(state_t* pstate);
 
 	/**
-	 * @brief tokenize
+	 * @name tokenize
 	*/
 	void tokenize();
 
 	/**
- 	* @brief get expression
- 	*/
+	 * @name get_expr
+ 	 * @brief get expression
+ 	 */
 	const string& get_expr() const;
 
 	/**
-	 * @brief build_expr
+	 * @name build_expr
 	 */
 	void build_expr();
 
 	/**
-     * @brief print token to stdout
+     * @name print token to stdout
 	 * @param id
  	 */
 	void print_token( int id );
 
-	state_t* get_state() const;
+    /**
+     * @name get_state
+     * @return state_t*
+     */
+    state_t * get_state() const;
 
-	void set_state(state_t* pstate);
+    /**
+     * @name set_state
+     * @param pstate
+     */
+    void set_state(state_t* pstate);
 
-	static bool is_id( const token_def& token, const int& id );
+    /**
+     * @name is_id
+     * @param token
+     * @param id
+     * @return bool
+     */
+    static bool is_id( const token_def& token, const int& id );
 
 protected:
 	parser*                                     m_pparser;
 	string                                      m_config_file;
+    string                                      m_input_file;
+    string                                      m_output_file;
 	vector<token_def>                           m_tokens;
-	vector<token_def>                           p_tokens;
 	map<unsigned long, token_def*>              m_idx_tab;  // idx  -> token_def
 	map<unsigned long, token_def*>              m_id_tab;   // id   -> token_def
 	map<string, token_def*>                     m_name_tab; // name -> token_def
@@ -376,17 +380,18 @@ protected:
 	map<unsigned long, vector<unsigned long>>*  p_state_tokens_tab;
 	map<unsigned long, state_t*>*               p_state_tab;
 	vector<token_def*>                          m_matches;
-	std::string                                 m_scan_file;
-	std::string                                 m_all_search_text;
-    std::string                                 m_current_search_text;
+	string                                      m_all_search_text;
+    string                                      m_current_search_text;
 	boost::regex                                m_rexp;
 	boost::sregex_iterator                      m_begin;
 	boost::sregex_iterator                      m_end;
-	boost::sregex_iterator*                     _p_iter;
+	boost::sregex_iterator*                     m_piter;
 	int                                         m_pos;
 	int                                         m_len;
 	state_t*                                    p_state;
 	string                                      m_expr;
+    string                                      m_prefix;
+    string                                      m_suffix;
 	stringstream                                m_sout;
 };
 

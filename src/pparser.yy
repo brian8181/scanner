@@ -65,10 +65,11 @@
     typedef std::pair< std::string, std::string > attribute;
 
 }
-%token MATCH WHITESPACE CARROT OPEN_PAREN CLOSE_PAREN DASH PLUS_SIGN EQUAL_SIGN OPEN_BRACKET CLOSE_BRACKET OPEN_BRACE CLOSE_BRACE BACKSLASH ARRAY
-%token SKIP_TOKEN CONST_SYMBOL UNESCAPED_TEXT ANYTHING
+%token MATCH UNDEFINED WHITESPACE CARROT OPEN_PAREN CLOSE_PAREN DASH PLUS_SIGN EQUAL_SIGN OPEN_BRACKET CLOSE_BRACKET OPEN_BRACE CLOSE_BRACE BACKSLASH ARRAY
+%token SKIP_TOKEN CONST_SYMBOL ANYTHING
 %token IF WHILE BREAK
 %token END 0 _("end of input")
+%token END_OF_FILES
 %type files file block blocks
 %type<std::pair< std::string, std::string >> attrib
 %type<std::string> built_in
@@ -83,6 +84,7 @@
 %token<std::string> STRING_LITERAL NUMERIC_LITERAL
 %token<std::string> IDENTIFIER ID CONST_ID
 %token<std::string> VAR_ATTRIB VALUE_ATTRIB FILE_ATTRIB FROM_ATTRIB KEY_ATTRIB NAME_ATTRIB ITEM_ATTRIB FILE_NAME
+%token<std::string> UNESCAPED_TEXT
 %token COMMENT QUESTION_MARK
 %token<int> NUMBER
 
@@ -99,7 +101,7 @@
 %%
 
 complier:
-    files                                                       {
+    files                                                      {
                                                                     std::cout <<  FMT_FG_GREEN << "PARSER complier: | files" << FMT_RESET << endl;
                                                                     cout << FMT_FG_YELLOW << "*********************** STOPPING **********************" << FMT_REVERSE << FMT_RESET << endl;
                                                                     cout << FMT_FG_YELLOW << "*                     Terminating.                    *" << FMT_REVERSE << FMT_RESET << endl;

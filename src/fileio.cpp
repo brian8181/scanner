@@ -92,7 +92,7 @@ int read_buf(const string& file, /* out */ unsigned char* buf, const int& len)
  * @param  const int& len : length of the buffer
  * @return int : number of bytes written, or -1 on error
  */
-int write_buf(const string& file, /* in */ const unsigned char* buf, const int& len)
+int write_buf(const string& file, /* in */ const char* buf, const int& len)
 {
 	std::ofstream stream(file, std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
 	if (stream.is_open())
@@ -136,7 +136,7 @@ int read_str(const string& file, /* out */ string& out)
 int write_str(const string& file, /* in */ const string& in)
 {
     ofstream stream;
-    stream.open(file, ios::out);
+    stream.open(file, std::ios_base::out | std::ios::trunc);
     if (stream.is_open())
     {
         stringstream ss;
@@ -178,7 +178,7 @@ int read_sstream(const string& file, /* out */ stringstream& ostrm)
  */
 int write_sstream(const string& file, /* in */ const stringstream& istrm)
 {
-    ofstream stream(file, ios::out);
+    ofstream stream(file, ios::out | std::ofstream::trunc);
     if (stream.is_open())
     {
         stream << istrm.str();

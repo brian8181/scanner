@@ -1,3 +1,20 @@
+// inline string e1 =
+// R"((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
+// inline string e2 =
+// R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+))";
+// inline string e3 = R"(|([
+// \t])|(.)|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
+// inline string e4 =
+// R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify))";
+// inline string e5 =
+// R"(|(string_format)|(strip_tags)|(truncate)|(wordwrap)|((\|)|(:)|(\*)|(/)|(\)|(\,)|(\.)|(\^)|(\?)|(\\)|(\+)|(-)|(\$[a-zA-Z]+)|(\$)|(\[)|(\])|(\{)|(\})|(\()|(\))|(!=)|(=)|(>)|(<)|(>=)|(<=)|(>)|(')|(")|([0-9]+))";
+// inline string e6 =
+// R"(|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*\[[^\]]\])|([A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(\$[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*)|(#[A-Za-z*@_.~+-][A-Za-z0-9*@_.~+-]*#)|([^{]+)|([
+// \t])|(.))"; inline string e7 =
+// R"(|(if)|(else)|(elseif)|(foreach)|(while)|(do)|(break)|(require)|(include)|(config_load)|(insert)|(assign)|(var_attrib)|(value_attrib)|(from_attrib)|(item_attrib)|(key_attrib)|(name_attrib))";
+// inline string e8 =
+// R"(|(capitalize)|(cat)|(count_characters)|(count_paragraphs)|(count_sentences)|(count_words)|(date_format)|(default)|(escape)|(indent)|(lower)|(upper)|(strip)|(nl2br)|(regx_replace)|(replace)|(spacify)|(string_format)|(strip_tags)|(truncate)|(wordwrap))";
+// inline string expression = e1 + e2 + e3 + e4 + e5 + e6 + e8;
 
 # g++ warnings
 #-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror -Wundef

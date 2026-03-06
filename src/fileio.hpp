@@ -57,7 +57,7 @@ int read_buf(const string& file, /* out */ unsigned char* buf, const int& len);
  * @param  len : length of the buffer
  * @return number of bytes written, or -1 on error
  */
-int write_buf(const string& file, /* in */ const unsigned char* buf, const int& len);
+int write_buf(const string& file, /* in */ const char* buf, const int& len);
 
 /**
  * @brief  read a file into a string
