@@ -70,7 +70,7 @@
 %token IF WHILE BREAK
 %token END 0 _("end of input")
 %token END_OF_FILES
-%type files file block blocks
+%type files file block blocks colon_sep_param colon_sep_params literal
 %type<std::pair< std::string, std::string >> attrib
 %type<std::string> built_in
 %type<std::string> attributes
@@ -167,7 +167,112 @@ literal:
                                                                 << FMT_RESET << endl;
                                                                }
     ;
+/*
+*   Numerical / logical exprssions
+*/
+expr:
+        NUMERIC_LITERAL                                         {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | NUMERIC_LITERAL\n");
+                                                                    #endif
+                                                                }
+        | STRING_LITERAL                                        {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | STRING_LITERAL\n");
+                                                                    #endif
+                                                                }
+        | symbol                                                {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | symbol\n");
+                                                                    #endif
+                                                                }
+        | symbol LESS_THAN NUMERIC_LITERAL                                        {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | symbol LESS_THAN NUMERIC_LITERAL\n");
+                                                                    #endif
+                                                                }
+        | MINUS expr %prec UMINUS                               {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr PLUS expr                                        {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr MINUS expr                                       {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr ASTERISK expr                                     {
+                                                                    #ifdef VERBOSE
+                                                                    ///RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr SLASH expr                                       {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr LESS_THAN expr                                   {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr GREATER_THAN expr                                {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr GREATER_THAN_EQUAL expr                          {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr LESS_THAN_EQUAL expr                             {
+                                                                    #ifdef VERBOSE
+                                                                    RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr NOT_EQUAL expr                                   {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | expr EQUAL expr                                       {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+        | LPAREN expr RPAREN                                    {
+                                                                    #ifdef VERBOSE
+                                                                    //RED("PARSER expr: | expr\n");
+                                                                    #endif
+                                                                }
+                                                                ;
+/*
+*   ( $x:$y:$x ) | 1:2:"three"
+*/
+colon_sep_params:
+        colon_sep_param                                         {
+                                                                    cout << "colon_sep_params: | colon_sep_param\n";
+                                                                }
+        | colon_sep_params colon_sep_param                      {
+                                                                    cout << "colon_sep_params: | colon_sep_params colon_sep_param" << endl;
+                                                                }
+                                                                ;
 
+
+/*
+*   colon seperated param {$x|trim:3:' '}
+*/
+colon_sep_param:
+        COLON NUMERIC_LITERAL                                   {
+                                                                    cout << "colon_sep_param: | COLON NUMERIC_LITERAL" << endl;
+                                                                }
+                                                                ;
 qualafied_id:
     symbol DOT ID                                               {
                                                                     cout << FMT_FG_YELLOW
@@ -197,12 +302,25 @@ array:
                                                                 }
                                                                 ;
 
+                                     ;
+
+/*
+*   params (i.e. $x, $y, $x)
+*/
 params:
-    /*empty*/
-    | symbol COMMA                                              { cout << FMT_FG_YELLOW << "PARSER params: | symbol" << FMT_RESET << endl; }
-    | params symbol                                             { cout << FMT_FG_YELLOW << "PARSER qualafied_id: | params COMMA symbol" << FMT_RESET << endl; }
+        param                                                   {
+                                                                    cout << "PARSER params: | param\n" << endl;
+
+                                                                }
+        | params symbol                                         { cout << FMT_FG_YELLOW << "PARSER qualafied_id: | params COMMA symbol" << FMT_RESET << endl; }
                                                                 ;
 
+/*
+*   param (i.e. $x, )
+*/
+param:
+        symbol COMMA                                            { cout << FMT_FG_YELLOW << "PARSER param: | symbol" << FMT_RESET << endl; }
+                                                                ;
 symbol:
     DOLLAR_SIGN IDENTIFIER                                      {
                                                                     cout << FMT_FG_YELLOW << "PARSER symbol: | IDENTIFIER=\"" << $2 << "\"" << FMT_RESET << endl;;
