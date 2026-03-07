@@ -386,10 +386,11 @@ protected:
 	boost::sregex_iterator                      m_begin;
 	boost::sregex_iterator                      m_end;
 	boost::sregex_iterator*                     m_piter;
-	int                                         m_pos;
+  	int                                         m_pos;
 	int                                         m_len;
 	state_t*                                    p_state;
 	string                                      m_expr;
+    string                                      m_str;
     string                                      m_prefix;
     string                                      m_suffix;
 	stringstream                                m_sout;

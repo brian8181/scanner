@@ -52,6 +52,11 @@ using yy::parser;
 #define UL_SEMI_COLON              27ul
 #define UL_DOUBLE_QUOTE            28ul
 #define UL_SINGLE_QUOTE            29ul
+#define UL_ESC_BACKSLASH           301ul
+#define UL_ESC_NEWLINE             302ul
+#define UL_ESC_DOUBLE_QUOTE        303ul
+#define UL_ESC_SINGLE_QUOTE        304ul
+#define UL_ESC_TAB                 305ul
 #define UL_LESS_THAN               30ul
 #define UL_COMMA                   31ul
 #define UL_GREATER_THAN            32ul
@@ -247,12 +252,14 @@ inline state_t sIF_CONDITION = { cIF_CONDITION, "IF_CONDITION" };
   */
 inline vector<unsigned long> INITIAL_STATE_TOKENS = { UL_OPEN_BRACE };
 inline vector<unsigned long> COMMENT_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_CLOSE_BRACE  };
-inline vector<unsigned long> DOUBLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
-inline vector<unsigned long> SINGLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+inline vector<unsigned long> ESCAPED_STATE_TOKENS = { UL_DOLLAR_SIGN, UL_IDENTIFIER, UL_CLOSE_BRACE, UL_SINGLE_QUOTE, UL_DOUBLE_QUOTE  };
+inline vector<unsigned long> DOUBLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_VALID_CHARS, UL_SINGLE_QUOTE, UL_DOUBLE_QUOTE };
+inline vector<unsigned long> SINGLE_QUOTED_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_VALID_CHARS, UL_SINGLE_QUOTE, UL_DOUBLE_QUOTE };
 inline vector<unsigned long> INCLUDING_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> IF_BLOCK_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
 inline vector<unsigned long> IF_CONDITION_STATE_TOKENS = { UL_OPEN_BRACE, UL_COMMENT, UL_ANYTHING };
+
+stringstream g_stringstream;
 
 /**
  * @brief state_t states vector
@@ -336,132 +343,169 @@ inline parser::symbol_type Lexer::on_token( token_def* ptoken )
 {
     switch (gp_state->id)
     {
-        case cINITIAL:
+    case cINITIAL:
+    {
+        switch (ptoken->id)
         {
-            switch (ptoken->id)
-            {
-               case UL_OPEN_BRACE:
-                    set_state(&sESCAPED);
-                    print_token(ptoken->id);
-                    cout << "state = " << p_state->name << "(" << p_state->id << ")" << endl;
-                    m_sout << m_prefix;
-                    // todo stream the prefix
-                    return parser::make_LBRACE("{");
-               // case UL_UNESCAPED_TEXT:
-               //       cout << "UNESCAPED_TEXT" << endl;
-               //       cout << "ascii: " << ptoken->value  << endl;
-               //       m_sout << ptoken->value;
-               //       return parser::make_UNESCAPED_TEXT(ptoken->value);
-                case UL_SKIP_TOKEN:
-                    cout << "default: SKIP_TOKEN" << endl;
-                    print_token(ptoken->id);
-                    ptoken->type = new parser::symbol_type(parser::token::SKIP_TOKEN);
-                    return *ptoken->type;
-                default:
-                    cout << "error: id=" << ptoken->id << ", name=" << ptoken->name  << endl;
-                    return parser::make_UNDEFINED();
+        case UL_OPEN_BRACE:
+            set_state(&sESCAPED);
+            print_token(ptoken->id);
+            m_sout << m_prefix;
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_LBRACE("{");
+         case UL_SKIP_TOKEN:
+            cout << "default: SKIP_TOKEN" << endl;
+            print_token(ptoken->id);
+            ptoken->type = new parser::symbol_type(parser::token::SKIP_TOKEN);
+            return *ptoken->type;
+        default:
+            cout << "error: id=" << ptoken->id << ", name=" << ptoken->name  << endl;
+            return parser::make_UNDEFINED();
 
-            }
-            break;
         }
         break;
-        case cESCAPED:
+    }
+        break;
+    case cESCAPED:
+    {
+        switch (ptoken->id)
         {
-            switch (ptoken->id)
-            {
-                case UL_CLOSE_BRACE:
-                    set_state(&sINITIAL);
-                    print_token(ptoken->id);
-                    cout << "state = " << p_state->name << "(" << p_state->id << ")" << endl;
-                    return parser::make_RBRACE( ptoken->value);
-                case UL_DOLLAR_SIGN:
-                    print_token(ptoken->id);
-                    return parser::make_DOLLAR_SIGN(ptoken->value);
-                case UL_IDENTIFIER:
-                    print_token(ptoken->id);
-                    return parser::make_IDENTIFIER(ptoken->value);
-                case UL_PLUS_SIGN:
-                    return parser::make_PLUS();
-                case UL_NUMERIC_LITERAL:
-                    return parser::make_NUMERIC_LITERAL(ptoken->value);
-                case UL_DOUBLE_QUOTE:
-                    return parser::make_DOUBLE_QUOTE(ptoken->value);
-                case UL_SINGLE_QUOTE:
-                    return parser::make_SINGLE_QUOTE(ptoken->value);
-                case UL_SLASH:
-                    return parser::make_SLASH();
-                case UL_BACKSLASH:
-                    return parser::make_BACK_SLASH(ptoken->value);
-                case UL_AT_SYMBOL:
-                    return parser::make_AT(ptoken->value);
-                case UL_DASH:
-                    return parser::make_MINUS();
-                case UL_ASTERISK:
-                    return parser::make_ASTERISK();
-                case UL_EQUAL_SIGN:
-                    return parser::make_EQUAL();
-                case 0:
-                    return parser::make_NOT_EQUAL();
-                case UL_PERIOD:
-                    return parser::make_DOT(ptoken->value);
-                //case INDIRECT_MEMBER_SELECT: break;
-                case UL_PERCENT_SIGN:
-                    return parser::make_PERCENT();
-                case UL_AMPERSAND:
-                    return parser::make_AMPERSAND(ptoken->value);
-                //case UL_NOT:
-                   // return parser::make_NOT(ptoken->value);
-                //case OR:
-                   // return parser::make_OR(ptoken->value);
-                //case AND:
-                   // return parser::make_AND(ptoken->value);
-                case UL_LESS_THAN:
-                    return parser::make_LESS_THAN();
-                case UL_LESS_THAN_EQUAL:
-                    return parser::make_LESS_THAN_EQUAL();
-                case UL_GREATER_THAN:
-                    return parser::make_GREATER_THAN();
-                case UL_GREATER_THAN_EQUAL:
-                    return parser::make_GREATER_THAN_EQUAL();
-                case UL_REQUIRE:
-                    return parser::make_REQUIRE(ptoken->value);
-                case UL_CONFIG_LOAD:
-                    return parser::make_CONFIG_LOAD(ptoken->value);
-                case UL_INSERT:
-                    return parser::make_INSERT(ptoken->value);
-                case UL_INCLUDE:
-                    return parser::make_INCLUDE(ptoken->value);
-                case UL_FILE_ATTRIB:
-                      return parser::make_FILE_ATTRIB(ptoken->value);
-                case UL_ASSIGN:
-                    return parser::make_ASSIGN(ptoken->value);
-                case UL_VAR_ATTRIB:
-                    return parser::make_VAR_ATTRIB(ptoken->value);
-                case UL_VALUE_ATTRIB:
-                    return parser::make_VALUE_ATTRIB(ptoken->value);
-                case UL_FROM_ATTRIB:
-                    return parser::make_FROM_ATTRIB(ptoken->value);
-                case UL_ITEM_ATTRIB:
-                    return parser::make_ITEM_ATTRIB(ptoken->value);
-                case UL_KEY_ATTRIB:
-                    return parser::make_KEY_ATTRIB(ptoken->value);
-                case UL_NAME_ATTRIB:
-                    return parser::make_NAME_ATTRIB(ptoken->value);
-                case UL_WHITESPACE:
-                    cout << "WHITESPACE" << endl;
-                case UL_SKIP_TOKEN:
-                    cout << "SKIP_TOKEN" << endl;
-                    return parser::make_SKIP_TOKEN();
-                default:
-                    cout << "error: id=" << ptoken->id << ", name=" << ptoken->name  << endl;
-                    return parser::make_UNDEFINED();
-
-            }
-            break;
-        }
+        case UL_CLOSE_BRACE:
+            set_state(&sINITIAL);
+            print_token(ptoken->id);
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_RBRACE( ptoken->value);
+        case UL_DOLLAR_SIGN:
+            print_token(ptoken->id);
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_DOLLAR_SIGN(ptoken->value);
+        case UL_IDENTIFIER:
+            print_token(ptoken->id);
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_IDENTIFIER(ptoken->value);
+        case UL_DOUBLE_QUOTE:
+            set_state(&sDOUBLE_QUOTED);
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_DOUBLE_QUOTE(ptoken->value);
+        case UL_SINGLE_QUOTE:
+            set_state(&sSINGLE_QUOTED);
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_SINGLE_QUOTE(ptoken->value);
+        case UL_PLUS_SIGN:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_PLUS();
+        case UL_NUMERIC_LITERAL:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_NUMERIC_LITERAL(ptoken->value);
+        case UL_SLASH:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_SLASH();
+        case UL_BACKSLASH:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_BACK_SLASH(ptoken->value);
+        case UL_AT_SYMBOL:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_AT(ptoken->value);
+        case UL_DASH:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_MINUS();
+        case UL_ASTERISK:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_ASTERISK();
+        case UL_EQUAL_SIGN:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_EQUAL();
+        case 0:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_NOT_EQUAL();
+        case UL_PERIOD:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_DOT(ptoken->value);
+            //case INDIRECT_MEMBER_SELECT: break;
+        case UL_PERCENT_SIGN:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_PERCENT();
+        case UL_AMPERSAND:
+            m_sout << " ~" << ptoken->value << "~ ";
+            return parser::make_AMPERSAND(ptoken->value);
+            //case UL_NOT:
+            // return parser::make_NOT(ptoken->value);
+            //case OR:
+            // return parser::make_OR(ptoken->value);
+            //case AND:
+            // return parser::make_AND(ptoken->value);
+        case UL_LESS_THAN:
+            return parser::make_LESS_THAN();
+        case UL_LESS_THAN_EQUAL:
+            return parser::make_LESS_THAN_EQUAL();
+        case UL_GREATER_THAN:
+            return parser::make_GREATER_THAN();
+        case UL_GREATER_THAN_EQUAL:
+            return parser::make_GREATER_THAN_EQUAL();
+        case UL_REQUIRE:
+            return parser::make_REQUIRE(ptoken->value);
+        case UL_CONFIG_LOAD:
+            return parser::make_CONFIG_LOAD(ptoken->value);
+        case UL_INSERT:
+            return parser::make_INSERT(ptoken->value);
+        case UL_INCLUDE:
+            return parser::make_INCLUDE(ptoken->value);
+        case UL_FILE_ATTRIB:
+            return parser::make_FILE_ATTRIB(ptoken->value);
+        case UL_ASSIGN:
+            return parser::make_ASSIGN(ptoken->value);
+        case UL_VAR_ATTRIB:
+            return parser::make_VAR_ATTRIB(ptoken->value);
+        case UL_VALUE_ATTRIB:
+            return parser::make_VALUE_ATTRIB(ptoken->value);
+        case UL_FROM_ATTRIB:
+            return parser::make_FROM_ATTRIB(ptoken->value);
+        case UL_ITEM_ATTRIB:
+            return parser::make_ITEM_ATTRIB(ptoken->value);
+        case UL_KEY_ATTRIB:
+            return parser::make_KEY_ATTRIB(ptoken->value);
+        case UL_NAME_ATTRIB:
+            return parser::make_NAME_ATTRIB(ptoken->value);
+        case UL_WHITESPACE:
+            cout << "WHITESPACE" << endl;
+        case UL_SKIP_TOKEN:
+            cout << "SKIP_TOKEN" << endl;
+            return parser::make_SKIP_TOKEN();
         default:
-            cout << "ERROR:" << ptoken->id << endl;
-            break;
+            cout << "error: id=" << ptoken->id << ", name=" << ptoken->name  << endl;
+            return parser::make_UNDEFINED();
+
+        }
+        break;
+    }
+    case cDOUBLE_QUOTED:
+    case cSINGLE_QUOTED:
+    {
+        switch (ptoken->id)
+        {
+        case UL_ESC_TAB:
+            g_stringstream << "\t";
+            return parser::make_SKIP_TOKEN();
+        case UL_ESC_BACKSLASH:
+            g_stringstream << "\\";
+            return parser::make_SKIP_TOKEN();
+        case UL_ESC_DOUBLE_QUOTE:
+            g_stringstream << "\"";
+            return parser::make_SKIP_TOKEN();
+        case UL_ESC_SINGLE_QUOTE:
+            g_stringstream << "'";
+        case UL_VALID_CHARS:
+            g_stringstream << ptoken->value;
+        case UL_DOUBLE_QUOTE:
+        case UL_SINGLE_QUOTE:
+                set_state(&sESCAPED);
+                return parser::make_STRING_LITERAL(g_stringstream.str());
+        default:;
+        }
+    }
+    default:
+        cout << "ERROR:" << ptoken->id << endl;
+        break;
     }
 
     return parser::make_END();

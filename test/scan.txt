@@ -1,2 +1,2 @@
 aaa{$anc}bbb
-ccc
+ccc {$xyz}
